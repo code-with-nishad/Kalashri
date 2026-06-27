@@ -70,13 +70,13 @@ function HeroSection({ settings }) {
       
       {/* Full-Screen Background Slider with Parallax */}
       <motion.div className="absolute inset-0 z-0" style={{ y: y1 }}>
-        <AnimatePresence mode="popLayout">
+        <AnimatePresence>
           <motion.img
             key={currentBg}
             src={backgrounds[currentBg]}
             alt="Hero Background"
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 2.5, ease: "easeInOut" }}
             className="absolute inset-0 w-full h-full object-cover object-top sm:object-center"
@@ -84,14 +84,15 @@ function HeroSection({ settings }) {
           />
         </AnimatePresence>
         
-        {/* Bright Premium Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white/90 via-white/60 to-white/95" />
-        <div className="absolute inset-0 bg-gradient-to-tr from-[var(--color-rose-200)]/30 to-[var(--color-rose-50)]/80" />
+        {/* Softened Overlays to make images clearly visible while keeping it bright */}
+        <div className="absolute inset-0 bg-white/20" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/40 via-transparent to-white/95" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.7)_0%,transparent_60%)]" />
       </motion.div>
 
-      {/* Floating Sparkles & Orbs */}
-      <motion.div style={{ y: y2 }} className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-[var(--color-rose-300)]/30 rounded-full blur-[140px] animate-float pointer-events-none z-0" />
-      <motion.div style={{ y: y2 }} className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-pink-300/20 rounded-full blur-[120px] animate-float pointer-events-none z-0" style={{ animationDelay: "2s" }} />
+      {/* Floating Sparkles & Orbs (Reduced blur & opacity for clarity) */}
+      <motion.div style={{ y: y2 }} className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-[var(--color-rose-300)]/15 rounded-full blur-[100px] animate-float pointer-events-none z-0" />
+      <motion.div style={{ y: y2 }} className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-pink-300/15 rounded-full blur-[90px] animate-float pointer-events-none z-0" style={{ animationDelay: "2s" }} />
 
       {/* Content */}
       <motion.div 
@@ -99,20 +100,20 @@ function HeroSection({ settings }) {
         className="relative z-10 text-center px-4 max-w-5xl mx-auto pt-20 flex flex-col items-center"
       >
         <motion.div
-          initial={{ opacity: 0, y: -30, scale: 0.8 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-white border border-[var(--color-rose-200)] text-[var(--color-rose-600)] text-sm font-bold tracking-widest uppercase mb-10 backdrop-blur-md shadow-[0_0_40px_rgba(255,105,180,0.15)]"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-white/80 border border-[var(--color-rose-200)] text-[var(--color-rose-600)] text-sm font-bold tracking-widest uppercase mb-10 backdrop-blur-md shadow-lg"
         >
           <Sparkles className="w-4 h-4 text-[var(--color-rose-500)]" />
           Award-Winning Beauty Studio
         </motion.div>
 
         <motion.h1
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 1 }}
-          className="font-display text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-[var(--color-text-primary)] mb-6 leading-[1.1] tracking-tight drop-shadow-sm"
+          transition={{ delay: 0.2, duration: 1.2, ease: "easeOut" }}
+          className="font-display text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-[var(--color-text-primary)] mb-6 leading-[1.1] tracking-tight drop-shadow-[0_4px_12px_rgba(255,255,255,0.8)]"
         >
           {hero.title ? (
             <span dangerouslySetInnerHTML={{ __html: hero.title }} className="text-[var(--color-text-primary)]" />
@@ -134,10 +135,10 @@ function HeroSection({ settings }) {
         </motion.h1>
 
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 1 }}
-          className="text-[var(--color-text-secondary)] text-lg sm:text-2xl mb-14 max-w-3xl mx-auto drop-shadow-sm font-medium tracking-wide leading-relaxed"
+          transition={{ delay: 0.4, duration: 1.2, ease: "easeOut" }}
+          className="text-[var(--color-text-secondary)] text-lg sm:text-2xl mb-14 max-w-3xl mx-auto drop-shadow-[0_2px_4px_rgba(255,255,255,0.8)] font-semibold tracking-wide leading-relaxed"
         >
           {hero.subtitle ? (
             <span dangerouslySetInnerHTML={{ __html: hero.subtitle }} />
@@ -147,9 +148,9 @@ function HeroSection({ settings }) {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7, duration: 1 }}
+          transition={{ delay: 0.6, duration: 1.2, ease: "easeOut" }}
           className="flex flex-col sm:flex-row gap-6 justify-center w-full sm:w-auto"
         >
           <Link
@@ -784,10 +785,10 @@ function CTASection() {
         <img
           src="/images/gallery-2.jpg"
           alt="CTA Background"
-          className="w-full h-full object-cover opacity-20 mix-blend-multiply"
+          className="w-full h-full object-cover opacity-60"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-rose-100)]/80 to-transparent" />
+        <div className="absolute inset-0 bg-white/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-rose-50)] via-white/70 to-white/90" />
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
