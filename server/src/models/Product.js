@@ -28,16 +28,24 @@ const productSchema = new mongoose.Schema(
             type: String,
             required: [true, "Category is required"],
         },
-<<<<<<< HEAD
         subcategory: { type: String, trim: true },
-        brand: { type: String, trim: true },
-        description: { type: String, trim: true },
+        description: {
+            type: String,
+            trim: true,
+            default: "",
+        },
         features: { type: String, trim: true },
         benefits: { type: String, trim: true },
+        keyIngredients: {
+            type: [String],
+            default: [],
+        },
         ingredients: { type: String, trim: true },
         usage: { type: String, trim: true },
         image: { type: String, trim: true },
+        imageUrl: { type: String, trim: true, default: "" },
         gallery: [{ type: String, trim: true }],
+        size: { type: String, trim: true, default: "" },
         price: {
             type: Number,
             required: [true, "Price is required"],
@@ -47,31 +55,6 @@ const productSchema = new mongoose.Schema(
         discount: { type: Number, default: 0 },
         rating: { type: Number, default: 0 },
         reviewCount: { type: Number, default: 0 },
-=======
-        description: {
-            type: String,
-            trim: true,
-            default: "",
-        },
-        size: {
-            type: String,
-            trim: true,
-            default: "",
-        },
-        keyIngredients: {
-            type: [String],
-            default: [],
-        },
-        benefits: {
-            type: [String],
-            default: [],
-        },
-        imageUrl: {
-            type: String,
-            trim: true,
-            default: "",
-        },
->>>>>>> f55ae792d48231ef8f03e454cd36041d2c1eb580
         stockQuantity: {
             type: Number,
             default: 0,

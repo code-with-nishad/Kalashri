@@ -6,8 +6,19 @@ const notificationService = require("./notificationService");
 const User = require("../models/User"); // To find admin to notify if needed
 const { productSchema, transactionSchema } = require("../validations/inventoryValidation");
 
-<<<<<<< HEAD
+const ensureSscpProducts = async () => {
+    await Promise.all(sscpProducts.map(product =>
+        Product.updateOne(
+            { sku: product.sku },
+            { $setOnInsert: product },
+            { upsert: true }
+        )
+    ));
+};
+
 exports.getProducts = async (query = {}) => {
+    await ensureSscpProducts();
+
     let filter = {};
     if (query.category) filter.category = query.category;
     if (query.brand) filter.brand = query.brand;
@@ -25,21 +36,6 @@ exports.getProducts = async (query = {}) => {
     else if (query.sort === "rating") sort = { rating: -1 };
 
     return Product.find(filter).sort(sort);
-=======
-const ensureSscpProducts = async () => {
-    await Promise.all(sscpProducts.map(product =>
-        Product.updateOne(
-            { sku: product.sku },
-            { $setOnInsert: product },
-            { upsert: true }
-        )
-    ));
-};
-
-exports.getProducts = async () => {
-    await ensureSscpProducts();
-    return Product.find().sort("name");
->>>>>>> f55ae792d48231ef8f03e454cd36041d2c1eb580
 };
 
 exports.createProduct = async (data) => {
