@@ -66,7 +66,7 @@ function HeroSection({ settings }) {
   }, [backgrounds.length]);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black perspective-[1000px]">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white perspective-[1000px]">
       
       {/* Full-Screen Background Slider with Parallax */}
       <motion.div className="absolute inset-0 z-0" style={{ y: y1 }}>
@@ -84,14 +84,14 @@ function HeroSection({ settings }) {
           />
         </AnimatePresence>
         
-        {/* Deep Premium Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black/90" />
-        <div className="absolute inset-0 bg-gradient-to-tr from-[var(--color-rose-950)]/40 to-transparent" />
+        {/* Bright Premium Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-b from-white/90 via-white/60 to-white/95" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-[var(--color-rose-200)]/30 to-[var(--color-rose-50)]/80" />
       </motion.div>
 
       {/* Floating Sparkles & Orbs */}
-      <motion.div style={{ y: y2 }} className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-[var(--color-rose-500)]/20 rounded-full blur-[140px] animate-float pointer-events-none z-0" />
-      <motion.div style={{ y: y2 }} className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-yellow-500/10 rounded-full blur-[120px] animate-float pointer-events-none z-0" style={{ animationDelay: "2s" }} />
+      <motion.div style={{ y: y2 }} className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-[var(--color-rose-300)]/30 rounded-full blur-[140px] animate-float pointer-events-none z-0" />
+      <motion.div style={{ y: y2 }} className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-pink-300/20 rounded-full blur-[120px] animate-float pointer-events-none z-0" style={{ animationDelay: "2s" }} />
 
       {/* Content */}
       <motion.div 
@@ -102,9 +102,9 @@ function HeroSection({ settings }) {
           initial={{ opacity: 0, y: -30, scale: 0.8 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 1, ease: "easeOut" }}
-          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-white/5 border border-white/10 text-[var(--color-rose-200)] text-sm font-medium tracking-widest uppercase mb-10 backdrop-blur-md shadow-[0_0_40px_rgba(244,63,94,0.1)]"
+          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-white border border-[var(--color-rose-200)] text-[var(--color-rose-600)] text-sm font-bold tracking-widest uppercase mb-10 backdrop-blur-md shadow-[0_0_40px_rgba(255,105,180,0.15)]"
         >
-          <Sparkles className="w-4 h-4 text-yellow-400" />
+          <Sparkles className="w-4 h-4 text-[var(--color-rose-500)]" />
           Award-Winning Beauty Studio
         </motion.div>
 
@@ -112,16 +112,18 @@ function HeroSection({ settings }) {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 1 }}
-          className="font-display text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-white mb-6 leading-[1.1] tracking-tight drop-shadow-2xl"
+          className="font-display text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-[var(--color-text-primary)] mb-6 leading-[1.1] tracking-tight drop-shadow-sm"
         >
-          {hero.title || (
+          {hero.title ? (
+            <span dangerouslySetInnerHTML={{ __html: hero.title }} className="text-[var(--color-text-primary)]" />
+          ) : (
             <>
               Beauty That{" "}
-              <span className="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-100 to-amber-500 drop-shadow-[0_0_40px_rgba(250,204,21,0.3)]">
+              <span className="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-rose-500)] to-[var(--color-rose-400)] drop-shadow-[0_0_20px_rgba(255,105,180,0.2)]">
                 Glows
                 <motion.span 
                   animate={{ rotate: 360 }} transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-                  className="absolute -top-6 -right-10 text-yellow-400 opacity-60"
+                  className="absolute -top-6 -right-10 text-[var(--color-rose-400)] opacity-60"
                 >
                   <Sparkles className="w-10 h-10" />
                 </motion.span>
@@ -131,14 +133,18 @@ function HeroSection({ settings }) {
           )}
         </motion.h1>
 
-        <motion.p
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 1 }}
-          className="text-gray-300 text-lg sm:text-2xl mb-14 max-w-3xl mx-auto drop-shadow-lg font-light tracking-wide leading-relaxed"
+          className="text-[var(--color-text-secondary)] text-lg sm:text-2xl mb-14 max-w-3xl mx-auto drop-shadow-sm font-medium tracking-wide leading-relaxed"
         >
-          {hero.subtitle || SALON_TAGLINE}
-        </motion.p>
+          {hero.subtitle ? (
+            <span dangerouslySetInnerHTML={{ __html: hero.subtitle }} />
+          ) : (
+            SALON_TAGLINE
+          )}
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -148,7 +154,7 @@ function HeroSection({ settings }) {
         >
           <Link
             to="/register"
-            className="group relative inline-flex items-center justify-center gap-3 px-10 py-5 bg-gradient-to-r from-[var(--color-rose-500)] to-purple-600 text-white font-bold rounded-2xl text-lg transition-all hover:shadow-[0_0_40px_rgba(244,63,94,0.5)] hover:-translate-y-1 overflow-hidden"
+            className="group relative inline-flex items-center justify-center gap-3 px-10 py-5 bg-gradient-to-r from-[var(--color-rose-500)] to-[var(--color-rose-400)] text-white font-bold rounded-2xl text-lg transition-all hover:shadow-[0_0_40px_rgba(255,105,180,0.4)] hover:-translate-y-1 overflow-hidden"
           >
             <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
             <span className="relative z-10">{hero.primaryButtonText || "Book Your Session"}</span>
@@ -158,9 +164,9 @@ function HeroSection({ settings }) {
             href={SALON_INSTAGRAM}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-3 px-10 py-5 bg-white/5 border border-white/20 text-white font-medium rounded-2xl text-lg transition-all hover:bg-white/10 hover:border-white/40 hover:-translate-y-1 hover:shadow-2xl backdrop-blur-xl"
+            className="inline-flex items-center justify-center gap-3 px-10 py-5 bg-white border border-[var(--color-rose-200)] text-[var(--color-rose-600)] font-bold rounded-2xl text-lg transition-all hover:bg-[var(--color-rose-50)] hover:border-[var(--color-rose-300)] hover:-translate-y-1 hover:shadow-xl backdrop-blur-xl"
           >
-            <Camera className="w-5 h-5 text-pink-400" />
+            <Camera className="w-5 h-5 text-[var(--color-rose-500)]" />
             Explore Gallery
           </a>
         </motion.div>
@@ -170,15 +176,15 @@ function HeroSection({ settings }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 1 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
+        className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10"
       >
-        <ChevronDown className="w-10 h-10 text-white/30 animate-bounce" />
+        <ChevronDown className="w-10 h-10 text-[var(--color-rose-300)] animate-bounce" />
       </motion.div>
       
-      {/* Wave divider */}
+      {/* Wave divider - Fixed SVG Shape */}
       <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-10 text-[var(--color-surface)]">
-        <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="relative block w-full h-[60px] md:h-[100px]">
-          <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118,152.47,143.22,229.4,130.89,261.27,125.82,292.1,108.6,321.39,56.44Z" fill="currentColor"></path>
+        <svg viewBox="0 0 1440 320" preserveAspectRatio="none" className="relative block w-full h-[60px] md:h-[120px]">
+          <path fill="currentColor" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,149.3C960,160,1056,160,1152,138.7C1248,117,1344,75,1392,53.3L1440,32L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
         </svg>
       </div>
     </section>
@@ -319,7 +325,7 @@ function FeaturedProductsSection({ products = [] }) {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-yellow-500 text-sm font-bold tracking-[0.2em] uppercase mb-4"
+          className="text-[var(--color-rose-500)] text-sm font-bold tracking-[0.2em] uppercase mb-4"
         >Our Store</motion.p>
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
@@ -328,7 +334,7 @@ function FeaturedProductsSection({ products = [] }) {
           transition={{ delay: 0.1 }}
           className="font-display text-4xl md:text-5xl font-bold text-[var(--color-text-primary)]"
         >
-          Premium <span className="text-gradient-gold">Products</span>
+          Premium <span className="text-gradient-rose">Products</span>
         </motion.h2>
       </div>
 
@@ -341,25 +347,25 @@ function FeaturedProductsSection({ products = [] }) {
             transition={{ delay: i * 0.1, duration: 0.5 }}
             viewport={{ once: true, margin: "-50px" }}
             whileHover={{ y: -10 }}
-            className="group rounded-3xl bg-[var(--color-surface-card)] border border-[var(--color-border)] p-5 hover:border-yellow-400 hover:shadow-[0_20px_40px_-15px_rgba(250,204,21,0.15)] transition-all overflow-hidden relative flex flex-col"
+            className="group rounded-3xl bg-[var(--color-surface-card)] border border-[var(--color-border)] p-5 hover:border-[var(--color-rose-400)] hover:shadow-[0_20px_40px_-15px_rgba(255,105,180,0.15)] transition-all overflow-hidden relative flex flex-col"
           >
-            <div className="absolute inset-0 bg-gradient-to-tr from-yellow-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-[var(--color-rose-500)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             
             <div className="relative w-full h-48 mb-5 bg-[var(--color-surface)] rounded-2xl overflow-hidden flex items-center justify-center p-2">
               {p.image || p.imageUrl ? (
                 <img src={p.image || p.imageUrl} alt={p.name} className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700 mix-blend-multiply dark:mix-blend-normal" />
               ) : (
-                <Package className="w-12 h-12 text-yellow-500/20" />
+                <Package className="w-12 h-12 text-[var(--color-rose-300)]" />
               )}
               {p.discount > 0 && (
-                <div className="absolute top-2 right-2 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-lg shadow-sm">
+                <div className="absolute top-2 right-2 bg-[var(--color-rose-500)] text-white text-[10px] font-bold px-2 py-1 rounded-lg shadow-sm">
                   {p.discount}% OFF
                 </div>
               )}
             </div>
 
             <div className="relative z-10 flex flex-col flex-1">
-              <p className="text-[10px] font-bold text-yellow-500 uppercase tracking-wider mb-1">{p.brand || "Salon Product"}</p>
+              <p className="text-[10px] font-bold text-[var(--color-rose-500)] uppercase tracking-wider mb-1">{p.brand || "Salon Product"}</p>
               <h3 className="font-display font-bold text-[var(--color-text-primary)] text-lg mb-2 line-clamp-2 leading-tight">{p.name}</h3>
               <p className="text-xs text-[var(--color-text-muted)] mb-4 line-clamp-2 flex-1">{p.description}</p>
               
@@ -368,11 +374,11 @@ function FeaturedProductsSection({ products = [] }) {
                   {p.originalPrice && (
                     <span className="text-[10px] text-[var(--color-text-muted)] line-through">{formatCurrency(p.originalPrice)}</span>
                   )}
-                  <span className="text-yellow-600 font-black text-lg">{formatCurrency(p.price)}</span>
+                  <span className="text-[var(--color-rose-600)] font-black text-lg">{formatCurrency(p.price)}</span>
                 </div>
                 <Link
                   to="/products"
-                  className="w-10 h-10 rounded-full bg-yellow-500 text-yellow-950 flex items-center justify-center hover:scale-110 hover:shadow-lg transition-transform"
+                  className="w-10 h-10 rounded-full bg-[var(--color-rose-500)] text-white flex items-center justify-center hover:scale-110 hover:shadow-lg transition-transform"
                 >
                   <ShoppingBag className="w-4 h-4" />
                 </Link>
@@ -386,7 +392,7 @@ function FeaturedProductsSection({ products = [] }) {
         initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
         className="text-center mt-12"
       >
-        <Link to="/products" className="inline-flex items-center gap-2 text-yellow-500 hover:text-yellow-400 font-bold text-base transition-colors group">
+        <Link to="/products" className="inline-flex items-center gap-2 text-[var(--color-rose-500)] hover:text-[var(--color-rose-400)] font-bold text-base transition-colors group">
           Shop All Products
           <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
         </Link>
@@ -773,15 +779,15 @@ function TrophiesSection() {
 // ==================== CALL TO ACTION ====================
 function CTASection() {
   return (
-    <section className="relative py-32 overflow-hidden bg-black">
+    <section className="relative py-32 overflow-hidden bg-[var(--color-rose-50)]">
       <div className="absolute inset-0 z-0">
         <img
           src="/images/gallery-2.jpg"
           alt="CTA Background"
-          className="w-full h-full object-cover opacity-40 mix-blend-luminosity"
+          className="w-full h-full object-cover opacity-20 mix-blend-multiply"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-rose-950)]/80 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-rose-100)]/80 to-transparent" />
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
@@ -789,7 +795,7 @@ function CTASection() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-yellow-400 to-amber-600 mb-8 shadow-[0_0_50px_rgba(250,204,21,0.5)]"
+          className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-[var(--color-rose-400)] to-[var(--color-rose-500)] mb-8 shadow-[0_0_50px_rgba(255,105,180,0.4)]"
         >
           <Sparkles className="w-10 h-10 text-white" />
         </motion.div>
@@ -799,9 +805,9 @@ function CTASection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
-          className="font-display text-5xl md:text-7xl font-black text-white mb-6 leading-tight drop-shadow-2xl"
+          className="font-display text-5xl md:text-7xl font-black text-[var(--color-text-primary)] mb-6 leading-tight drop-shadow-sm"
         >
-          Ready to experience the <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-amber-500">Magic?</span>
+          Ready to experience the <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-rose-500)] to-[var(--color-rose-400)]">Magic?</span>
         </motion.h2>
         
         <motion.p
@@ -809,7 +815,7 @@ function CTASection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
-          className="text-gray-300 text-xl max-w-2xl mx-auto mb-12"
+          className="text-[var(--color-text-secondary)] text-xl max-w-2xl mx-auto mb-12"
         >
           Book your session today and step into a world of premium beauty and relaxation.
         </motion.p>
@@ -822,9 +828,9 @@ function CTASection() {
         >
           <Link
             to="/register"
-            className="group relative inline-flex items-center justify-center gap-3 px-12 py-6 bg-white text-black font-black rounded-full text-xl transition-all hover:shadow-[0_0_40px_rgba(255,255,255,0.4)] hover:scale-105 overflow-hidden"
+            className="group relative inline-flex items-center justify-center gap-3 px-12 py-6 bg-[var(--color-rose-500)] text-white font-black rounded-full text-xl transition-all hover:shadow-[0_0_40px_rgba(255,105,180,0.4)] hover:scale-105 overflow-hidden"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-yellow-300 to-amber-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-rose-400)] to-[var(--color-rose-600)] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <span className="relative z-10 group-hover:text-white transition-colors duration-500">Book Appointment</span>
             <ArrowRight className="w-6 h-6 relative z-10 group-hover:text-white group-hover:translate-x-2 transition-all duration-500" />
           </Link>
