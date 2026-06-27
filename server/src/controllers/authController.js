@@ -37,6 +37,20 @@ exports.login = asyncHandler(async (req, res) => {
 
 });
 
+exports.googleLogin = asyncHandler(async (req, res) => {
+    const { token } = req.body;
+    if (!token) throw new AppError("Google token is required", 400);
+
+    const user = await authService.googleLogin(token);
+    
+    sendToken(
+        user,
+        200,
+        "Google Login Successful",
+        res
+    );
+});
+
 exports.logout = asyncHandler(async (req, res) => {
 
     res.cookie("token", "", {
@@ -67,4 +81,9 @@ exports.getMe = asyncHandler(async (req, res) => {
         user
     );
 
+});
+
+exports.updateMe = asyncHandler(async (req, res) => {
+    const updatedUser = await authService.updateCurrentUser(req.user._id, req.body);
+    sendResponse(res, 200, true, "Profile updated successfully", updatedUser);
 });

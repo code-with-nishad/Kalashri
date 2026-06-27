@@ -19,6 +19,11 @@ router.post(
 );
 
 router.post(
+    "/google",
+    authController.googleLogin
+);
+
+router.post(
     "/logout",
     authController.logout
 );
@@ -27,6 +32,12 @@ router.get(
     "/me",
     protect,
     authController.getMe
+);
+
+router.put(
+    "/me",
+    protect,
+    authController.updateMe
 );
 
 module.exports = router;

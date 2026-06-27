@@ -3,14 +3,14 @@ const mongoose = require("mongoose");
 const settingSchema = new mongoose.Schema(
     {
         general: {
-            salonName: { type: String, default: "Aai Beauty Studio" },
+            salonName: { type: String, default: "Gayatri Beauty Studio" },
             logo: { type: String, default: "" },
             about: { type: String, default: "" },
             mission: { type: String, default: "" },
             vision: { type: String, default: "" },
         },
         hero: {
-            title: { type: String, default: "Welcome to Aai Beauty Studio" },
+            title: { type: String, default: "Welcome to Gayatri Beauty Studio" },
             subtitle: { type: String, default: "Your beauty, our passion." },
             image: { type: String, default: "" },
             video: { type: String, default: "" },

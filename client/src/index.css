@@ -1,0 +1,175 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Playfair Display", ui-serif, Georgia, serif;
+
+  /* Brand Colors - Gayatri Beauty Studio (Baby Pink focused) */
+  --color-rose-50: #fff0f5;
+  --color-rose-100: #ffe4e1;
+  --color-rose-200: #ffc0cb;
+  --color-rose-300: #ffb6c1;
+  --color-rose-400: #ff69b4;
+  --color-rose-500: #ff1493;
+  --color-rose-600: #e75480;
+  --color-rose-700: #c21e56;
+  --color-rose-800: #900020;
+  --color-rose-900: #800020;
+
+  --color-gold-50: #fffbeb;
+  --color-gold-100: #fef3c7;
+  --color-gold-200: #fde68a;
+  --color-gold-300: #fcd34d;
+  --color-gold-400: #fbbf24;
+  --color-gold-500: #f59e0b;
+  --color-gold-600: #d97706;
+  --color-gold-700: #b45309;
+  --color-gold-800: #92400e;
+  --color-gold-900: #78350f;
+
+  --color-blush: #fff0f5;
+  --color-champagne: #f7e7ce;
+
+  /* Backgrounds - Light Mode */
+  --color-surface: #ffffff;
+  --color-surface-2: #fffafa;
+  --color-surface-3: #ffe4e1;
+  --color-surface-card: #ffffff;
+
+  /* Text - Light Mode */
+  --color-text-primary: #1f2937;
+  --color-text-secondary: #4b5563;
+  --color-text-muted: #6b7280;
+
+  /* Borders - Light Mode */
+  --color-border: #fbcfe8;
+  --color-border-subtle: #fce7f3;
+
+  /* Gradients */
+  --color-gradient-rose: linear-gradient(135deg, #ffb6c1 0%, #ff69b4 50%, #ff1493 100%);
+  --color-gradient-gold: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+
+  /* Shadows - Light Mode */
+  --shadow-glow-rose: 0 4px 20px rgba(255, 105, 180, 0.2);
+  --shadow-glow-gold: 0 4px 20px rgba(251, 191, 36, 0.2);
+  --shadow-card: 0 4px 12px rgba(255, 182, 193, 0.15);
+  --shadow-card-hover: 0 8px 24px rgba(255, 105, 180, 0.25);
+
+  /* Border Radius */
+  --radius-sm: 0.375rem;
+  --radius: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+}
+
+/* Global base styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar - Light */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-surface-2);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-rose-300);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-rose-400);
+}
+
+/* Selection */
+::selection {
+  background: rgba(255, 105, 180, 0.3);
+  color: var(--color-text-primary);
+}
+
+/* Utility classes */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.text-gradient-rose {
+  background: var(--color-gradient-rose);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-gold {
+  background: var(--color-gradient-gold);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.card-glow {
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.card-glow:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 182, 193, 0.4);
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Skeleton Loader - Light */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-surface-2) 25%,
+    var(--color-surface-3) 50%,
+    var(--color-surface-2) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius);
+}

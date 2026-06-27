@@ -11,11 +11,11 @@ const bookAppointment = async (userId, appointmentData) => {
     // Validate request data
     const validationResult = createAppointmentSchema.safeParse(appointmentData);
     if (!validationResult.success) {
-        const errors = validationResult.error.errors.map((err) => err.message).join(", ");
+        const errors = validationResult.error.issues.map((err) => err.message).join(", ");
         throw new AppError(errors, 400);
     }
 
-    const { serviceIds, appointmentDate, appointmentTime, notes } = validationResult.data;
+    const { serviceIds, appointmentDate, appointmentTime, notes, paymentMethod, transactionId, paymentScreenshot } = validationResult.data;
 
     // Fetch all services
     const services = await Service.find({ _id: { $in: serviceIds }, isActive: true });
@@ -50,6 +50,11 @@ const bookAppointment = async (userId, appointmentData) => {
         totalAmount,
         totalDuration,
         notes,
+        paymentMethod,
+        transactionId,
+        paymentScreenshot,
+        paymentStatus: paymentMethod === "Manual UPI" ? "Verification Pending" : paymentMethod === "Cash" ? "Unpaid" : "Pending",
+        status: "Pending",
     });
 
     return appointment;
@@ -86,11 +91,11 @@ const updateAppointmentStatus = async (appointmentId, updateData) => {
     // Validate request data
     const validationResult = updateAppointmentStatusSchema.safeParse(updateData);
     if (!validationResult.success) {
-        const errors = validationResult.error.errors.map((err) => err.message).join(", ");
+        const errors = validationResult.error.issues.map((err) => err.message).join(", ");
         throw new AppError(errors, 400);
     }
 
-    const { status, paymentStatus, paymentMethod, suggestedTimeFrame } = validationResult.data;
+    const { status, paymentStatus, paymentMethod, suggestedTimeFrame, transactionId, paymentScreenshot } = validationResult.data;
 
     const appointment = await Appointment.findById(appointmentId).populate("customer", "firstName lastName email phone");
 
@@ -99,15 +104,40 @@ const updateAppointmentStatus = async (appointmentId, updateData) => {
     }
 
     const previousStatus = appointment.status;
+    const previousPaymentStatus = appointment.paymentStatus;
 
     // Prevent re-awarding points if it's already completed
     const wasAlreadyCompleted = appointment.status === "Completed";
 
     // Update fields
     if (status) appointment.status = status;
-    if (paymentStatus) appointment.paymentStatus = paymentStatus;
+    if (paymentStatus) {
+        appointment.paymentStatus = paymentStatus;
+        if (paymentStatus === "Paid" && previousPaymentStatus === "Verification Pending") {
+            appointment.verifiedAt = new Date();
+            // TODO: Extract admin user from context if passed, for verifiedBy.
+        }
+    }
     if (paymentMethod) appointment.paymentMethod = paymentMethod;
     if (suggestedTimeFrame) appointment.suggestedTimeFrame = suggestedTimeFrame;
+    if (transactionId) appointment.transactionId = transactionId;
+    if (paymentScreenshot) appointment.paymentScreenshot = paymentScreenshot;
+    
+    // Auto-confirm if paid via manual verification
+    if (paymentStatus === "Paid" && appointment.paymentMethod === "Manual UPI" && status !== "Completed") {
+        appointment.status = "Confirmed";
+    }
+
+    // Auto-reject if payment rejected
+    if (paymentStatus === "Rejected") {
+        appointment.status = "Payment Failed";
+    }
+
+    // When completed, mark completedAt and payment as paid
+    if (status === "Completed") {
+        appointment.completedAt = new Date();
+        appointment.paymentStatus = "Paid";
+    }
 
     await appointment.save();
 
@@ -122,13 +152,17 @@ const updateAppointmentStatus = async (appointmentId, updateData) => {
             
             // Send Email
             if (appointment.customer.email) {
-                const html = `<h2>${title}</h2><p>Hi ${appointment.customer.firstName},</p><p>${message}</p><p>Thank you for choosing Aai Beauty Studio!</p>`;
+                const html = `<h2>${title}</h2><p>Hi ${appointment.customer.firstName},</p><p>${message}</p><p>Thank you for choosing Gayatri Beauty Studio!</p>`;
                 await emailService.sendEmail(appointment.customer.email, title, html);
             }
-        } else if (status === "Cancelled" || status === "Rejected") {
-            const title = "Appointment Rejected \uD83D\uDE14";
+        } else if (status === "Cancelled" || status === "Rejected" || status === "Payment Failed") {
+            const title = "Appointment Rejected 😞";
+            let reasonText = "";
+            if (appointment.paymentStatus === "Rejected") {
+                reasonText = " We could not verify your UPI payment. Please ensure you entered the correct UTR number or try booking again.";
+            }
             const rescheduleText = suggestedTimeFrame ? ` We suggest rescheduling to: ${suggestedTimeFrame}.` : " Please reschedule at your earliest convenience.";
-            const message = `Sorry, your appointment on ${new Date(appointment.appointmentDate).toDateString()} at ${appointment.appointmentTime} was declined.${rescheduleText}`;
+            const message = `Sorry, your appointment on ${new Date(appointment.appointmentDate).toDateString()} at ${appointment.appointmentTime} was declined.${reasonText}${rescheduleText}`;
             
             // Sorry Card Notification
             await notificationService.createNotification(appointment.customer._id, "Appointment", title, message);
@@ -139,6 +173,9 @@ const updateAppointmentStatus = async (appointmentId, updateData) => {
                 await emailService.sendEmail(appointment.customer.email, title, html);
             }
         }
+    } else if (appointment.status === "Confirmed" && paymentStatus === "Paid" && previousPaymentStatus === "Verification Pending") {
+        // Just send payment verified notification if status was already confirmed somehow
+        await notificationService.createNotification(appointment.customer._id, "Payment Verified", "Payment Verified ✅", "Your manual UPI payment has been successfully verified. Your appointment is confirmed.");
     }
 
     // Loyalty Engine logic: Automatically award points when status changes to Completed for the first time

@@ -8,7 +8,7 @@ const { createRewardSchema, updateRewardSchema } = require("../validations/rewar
 const createReward = async (rewardData) => {
     const validationResult = createRewardSchema.safeParse(rewardData);
     if (!validationResult.success) {
-        const errors = validationResult.error.errors.map((err) => err.message).join(", ");
+        const errors = validationResult.error.issues.map((err) => err.message).join(", ");
         throw new AppError(errors, 400);
     }
 
@@ -19,7 +19,7 @@ const createReward = async (rewardData) => {
 const updateReward = async (id, updateData) => {
     const validationResult = updateRewardSchema.safeParse(updateData);
     if (!validationResult.success) {
-        const errors = validationResult.error.errors.map((err) => err.message).join(", ");
+        const errors = validationResult.error.issues.map((err) => err.message).join(", ");
         throw new AppError(errors, 400);
     }
 

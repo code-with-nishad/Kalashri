@@ -50,7 +50,7 @@ app.use("/api/inventory", inventoryRoutes);
 app.get("/", (req, res) => {
     res.status(200).json({
         success: true,
-        message: "Aai Beauty Studio API Running 🚀",
+        message: "Gayatri Beauty Studio API Running 🚀",
     });
 });
 

@@ -16,7 +16,7 @@ exports.sendEmail = async (to, subject, html) => {
         }
 
         const mailOptions = {
-            from: `"Aai Beauty Studio" <${process.env.EMAIL_USER}>`,
+            from: `"Gayatri Beauty Studio" <${process.env.EMAIL_USER}>`,
             to,
             subject,
             html,

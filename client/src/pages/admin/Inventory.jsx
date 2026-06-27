@@ -1,0 +1,122 @@
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Plus, History } from "lucide-react";
+import { inventoryService } from "../../services";
+import { QUERY_KEYS } from "../../constants/queryKeys";
+import { Badge } from "../../components/ui/Badge";
+import { Modal } from "../../components/ui/Modal";
+import { toast } from "sonner";
+
+export default function Inventory() {
+  const qc = useQueryClient();
+  const [txModal, setTxModal] = useState(null);
+  const [createModal, setCreateModal] = useState(false);
+  const [form, setForm] = useState({ name: "", sku: "", category: "", unit: "", stockQuantity: 0, lowStockThreshold: 5 });
+  const [tx, setTx] = useState({ type: "Restock", quantity: 1, reason: "" });
+
+  const { data, isLoading } = useQuery({ queryKey: QUERY_KEYS.INVENTORY, queryFn: inventoryService.getProducts });
+  const products = data?.data || [];
+
+  const { mutate: create } = useMutation({ mutationFn: inventoryService.createProduct, onSuccess: () => { toast.success("Product created!"); qc.invalidateQueries({ queryKey: QUERY_KEYS.INVENTORY }); setCreateModal(false); }, onError: err => toast.error(err.message) });
+  const { mutate: logTx } = useMutation({ mutationFn: ({ id, data }) => inventoryService.logTransaction(id, data), onSuccess: () => { toast.success("Stock updated!"); qc.invalidateQueries({ queryKey: QUERY_KEYS.INVENTORY }); setTxModal(null); }, onError: err => toast.error(err.message) });
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div><h1 className="font-display text-2xl font-bold text-[var(--color-text-primary)]">Inventory</h1><p className="text-[var(--color-text-muted)] text-sm">{products.length} products</p></div>
+        <button onClick={() => { setForm({ name: "", sku: "", category: "", unit: "", stockQuantity: 0, lowStockThreshold: 5 }); setCreateModal(true); }} className="flex items-center gap-2 px-5 py-2.5 -white text-sm font-medium rounded-xl transition-all">
+          <Plus className="w-4 h-4" /> Add Product
+        </button>
+      </div>
+
+      <div className="space-y-3">
+        {isLoading ? <div className="text-center py-10 text-[var(--color-text-muted)]">Loading...</div> :
+          products.map((p, i) => {
+            const isLow = p.stockQuantity <= p.lowStockThreshold;
+            const pct = Math.min(100, (p.stockQuantity / (p.lowStockThreshold * 4)) * 100);
+            return (
+              <motion.div key={p._id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}
+                className="rounded-2xl bg-[var(--color-surface-card)] border border-[var(--color-border)] p-5"
+              >
+                <div className="flex items-start justify-between flex-wrap gap-3 mb-3">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-semibold text-[var(--color-text-primary)]">{p.name}</h3>
+                      {isLow && <Badge variant="error">Low Stock!</Badge>}
+                    </div>
+                    <p className="text-xs text-[var(--color-text-muted)]">SKU: {p.sku} · {p.category}</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="text-right">
+                      <p className="text-xl font-bold text-[var(--color-text-primary)]">{p.stockQuantity}</p>
+                      <p className="text-xs text-[var(--color-text-muted)]">{p.unit}</p>
+                    </div>
+                    <button onClick={() => { setTxModal(p); setTx({ type: "Restock", quantity: 1, reason: "" }); }} className="px-3 py-1.5 bg-[var(--color-rose-600)]/10 border border-[var(--color-rose-500)]/30 text-[var(--color-rose-400)] text-xs rounded-lg hover:bg-[var(--color-rose-600)]/20 transition-all">
+                      Update
+                    </button>
+                  </div>
+                </div>
+                <div className="w-full bg-[var(--color-surface-3)] rounded-full h-1.5">
+                  <div className={`h-1.5 rounded-full transition-all ${isLow ? "bg-red-500" : "bg-emerald-500"}`} style={{ width: `${pct}%` }} />
+                </div>
+                <p className="text-xs text-[var(--color-text-muted)] mt-1">Threshold: {p.lowStockThreshold} {p.unit}</p>
+              </motion.div>
+            );
+          })}
+      </div>
+
+      <Modal open={!!txModal} onClose={() => setTxModal(null)} title={`Update Stock — ${txModal?.name}`}>
+        <div className="space-y-4">
+          <div className="flex gap-2">
+            {["Restock", "Usage"].map(t => (
+              <button key={t} onClick={() => setTx(tx => ({ ...tx, type: t }))}
+                className={`flex-1 py-2 rounded-xl text-sm font-medium transition-all border ${tx.type === t ? (t === "Restock" ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" : "bg-red-500/10 border-red-500/30 text-red-400") : "border-[var(--color-border)] text-[var(--color-text-muted)]"}`}
+              >{t}</button>
+            ))}
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1">Quantity</label>
+            <input type="number" min={1} value={tx.quantity} onChange={e => setTx(t => ({ ...t, quantity: Number(e.target.value) }))}
+              className="w-full px-4 py-2.5 rounded-xl bg-[var(--color-surface-3)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-rose-500)] transition-all text-sm"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1">Reason (Optional)</label>
+            <input value={tx.reason} onChange={e => setTx(t => ({ ...t, reason: e.target.value }))} placeholder="e.g. Monthly restock"
+              className="w-full px-4 py-2.5 rounded-xl bg-[var(--color-surface-3)] border border-[var(--color-border)] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-rose-500)] transition-all text-sm"
+            />
+          </div>
+          <div className="flex gap-3">
+            <button onClick={() => setTxModal(null)} className="flex-1 py-2.5 border border-[var(--color-border)] text-[var(--color-text-secondary)] rounded-xl">Cancel</button>
+            <button onClick={() => logTx({ id: txModal._id, data: tx })} className="flex-1 py-2.5 -white font-medium rounded-xl transition-all">Apply</button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={createModal} onClose={() => setCreateModal(false)} title="Add Product">
+        <div className="space-y-4">
+          {[
+            { key: "name", label: "Product Name", placeholder: "Shampoo Premium" },
+            { key: "sku", label: "SKU", placeholder: "SHMP-001" },
+            { key: "category", label: "Category", placeholder: "Hair Care" },
+            { key: "unit", label: "Unit", placeholder: "bottles" },
+            { key: "stockQuantity", label: "Initial Stock", type: "number", placeholder: "20" },
+            { key: "lowStockThreshold", label: "Low Stock Alert At", type: "number", placeholder: "5" },
+          ].map(({ key, label, type = "text", placeholder }) => (
+            <div key={key}>
+              <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1">{label}</label>
+              <input value={form[key] || ""} type={type} onChange={e => setForm(f => ({ ...f, [key]: type === "number" ? Number(e.target.value) : e.target.value }))} placeholder={placeholder}
+                className="w-full px-4 py-2.5 rounded-xl bg-[var(--color-surface-3)] border border-[var(--color-border)] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-rose-500)] transition-all text-sm"
+              />
+            </div>
+          ))}
+          <div className="flex gap-3">
+            <button onClick={() => setCreateModal(false)} className="flex-1 py-2.5 border border-[var(--color-border)] text-[var(--color-text-secondary)] rounded-xl">Cancel</button>
+            <button onClick={() => create(form)} className="flex-1 py-2.5 -white font-medium rounded-xl transition-all">Create</button>
+          </div>
+        </div>
+      </Modal>
+    </div>
+  );
+}

@@ -16,7 +16,7 @@ const jwt = require("jsonwebtoken");
 const registerAdmin = async (adminData) => {
     const validationResult = registerAdminSchema.safeParse(adminData);
     if (!validationResult.success) {
-        const errors = validationResult.error.errors.map((err) => err.message).join(", ");
+        const errors = validationResult.error.issues.map((err) => err.message).join(", ");
         throw new AppError(errors, 400);
     }
 
@@ -236,7 +236,7 @@ const updateCustomerNotes = async (id, notesData) => {
 const manageGlowPoints = async (id, pointData) => {
     const validationResult = manageGlowPointsSchema.safeParse(pointData);
     if (!validationResult.success) {
-        const errors = validationResult.error.errors.map((err) => err.message).join(", ");
+        const errors = validationResult.error.issues.map((err) => err.message).join(", ");
         throw new AppError(errors, 400);
     }
 

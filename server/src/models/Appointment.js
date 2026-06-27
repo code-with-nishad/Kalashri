@@ -46,7 +46,7 @@ const appointmentSchema = new mongoose.Schema(
         },
         status: {
             type: String,
-            enum: ["Pending", "Confirmed", "Completed", "Cancelled"],
+            enum: ["Pending", "Confirmed", "Completed", "Cancelled", "Payment Failed"],
             default: "Pending",
         },
         suggestedTimeFrame: {
@@ -59,13 +59,29 @@ const appointmentSchema = new mongoose.Schema(
         },
         paymentStatus: {
             type: String,
-            enum: ["Pending", "Paid"],
+            enum: ["Unpaid", "Verification Pending", "Pending", "Paid", "Rejected"],
             default: "Pending",
         },
         paymentMethod: {
             type: String,
-            enum: ["Cash", "UPI", "Card"],
+            enum: ["Cash", "Manual UPI", "Razorpay", "Stripe", "Card", "UPI"],
         },
+        transactionId: {
+            type: String,
+        },
+        paymentScreenshot: {
+            type: String,
+        },
+        verifiedBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+        },
+        verifiedAt: {
+            type: Date,
+        },
+        completedAt: {
+            type: Date,
+        }
     },
     {
         timestamps: true,

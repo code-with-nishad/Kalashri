@@ -1,0 +1,185 @@
+import { useAuthStore } from "../../store/authStore";
+import { motion } from "framer-motion";
+import { User, Mail, Phone, Sparkles, Calendar, Edit2, Check, X, Camera } from "lucide-react";
+import { formatDate, getMembershipColor, getInitials } from "../../utils";
+import { Badge } from "../../components/ui/Badge";
+import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { authService } from "../../services";
+import { toast } from "sonner";
+
+export default function Profile() {
+  const user = useAuthStore((s) => s.user);
+  const setUser = useAuthStore((s) => s.setUser);
+  const queryClient = useQueryClient();
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: user?.firstName || "",
+    lastName: user?.lastName || "",
+    phone: user?.phone || "",
+    instagram: user?.instagram || "",
+  });
+
+  const { mutate: updateProfile, isPending } = useMutation({
+    mutationFn: authService.updateMe,
+    onSuccess: (res) => {
+      toast.success("Profile updated successfully!");
+      setIsEditing(false);
+      setUser(res.data.data);
+      queryClient.invalidateQueries(["auth", "me"]);
+    },
+    onError: (err) => {
+      toast.error(err.response?.data?.message || "Failed to update profile");
+    },
+  });
+
+  if (!user) return null;
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    updateProfile(formData);
+  };
+
+  return (
+    <div className="max-w-2xl mx-auto space-y-6">
+      <h1 className="font-display text-2xl font-bold text-[var(--color-text-primary)]">My Profile</h1>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+        className="rounded-2xl bg-gradient-to-br from-[var(--color-surface-card)] to-[var(--color-surface-2)] border border-[var(--color-border)] p-8 text-center shadow-[var(--shadow-card)]"
+      >
+        <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[var(--color-rose-600)] to-[var(--color-rose-400)] flex items-center justify-center text-[var(--color-text-primary)] text-3xl font-bold mx-auto mb-4">
+          {getInitials(user.firstName, user.lastName)}
+        </div>
+        <h2 className="font-display text-2xl font-bold text-[var(--color-text-primary)]">{user.firstName} {user.lastName}</h2>
+        <p className="text-[var(--color-text-muted)] text-sm mt-1">{user.email}</p>
+        <div className="flex items-center justify-center gap-2 mt-3">
+          <Badge style={{ color: getMembershipColor(user.membership), borderColor: getMembershipColor(user.membership) + "40", background: getMembershipColor(user.membership) + "15" }}>
+            {user.membership} Member
+          </Badge>
+        </div>
+        <div className="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-[var(--color-border)]">
+          <div className="text-center">
+            <p className="font-display text-2xl font-bold text-gradient-rose">{user.glowPoints || 0}</p>
+            <p className="text-xs text-[var(--color-text-muted)] mt-0.5">Glow Points</p>
+          </div>
+          <div className="text-center">
+            <p className="font-display text-2xl font-bold text-[var(--color-text-primary)]">{user.lifetimeGlowPoints || 0}</p>
+            <p className="text-xs text-[var(--color-text-muted)] mt-0.5">Lifetime Points</p>
+          </div>
+          <div className="text-center">
+            <p className="font-display text-2xl font-bold text-[var(--color-rose-500)]">{user.monthlyGlowPoints || 0}</p>
+            <p className="text-xs text-[var(--color-text-muted)] mt-0.5">Monthly Points</p>
+          </div>
+        </div>
+      </motion.div>
+
+      <div className="rounded-2xl bg-[var(--color-surface-card)] border border-[var(--color-border)] p-6 space-y-4 shadow-[var(--shadow-card)]">
+        <div className="flex items-center justify-between">
+          <h3 className="font-semibold text-[var(--color-text-primary)]">Account Details</h3>
+          {!isEditing ? (
+            <button
+              onClick={() => setIsEditing(true)}
+              className="p-2 hover:bg-[var(--color-surface-2)] rounded-lg text-[var(--color-text-muted)] hover:text-[var(--color-rose-400)] transition-colors"
+            >
+              <Edit2 className="w-4 h-4" />
+            </button>
+          ) : (
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  setIsEditing(false);
+                  setFormData({
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    phone: user.phone || "",
+                    instagram: user.instagram || "",
+                  });
+                }}
+                className="p-2 hover:bg-[var(--color-surface-2)] rounded-lg text-[var(--color-text-muted)] hover:text-red-400 transition-colors"
+                disabled={isPending}
+              >
+                <X className="w-4 h-4" />
+              </button>
+              <button
+                onClick={handleSubmit}
+                disabled={isPending}
+                className="p-2 hover:bg-[var(--color-surface-2)] rounded-lg text-[var(--color-text-muted)] hover:text-emerald-400 transition-colors"
+              >
+                <Check className="w-4 h-4" />
+              </button>
+            </div>
+          )}
+        </div>
+
+        {isEditing ? (
+          <form id="profile-form" onSubmit={handleSubmit} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <label className="text-xs text-[var(--color-text-muted)] ml-1">First Name</label>
+                <input
+                  type="text"
+                  value={formData.firstName}
+                  onChange={(e) => setFormData(p => ({ ...p, firstName: e.target.value }))}
+                  className="w-full px-4 py-2 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-[var(--color-text-primary)] focus:border-[var(--color-rose-500)] outline-none"
+                  required
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs text-[var(--color-text-muted)] ml-1">Last Name</label>
+                <input
+                  type="text"
+                  value={formData.lastName}
+                  onChange={(e) => setFormData(p => ({ ...p, lastName: e.target.value }))}
+                  className="w-full px-4 py-2 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-[var(--color-text-primary)] focus:border-[var(--color-rose-500)] outline-none"
+                  required
+                />
+              </div>
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs text-[var(--color-text-muted)] ml-1">Phone</label>
+              <input
+                type="tel"
+                value={formData.phone}
+                onChange={(e) => setFormData(p => ({ ...p, phone: e.target.value }))}
+                className="w-full px-4 py-2 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-[var(--color-text-primary)] focus:border-[var(--color-rose-500)] outline-none"
+                required
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs text-[var(--color-text-muted)] ml-1">Instagram Link</label>
+              <input
+                type="url"
+                value={formData.instagram}
+                onChange={(e) => setFormData(p => ({ ...p, instagram: e.target.value }))}
+                placeholder="https://instagram.com/username"
+                className="w-full px-4 py-2 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-[var(--color-text-primary)] focus:border-[var(--color-rose-500)] outline-none"
+              />
+            </div>
+          </form>
+        ) : (
+          <div className="space-y-4">
+            {[
+              { icon: User, label: "Full Name", value: `${user.firstName} ${user.lastName}` },
+              { icon: Mail, label: "Email", value: user.email },
+              { icon: Phone, label: "Phone", value: user.phone || "Not provided" },
+              { icon: Camera, label: "Instagram", value: user.instagram || "Not provided", isLink: !!user.instagram },
+              { icon: Calendar, label: "Member Since", value: formatDate(user.createdAt) },
+              { icon: Sparkles, label: "Membership", value: user.membership },
+            ].map(({ icon: Icon, label, value, isLink }) => (
+              <div key={label} className="flex items-center gap-3 py-2 border-b border-[var(--color-border)] last:border-0">
+                <Icon className="w-4 h-4 text-[var(--color-rose-400)] flex-shrink-0" />
+                <span className="text-sm text-[var(--color-text-muted)] w-28">{label}</span>
+                {isLink ? (
+                  <a href={value} target="_blank" rel="noopener noreferrer" className="text-sm text-[var(--color-rose-400)] hover:underline flex-1 truncate">
+                    {value}
+                  </a>
+                ) : (
+                  <span className="text-sm text-[var(--color-text-primary)] flex-1">{value}</span>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

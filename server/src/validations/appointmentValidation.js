@@ -10,13 +10,18 @@ const createAppointmentSchema = z.object({
     }),
     appointmentTime: z.string({ required_error: "Appointment time is required" }).min(1, "Appointment time cannot be empty"),
     notes: z.string().max(500, "Notes cannot exceed 500 characters").optional(),
+    paymentMethod: z.enum(["Cash", "Manual UPI", "Razorpay", "Stripe"]).optional(),
+    transactionId: z.string().optional(),
+    paymentScreenshot: z.string().optional(),
 });
 
 const updateAppointmentStatusSchema = z.object({
-    status: z.enum(["Pending", "Confirmed", "Completed", "Cancelled"]),
-    paymentStatus: z.enum(["Pending", "Paid"]).optional(),
-    paymentMethod: z.enum(["Cash", "UPI", "Card"]).optional(),
+    status: z.enum(["Pending", "Confirmed", "Completed", "Cancelled", "Payment Failed"]).optional(),
+    paymentStatus: z.enum(["Unpaid", "Verification Pending", "Pending", "Paid", "Rejected"]).optional(),
+    paymentMethod: z.enum(["Cash", "Manual UPI", "Razorpay", "Stripe", "UPI", "Card"]).optional(),
     suggestedTimeFrame: z.string().optional(),
+    transactionId: z.string().optional(),
+    paymentScreenshot: z.string().optional(),
 });
 
 module.exports = {

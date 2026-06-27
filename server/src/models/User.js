@@ -15,6 +15,12 @@ const userSchema = new mongoose.Schema(
             trim: true,
         },
 
+        googleId: {
+            type: String,
+            sparse: true,
+            unique: true,
+        },
+
         email: {
             type: String,
             required: [true, "Email is required"],
@@ -66,6 +72,11 @@ const userSchema = new mongoose.Schema(
 
         dob: {
             type: Date,
+        },
+
+        instagram: {
+            type: String,
+            default: "",
         },
 
         adminNotes: {

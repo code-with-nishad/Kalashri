@@ -6,7 +6,7 @@ const sendToken = require("../utils/sendToken");
 const registerAdmin = asyncHandler(async (req, res) => {
     const admin = await adminService.registerAdmin(req.body);
     // Use existing sendToken method from auth module if needed, or just standard response
-    sendToken(admin, 201, res); // sendToken wraps sendResponse usually or sets cookie
+    sendToken(admin, 201, "Admin registered successfully", res);
 });
 
 const getDashboardStats = asyncHandler(async (req, res) => {

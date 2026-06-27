@@ -6,7 +6,7 @@ const createService = async (serviceData) => {
     // Validate request data
     const validationResult = createServiceSchema.safeParse(serviceData);
     if (!validationResult.success) {
-        const errors = validationResult.error.errors.map(err => err.message).join(", ");
+        const errors = validationResult.error.issues.map(err => err.message).join(", ");
         throw new AppError(errors, 400);
     }
 
@@ -25,7 +25,7 @@ const updateService = async (id, serviceData) => {
     // Validate request data
     const validationResult = updateServiceSchema.safeParse(serviceData);
     if (!validationResult.success) {
-        const errors = validationResult.error.errors.map(err => err.message).join(", ");
+        const errors = validationResult.error.issues.map(err => err.message).join(", ");
         throw new AppError(errors, 400);
     }
 
