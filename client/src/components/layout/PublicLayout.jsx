@@ -12,6 +12,7 @@ import Footer from "./Footer";
 const publicLinks = [
   { to: "/", label: "Home" },
   { to: "/services", label: "Services" },
+  { to: "/products", label: "Products" },
   { to: "/gallery", label: "Gallery" },
   { to: "/offers", label: "Offers" },
   { to: "/about", label: "About" },

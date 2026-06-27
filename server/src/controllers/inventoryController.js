@@ -3,7 +3,7 @@ const asyncHandler = require("../utils/asyncHandler");
 const sendResponse = require("../utils/sendResponse");
 
 exports.getProducts = asyncHandler(async (req, res) => {
-    const data = await inventoryService.getProducts();
+    const data = await inventoryService.getProducts(req.query);
     sendResponse(res, 200, true, "Products retrieved successfully", data);
 });
 

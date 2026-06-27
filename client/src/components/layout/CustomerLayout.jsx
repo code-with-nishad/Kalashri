@@ -15,6 +15,7 @@ const navItems = [
   { icon: LayoutDashboard, label: "Home", to: "/dashboard" },
   { icon: Calendar, label: "Book", to: "/book" },
   { icon: ShoppingBag, label: "My Appts", to: "/appointments" },
+  { icon: Sparkles, label: "Products", to: "/products" },
   { icon: Gift, label: "Rewards", to: "/rewards" },
   { icon: Trophy, label: "Leaderboard", to: "/leaderboard" },
   { icon: User, label: "Profile", to: "/profile" },

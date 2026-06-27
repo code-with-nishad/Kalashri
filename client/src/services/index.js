@@ -92,7 +92,7 @@ export const adminService = {
 };
 
 export const inventoryService = {
-  getProducts: () => api.get("/inventory"),
+  getProducts: (params) => api.get("/inventory", { params }),
   createProduct: (data) => api.post("/inventory", data),
   updateProduct: (id, data) => api.put(`/inventory/${id}`, data),
   logTransaction: (id, data) => api.post(`/inventory/${id}/transaction`, data),

@@ -22,6 +22,10 @@ const serviceSchema = new mongoose.Schema(
             required: [true, "Service price is required"],
             min: [0, "Price cannot be negative"],
         },
+        discountPrice: {
+            type: Number,
+            min: [0, "Discount price cannot be negative"],
+        },
         duration: {
             type: Number,
             required: [true, "Service duration is required"],
@@ -31,6 +35,9 @@ const serviceSchema = new mongoose.Schema(
             type: String,
             trim: true,
         },
+        benefits: [{ type: String, trim: true }],
+        featured: { type: Boolean, default: false },
+        popular: { type: Boolean, default: false },
         isActive: {
             type: Boolean,
             default: true,

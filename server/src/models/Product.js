@@ -7,6 +7,12 @@ const productSchema = new mongoose.Schema(
             required: [true, "Product name is required"],
             trim: true,
         },
+        slug: {
+            type: String,
+            trim: true,
+            unique: true,
+            sparse: true,
+        },
         sku: {
             type: String,
             required: [true, "SKU is required"],
@@ -17,6 +23,24 @@ const productSchema = new mongoose.Schema(
             type: String,
             required: [true, "Category is required"],
         },
+        subcategory: { type: String, trim: true },
+        brand: { type: String, trim: true },
+        description: { type: String, trim: true },
+        features: { type: String, trim: true },
+        benefits: { type: String, trim: true },
+        ingredients: { type: String, trim: true },
+        usage: { type: String, trim: true },
+        image: { type: String, trim: true },
+        gallery: [{ type: String, trim: true }],
+        price: {
+            type: Number,
+            required: [true, "Price is required"],
+            default: 0,
+        },
+        originalPrice: { type: Number },
+        discount: { type: Number, default: 0 },
+        rating: { type: Number, default: 0 },
+        reviewCount: { type: Number, default: 0 },
         stockQuantity: {
             type: Number,
             default: 0,
@@ -30,6 +54,9 @@ const productSchema = new mongoose.Schema(
             type: Number,
             default: 5,
         },
+        isFeatured: { type: Boolean, default: false },
+        isActive: { type: Boolean, default: true },
+        tags: [{ type: String, trim: true }],
     },
     { timestamps: true }
 );

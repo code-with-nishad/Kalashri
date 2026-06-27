@@ -17,6 +17,8 @@ const Contact = lazy(() => import("../pages/public/Contact"));
 const Login = lazy(() => import("../pages/public/Login"));
 const Register = lazy(() => import("../pages/public/Register"));
 
+const Products = lazy(() => import("../pages/public/Products"));
+
 // Customer Pages
 const CustomerDashboard = lazy(() => import("../pages/customer/Dashboard"));
 const BookAppointment = lazy(() => import("../pages/customer/BookAppointment"));
@@ -57,6 +59,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <Suspense fallback={<PageLoader />}><Home /></Suspense> },
       { path: "/services", element: <Suspense fallback={<PageLoader />}><Services /></Suspense> },
+      { path: "/products", element: <Suspense fallback={<PageLoader />}><Products /></Suspense> },
       { path: "/gallery", element: <Suspense fallback={<PageLoader />}><Gallery /></Suspense> },
       { path: "/offers", element: <Suspense fallback={<PageLoader />}><Offers /></Suspense> },
       { path: "/about", element: <Suspense fallback={<PageLoader />}><About /></Suspense> },

@@ -10,6 +10,8 @@ import { formatDate, formatCurrency, getMembershipColor } from "../../utils";
 import { StatCard } from "../../components/ui/Card";
 import { Badge } from "../../components/ui/Badge";
 import { APPOINTMENT_STATUSES } from "../../constants";
+import ProductCarousel from "../../components/products/ProductCarousel";
+import ProductModal from "../../components/products/ProductModal";
 
 export default function CustomerDashboard() {
   const user = useAuthStore((s) => s.user);
@@ -49,6 +51,7 @@ export default function CustomerDashboard() {
   // ───── Services Slider Logic ─────
   const sliderRef = useRef(null);
   const [sliderIndex, setSliderIndex] = useState(0);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const activeServices = services.filter(s => s.isActive);
   const maxIndex = Math.max(0, activeServices.length - 1);
 
@@ -228,33 +231,19 @@ export default function CustomerDashboard() {
 
       {/* ═══════════════ Products We Offer ═══════════════ */}
       {products.length > 0 && (
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
-          <h2 className="font-display text-xl font-semibold text-[var(--color-text-primary)] flex items-center gap-2 mb-4">
-            <Package className="w-5 h-5 text-purple-400" /> Products We Use
-          </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-            {products.map((p, i) => (
-              <motion.div key={p._id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.05 * i }}
-                className="rounded-2xl bg-[var(--color-surface-card)] border border-[var(--color-border)] p-4 hover:border-purple-500/30 transition-all hover:-translate-y-0.5 hover:shadow-md"
-              >
-                <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center mb-3">
-                  <ShoppingBag className="w-5 h-5 text-purple-400" />
-                </div>
-                <h3 className="font-semibold text-sm text-[var(--color-text-primary)] line-clamp-1">{p.name}</h3>
-                <p className="text-[10px] text-[var(--color-text-muted)] mt-0.5">{p.category}</p>
-                <div className="flex items-center gap-1.5 mt-2">
-                  <span className={`w-1.5 h-1.5 rounded-full ${p.stockQuantity > p.lowStockThreshold ? "bg-emerald-400" : p.stockQuantity > 0 ? "bg-yellow-400" : "bg-red-400"}`} />
-                  <span className="text-[10px] text-[var(--color-text-muted)]">
-                    {p.stockQuantity > p.lowStockThreshold ? "In Stock" : p.stockQuantity > 0 ? "Low Stock" : "Out of Stock"}
-                  </span>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+        <>
+          <ProductCarousel 
+            products={products} 
+            onViewDetails={setSelectedProduct} 
+            title="Products We Use" 
+            icon={Package} 
+          />
+          <ProductModal 
+            isOpen={!!selectedProduct} 
+            product={selectedProduct} 
+            onClose={() => setSelectedProduct(null)} 
+          />
+        </>
       )}
 
       {/* Upcoming Appointment */}

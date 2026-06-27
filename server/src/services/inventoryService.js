@@ -5,7 +5,25 @@ const notificationService = require("./notificationService");
 const User = require("../models/User"); // To find admin to notify if needed
 const { productSchema, transactionSchema } = require("../validations/inventoryValidation");
 
-exports.getProducts = async () => Product.find().sort("name");
+exports.getProducts = async (query = {}) => {
+    let filter = {};
+    if (query.category) filter.category = query.category;
+    if (query.brand) filter.brand = query.brand;
+    if (query.search) {
+        filter.$or = [
+            { name: { $regex: query.search, $options: "i" } },
+            { description: { $regex: query.search, $options: "i" } }
+        ];
+    }
+    
+    let sort = { name: 1 };
+    if (query.sort === "newest") sort = { createdAt: -1 };
+    else if (query.sort === "price-asc") sort = { price: 1 };
+    else if (query.sort === "price-desc") sort = { price: -1 };
+    else if (query.sort === "rating") sort = { rating: -1 };
+
+    return Product.find(filter).sort(sort);
+};
 
 exports.createProduct = async (data) => {
     const validated = productSchema.parse(data);
