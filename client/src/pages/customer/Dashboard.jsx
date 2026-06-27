@@ -20,7 +20,7 @@ export default function CustomerDashboard() {
   const { data: rewardsData } = useQuery({ queryKey: QUERY_KEYS.REWARDS, queryFn: rewardService.getAll });
   const { data: leaderboardData } = useQuery({ queryKey: ["LEADERBOARD"], queryFn: authService.getLeaderboard });
   const { data: servicesData } = useQuery({ queryKey: QUERY_KEYS.SERVICES, queryFn: serviceService.getAll });
-  const { data: productsData } = useQuery({ queryKey: QUERY_KEYS.PRODUCTS || ["PRODUCTS"], queryFn: inventoryService.getProducts });
+  const { data: productsData } = useQuery({ queryKey: QUERY_KEYS.PRODUCTS, queryFn: inventoryService.getProducts });
 
   const appointments = apptData?.data || [];
   const notifications = notifData?.data || [];
@@ -231,6 +231,7 @@ export default function CustomerDashboard() {
 
       {/* ═══════════════ Products We Offer ═══════════════ */}
       {products.length > 0 && (
+<<<<<<< HEAD
         <>
           <ProductCarousel 
             products={products} 
@@ -244,6 +245,37 @@ export default function CustomerDashboard() {
             onClose={() => setSelectedProduct(null)} 
           />
         </>
+=======
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+          <h2 className="font-display text-xl font-semibold text-[var(--color-text-primary)] flex items-center gap-2 mb-4">
+            <Package className="w-5 h-5 text-purple-400" /> Products We Use
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+            {products.map((p, i) => (
+              <motion.div key={p._id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.05 * i }}
+                className="rounded-2xl bg-[var(--color-surface-card)] border border-[var(--color-border)] p-4 hover:border-purple-500/30 transition-all hover:-translate-y-0.5 hover:shadow-md"
+              >
+                <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center mb-3">
+                  <ShoppingBag className="w-5 h-5 text-purple-400" />
+                </div>
+                <h3 className="font-semibold text-sm text-[var(--color-text-primary)] line-clamp-1">{p.name}</h3>
+                <p className="text-[10px] text-[var(--color-text-muted)] mt-0.5">{p.brand || "Salon Product"} · {p.category}{p.size ? ` · ${p.size}` : ""}</p>
+                {p.description && <p className="text-[10px] text-[var(--color-text-secondary)] mt-1 line-clamp-2">{p.description}</p>}
+                {p.keyIngredients?.length > 0 && <p className="text-[10px] text-[var(--color-text-muted)] mt-1 line-clamp-1">{p.keyIngredients.slice(0, 3).join(", ")}</p>}
+                <div className="flex items-center gap-1.5 mt-2">
+                  <span className={`w-1.5 h-1.5 rounded-full ${p.stockQuantity > p.lowStockThreshold ? "bg-emerald-400" : p.stockQuantity > 0 ? "bg-yellow-400" : "bg-red-400"}`} />
+                  <span className="text-[10px] text-[var(--color-text-muted)]">
+                    {p.stockQuantity > p.lowStockThreshold ? "In Stock" : p.stockQuantity > 0 ? "Low Stock" : "Out of Stock"}
+                  </span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+>>>>>>> f55ae792d48231ef8f03e454cd36041d2c1eb580
       )}
 
       {/* Upcoming Appointment */}
