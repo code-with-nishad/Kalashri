@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Sparkles, Calendar, ArrowRight, Bell, Gift, Trophy, Crown } from "lucide-react";
-import confetti from "canvas-confetti";
+import { Sparkles, Calendar, ArrowRight, Bell, Gift, Trophy, Crown, ChevronLeft, ChevronRight, Clock, ShoppingBag, Package } from "lucide-react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useAuthStore } from "../../store/authStore";
-import { appointmentService, notificationService, rewardService, authService } from "../../services";
+import { appointmentService, notificationService, rewardService, authService, serviceService, inventoryService } from "../../services";
 import { QUERY_KEYS } from "../../constants/queryKeys";
 import { formatDate, formatCurrency, getMembershipColor } from "../../utils";
 import { StatCard } from "../../components/ui/Card";
@@ -17,11 +17,15 @@ export default function CustomerDashboard() {
   const { data: notifData } = useQuery({ queryKey: QUERY_KEYS.NOTIFICATIONS, queryFn: notificationService.getAll });
   const { data: rewardsData } = useQuery({ queryKey: QUERY_KEYS.REWARDS, queryFn: rewardService.getAll });
   const { data: leaderboardData } = useQuery({ queryKey: ["LEADERBOARD"], queryFn: authService.getLeaderboard });
+  const { data: servicesData } = useQuery({ queryKey: QUERY_KEYS.SERVICES, queryFn: serviceService.getAll });
+  const { data: productsData } = useQuery({ queryKey: QUERY_KEYS.PRODUCTS || ["PRODUCTS"], queryFn: inventoryService.getProducts });
 
   const appointments = apptData?.data || [];
   const notifications = notifData?.data || [];
   const rewards = rewardsData?.data || [];
   const leaderboard = leaderboardData?.data?.lifetime || [];
+  const services = servicesData?.data || [];
+  const products = productsData?.data || [];
 
   const upcoming = appointments.find(a => a.status === "Confirmed" || a.status === "Pending");
   const unreadCount = notifications.filter(n => !n.isRead).length;
@@ -41,6 +45,58 @@ export default function CustomerDashboard() {
       pointsAwayText = `You are ${pointsDiff} points away from entering the Leaderboard! Book a session to catch up!`;
     }
   }
+
+  // ───── Services Slider Logic ─────
+  const sliderRef = useRef(null);
+  const [sliderIndex, setSliderIndex] = useState(0);
+  const activeServices = services.filter(s => s.isActive);
+  const maxIndex = Math.max(0, activeServices.length - 1);
+
+  const scrollToIndex = useCallback((idx) => {
+    const clamped = Math.max(0, Math.min(idx, maxIndex));
+    setSliderIndex(clamped);
+    if (sliderRef.current) {
+      const card = sliderRef.current.children[clamped];
+      if (card) card.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    }
+  }, [maxIndex]);
+
+  // Auto-scroll every 3 seconds
+  useEffect(() => {
+    if (activeServices.length <= 1) return;
+    const timer = setInterval(() => {
+      setSliderIndex(prev => {
+        const next = prev >= maxIndex ? 0 : prev + 1;
+        if (sliderRef.current?.children[next]) {
+          sliderRef.current.children[next].scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+        }
+        return next;
+      });
+    }, 3000);
+    return () => clearInterval(timer);
+  }, [activeServices.length, maxIndex]);
+
+  // Touch/drag swipe support
+  const touchStart = useRef(null);
+  const handleTouchStart = (e) => { touchStart.current = e.touches[0].clientX; };
+  const handleTouchEnd = (e) => {
+    if (touchStart.current === null) return;
+    const diff = touchStart.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) {
+      scrollToIndex(diff > 0 ? sliderIndex + 1 : sliderIndex - 1);
+    }
+    touchStart.current = null;
+  };
+
+  // Service card gradient colors
+  const serviceColors = [
+    "from-rose-500/20 to-pink-500/10",
+    "from-purple-500/20 to-indigo-500/10",
+    "from-amber-500/20 to-yellow-500/10",
+    "from-emerald-500/20 to-teal-500/10",
+    "from-blue-500/20 to-cyan-500/10",
+    "from-fuchsia-500/20 to-pink-500/10",
+  ];
 
   return (
     <div className="space-y-8">
@@ -100,6 +156,103 @@ export default function CustomerDashboard() {
           <div>
             <h3 className="font-semibold text-[var(--color-text-primary)]">Glow Points Goal</h3>
             <p className="text-sm text-[var(--color-text-muted)] mt-0.5">{pointsAwayText}</p>
+          </div>
+        </motion.div>
+      )}
+
+      {/* ═══════════════ Our Services Slider ═══════════════ */}
+      {activeServices.length > 0 && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-display text-xl font-semibold text-[var(--color-text-primary)] flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-[var(--color-rose-400)]" /> Our Services
+            </h2>
+            <div className="flex items-center gap-2">
+              <button onClick={() => scrollToIndex(sliderIndex - 1)} disabled={sliderIndex === 0}
+                className="w-8 h-8 rounded-full bg-[var(--color-surface-card)] border border-[var(--color-border)] flex items-center justify-center text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-rose-500)]/30 transition-all disabled:opacity-30 disabled:pointer-events-none">
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button onClick={() => scrollToIndex(sliderIndex + 1)} disabled={sliderIndex >= maxIndex}
+                className="w-8 h-8 rounded-full bg-[var(--color-surface-card)] border border-[var(--color-border)] flex items-center justify-center text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-rose-500)]/30 transition-all disabled:opacity-30 disabled:pointer-events-none">
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          <div ref={sliderRef} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}
+            className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          >
+            {activeServices.map((svc, i) => (
+              <motion.div key={svc._id}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: i * 0.05 }}
+                className={`snap-center flex-shrink-0 w-[260px] sm:w-[280px] rounded-2xl bg-gradient-to-br ${serviceColors[i % serviceColors.length]} border border-[var(--color-border)] p-5 flex flex-col justify-between hover:border-[var(--color-rose-500)]/40 transition-all hover:-translate-y-1 hover:shadow-lg`}
+              >
+                {svc.image && (
+                  <img src={svc.image} alt={svc.name} className="w-full h-32 object-cover rounded-xl mb-3" />
+                )}
+                <div className="flex-1">
+                  <Badge variant="ghost" className="mb-2 text-[10px]">{svc.category}</Badge>
+                  <h3 className="font-display font-bold text-[var(--color-text-primary)] text-base">{svc.name}</h3>
+                  {svc.description && (
+                    <p className="text-xs text-[var(--color-text-muted)] mt-1 line-clamp-2">{svc.description}</p>
+                  )}
+                  <div className="flex items-center gap-3 mt-3 text-xs text-[var(--color-text-muted)]">
+                    <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {svc.duration} min</span>
+                    <span className="font-bold text-[var(--color-rose-400)] text-sm">{formatCurrency(svc.price)}</span>
+                  </div>
+                </div>
+                <Link to={`/book?service=${svc._id}`}
+                  className="mt-4 inline-flex items-center justify-center gap-1.5 w-full py-2.5 bg-[var(--color-rose-500)] hover:bg-[var(--color-rose-600)] text-white font-semibold rounded-xl text-xs transition-all hover:shadow-md"
+                >
+                  <Calendar className="w-3.5 h-3.5" /> Book Now
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Dot indicators */}
+          {activeServices.length > 1 && (
+            <div className="flex justify-center gap-1.5 mt-3">
+              {activeServices.map((_, i) => (
+                <button key={i} onClick={() => scrollToIndex(i)}
+                  className={`w-2 h-2 rounded-full transition-all ${i === sliderIndex ? "bg-[var(--color-rose-500)] w-5" : "bg-[var(--color-text-muted)]/30 hover:bg-[var(--color-text-muted)]/60"}`}
+                />
+              ))}
+            </div>
+          )}
+        </motion.div>
+      )}
+
+      {/* ═══════════════ Products We Offer ═══════════════ */}
+      {products.length > 0 && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+          <h2 className="font-display text-xl font-semibold text-[var(--color-text-primary)] flex items-center gap-2 mb-4">
+            <Package className="w-5 h-5 text-purple-400" /> Products We Use
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+            {products.map((p, i) => (
+              <motion.div key={p._id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.05 * i }}
+                className="rounded-2xl bg-[var(--color-surface-card)] border border-[var(--color-border)] p-4 hover:border-purple-500/30 transition-all hover:-translate-y-0.5 hover:shadow-md"
+              >
+                <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center mb-3">
+                  <ShoppingBag className="w-5 h-5 text-purple-400" />
+                </div>
+                <h3 className="font-semibold text-sm text-[var(--color-text-primary)] line-clamp-1">{p.name}</h3>
+                <p className="text-[10px] text-[var(--color-text-muted)] mt-0.5">{p.category}</p>
+                <div className="flex items-center gap-1.5 mt-2">
+                  <span className={`w-1.5 h-1.5 rounded-full ${p.stockQuantity > p.lowStockThreshold ? "bg-emerald-400" : p.stockQuantity > 0 ? "bg-yellow-400" : "bg-red-400"}`} />
+                  <span className="text-[10px] text-[var(--color-text-muted)]">
+                    {p.stockQuantity > p.lowStockThreshold ? "In Stock" : p.stockQuantity > 0 ? "Low Stock" : "Out of Stock"}
+                  </span>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </motion.div>
       )}
