@@ -43,7 +43,12 @@ const userSchema = new mongoose.Schema(
             default: "customer",
         },
 
-        loyaltyPoints: {
+        glowPoints: {
+            type: Number,
+            default: 0,
+        },
+
+        lifetimeGlowPoints: {
             type: Number,
             default: 0,
         },
@@ -57,6 +62,30 @@ const userSchema = new mongoose.Schema(
         avatar: {
             type: String,
             default: "",
+        },
+
+        dob: {
+            type: Date,
+        },
+
+        adminNotes: {
+            type: String,
+            default: "",
+        },
+
+        isHiddenFromLeaderboard: {
+            type: Boolean,
+            default: false,
+        },
+
+        isFeaturedOnLeaderboard: {
+            type: Boolean,
+            default: false,
+        },
+
+        monthlyGlowPoints: {
+            type: Number,
+            default: 0,
         },
 
         isVerified: {
@@ -93,11 +122,11 @@ userSchema.methods.generateToken = function () {
 };
 
 userSchema.methods.updateMembership = function () {
-    if (this.loyaltyPoints >= 700) {
+    if (this.lifetimeGlowPoints >= 2000) {
         this.membership = "Diamond";
-    } else if (this.loyaltyPoints >= 300) {
+    } else if (this.lifetimeGlowPoints >= 1000) {
         this.membership = "Gold";
-    } else if (this.loyaltyPoints >= 100) {
+    } else if (this.lifetimeGlowPoints >= 500) {
         this.membership = "Silver";
     } else {
         this.membership = "Bronze";
