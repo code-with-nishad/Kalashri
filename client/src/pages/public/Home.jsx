@@ -3,7 +3,7 @@ import { motion, useScroll, useTransform, AnimatePresence, useInView } from "fra
 import { Link } from "react-router-dom";
 import {
   Sparkles, ArrowRight, MessageCircle, Star, CheckCircle,
-  ChevronDown, Clock, Award, Users, Shield, Plus, Minus, Instagram,
+  ChevronDown, Clock, Award, Users, Shield, Plus, Minus, Camera,
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { cmsService, serviceService } from "../../services";
@@ -155,7 +155,7 @@ function HeroSection({ settings }) {
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-2 px-8 py-4 glass border border-white/30 text-white font-bold rounded-2xl text-lg transition-all hover:bg-white/10 hover:border-white/60 hover:-translate-y-1 hover:shadow-xl backdrop-blur-md"
           >
-            <Instagram className="w-5 h-5 text-pink-400" />
+            <Camera className="w-5 h-5 text-pink-400" />
             Instagram
           </a>
         </motion.div>

@@ -32,6 +32,16 @@ const getMyRedemptionHistory = asyncHandler(async (req, res) => {
     sendResponse(res, 200, true, "Redemption history retrieved successfully", history);
 });
 
+const getAllRedemptions = asyncHandler(async (req, res) => {
+    const redemptions = await rewardService.getAllRedemptions();
+    sendResponse(res, 200, true, "All redemptions retrieved successfully", redemptions);
+});
+
+const updateRedemptionStatus = asyncHandler(async (req, res) => {
+    const redemption = await rewardService.updateRedemptionStatus(req.params.id, req.body);
+    sendResponse(res, 200, true, "Redemption status updated successfully", redemption);
+});
+
 module.exports = {
     createReward,
     updateReward,
@@ -39,4 +49,6 @@ module.exports = {
     getActiveRewards,
     redeemReward,
     getMyRedemptionHistory,
+    getAllRedemptions,
+    updateRedemptionStatus,
 };

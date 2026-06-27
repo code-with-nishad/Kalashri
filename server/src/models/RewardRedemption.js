@@ -22,8 +22,8 @@ const rewardRedemptionSchema = new mongoose.Schema(
         },
         status: {
             type: String,
-            enum: ["Success"], // Could be expanded later
-            default: "Success",
+            enum: ["Pending", "Success", "Rejected"],
+            default: "Pending",
         },
         redeemedAt: {
             type: Date,

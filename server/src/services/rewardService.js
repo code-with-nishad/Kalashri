@@ -95,7 +95,7 @@ const redeemReward = async (userId, rewardId) => {
         reward: reward._id,
         glowPointsSpent: reward.glowPointsRequired,
         discountAmount: reward.discountAmount,
-        status: "Success",
+        status: "Pending",
     });
 
     return redemption;
@@ -108,6 +108,48 @@ const getMyRedemptionHistory = async (userId) => {
     return history;
 };
 
+const getAllRedemptions = async () => {
+    const redemptions = await RewardRedemption.find()
+        .populate("user")
+        .populate("reward")
+        .sort("-redeemedAt");
+    return redemptions;
+};
+
+const updateRedemptionStatus = async (id, statusData) => {
+    const { status } = statusData;
+    if (!["Pending", "Success", "Rejected"].includes(status)) {
+        throw new AppError("Invalid redemption status", 400);
+    }
+
+    const redemption = await RewardRedemption.findById(id);
+    if (!redemption) {
+        throw new AppError("Redemption not found", 404);
+    }
+
+    // Refund points if rejected
+    if (redemption.status === "Pending" && status === "Rejected") {
+        const user = await User.findById(redemption.user);
+        if (user) {
+            user.glowPoints += redemption.glowPointsSpent;
+            await user.save();
+
+            // Log refund transaction
+            await LoyaltyTransaction.create({
+                user: user._id,
+                points: redemption.glowPointsSpent,
+                type: "Refunded",
+                reason: "Refund for rejected reward redemption",
+            });
+        }
+    }
+
+    redemption.status = status;
+    await redemption.save();
+
+    return await RewardRedemption.findById(id).populate("user").populate("reward");
+};
+
 module.exports = {
     createReward,
     updateReward,
@@ -115,4 +157,6 @@ module.exports = {
     getActiveRewards,
     redeemReward,
     getMyRedemptionHistory,
+    getAllRedemptions,
+    updateRedemptionStatus,
 };
