@@ -62,7 +62,8 @@ export default function Profile() {
     <div className="max-w-2xl mx-auto space-y-6">
       <h1 className="font-display text-2xl font-bold text-[var(--color-text-primary)]">My Profile</h1>
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-        className="rounded-2xl bg-gradient-to-br from-[var(--color-surface-card)] to-[var(--color-surface-2)] border border-[var(--color-border)] p-8 text-center shadow-[var(--shadow-card)]"
+        className="rounded-2xl bg-gradient-to-br from-[var(--color-surface-card)] to-[var(--color-surface-2)] border p-8 text-center transition-all"
+        style={{ borderColor: getMembershipColor(user.membership) + "50", boxShadow: `0 10px 40px ${getMembershipColor(user.membership)}15` }}
       >
         <div className="relative w-24 h-24 mx-auto mb-4 group cursor-pointer">
           <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" id="avatar-upload" disabled={isUploading} />

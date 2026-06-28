@@ -2,7 +2,7 @@ import { Link, useLocation, Outlet } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard, Calendar, Gift, Trophy, Bell, User,
-  Sparkles, ShoppingBag, ChevronLeft, ChevronRight,
+  Sparkles, ShoppingBag, ShoppingCart, ChevronLeft, ChevronRight,
   LogOut, History,
 } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -15,7 +15,8 @@ import { SALON_NAME } from "../../constants";
 const navItems = [
   { icon: LayoutDashboard, label: "Home", to: "/dashboard" },
   { icon: Calendar, label: "Book", to: "/book" },
-  { icon: ShoppingBag, label: "My Appts", to: "/appointments" },
+  { icon: History, label: "My Appts", to: "/appointments" },
+  { icon: ShoppingCart, label: "My Cart", to: "/cart" },
   { icon: Sparkles, label: "Products", to: "/products" },
   { icon: Gift, label: "Rewards", to: "/rewards" },
   { icon: Trophy, label: "Leaderboard", to: "/leaderboard" },
