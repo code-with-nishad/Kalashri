@@ -1,6 +1,7 @@
 import React, { Suspense, lazy } from "react";
 import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
 import { ProtectedRoute, AdminRoute, PublicOnlyRoute } from "./ProtectedRoute";
+import GlobalError from "../components/ui/GlobalError";
 
 // Layouts
 const PublicLayout = lazy(() => import("../components/layout/PublicLayout"));
@@ -56,6 +57,7 @@ const router = createBrowserRouter([
   // Public Routes
   {
     element: <Suspense fallback={<PageLoader />}><PublicLayout /></Suspense>,
+    errorElement: <GlobalError />,
     children: [
       { path: "/", element: <Suspense fallback={<PageLoader />}><Home /></Suspense> },
       { path: "/services", element: <Suspense fallback={<PageLoader />}><Services /></Suspense> },
@@ -69,6 +71,7 @@ const router = createBrowserRouter([
   // Public Only (redirect to dashboard if logged in)
   {
     element: <Suspense fallback={<PageLoader />}><PublicOnlyRoute /></Suspense>,
+    errorElement: <GlobalError />,
     children: [
       { path: "/login", element: <Suspense fallback={<PageLoader />}><Login /></Suspense> },
       { path: "/register", element: <Suspense fallback={<PageLoader />}><Register /></Suspense> },
@@ -77,6 +80,7 @@ const router = createBrowserRouter([
   // Customer Protected
   {
     element: <Suspense fallback={<PageLoader />}><ProtectedRoute /></Suspense>,
+    errorElement: <GlobalError />,
     children: [
       {
         element: <Suspense fallback={<PageLoader />}><CustomerLayout /></Suspense>,
@@ -97,6 +101,7 @@ const router = createBrowserRouter([
   // Admin Protected
   {
     element: <Suspense fallback={<PageLoader />}><AdminRoute /></Suspense>,
+    errorElement: <GlobalError />,
     children: [
       {
         element: <Suspense fallback={<PageLoader />}><AdminLayout /></Suspense>,

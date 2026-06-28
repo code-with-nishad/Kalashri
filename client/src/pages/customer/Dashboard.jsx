@@ -6,7 +6,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { useAuthStore } from "../../store/authStore";
 import { appointmentService, notificationService, rewardService, authService, serviceService, inventoryService } from "../../services";
 import { QUERY_KEYS } from "../../constants/queryKeys";
-import { formatDate, formatCurrency, getMembershipColor } from "../../utils";
+import { formatDate, formatCurrency, getMembershipColor, cn } from "../../utils";
 import { StatCard } from "../../components/ui/Card";
 import { Badge } from "../../components/ui/Badge";
 import { APPOINTMENT_STATUSES } from "../../constants";
