@@ -31,6 +31,9 @@ export const QUERY_KEYS = {
   // Leaderboard
   LEADERBOARD: ["leaderboard"],
 
+  // Journey
+  MY_JOURNEY: ["journey", "me"],
+
   // Products
   PRODUCTS: ["products"],
 

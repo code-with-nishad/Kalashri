@@ -139,3 +139,7 @@ export const orderService = {
   getAllOrders: () => api.get("/orders"),
   updateStatus: (id, data) => api.put(`/orders/${id}/status`, data),
 };
+
+export const journeyService = {
+  getMyJourney: () => api.get("/journey/me"),
+};

@@ -5,6 +5,7 @@ const User = require("../models/User");
 const AppError = require("../utils/AppError");
 const notificationService = require("./notificationService");
 const emailService = require("../utils/emailService");
+const journeyService = require("./journeyService");
 const { createAppointmentSchema, updateAppointmentStatusSchema } = require("../validations/appointmentValidation");
 
 const bookAppointment = async (userId, appointmentData) => {
@@ -252,6 +253,12 @@ const updateAppointmentStatus = async (appointmentId, updateData) => {
                 }
                 await user.save();
             }
+        }
+
+        try {
+            await journeyService.processAppointmentCompletion(appointment.customer._id, appointment);
+        } catch (err) {
+            console.error("Beauty journey update failed:", err);
         }
     }
 
