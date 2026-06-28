@@ -52,7 +52,7 @@ const getCurrentUser = async (id) => {
 
 const updateCurrentUser = async (id, data) => {
     // Only allow updating specific fields
-    const { firstName, lastName, phone, instagram } = data;
+    const { firstName, lastName, phone, instagram, avatar } = data;
     
     // Check if phone is already taken by another user
     if (phone) {
@@ -64,7 +64,7 @@ const updateCurrentUser = async (id, data) => {
 
     const updatedUser = await User.findByIdAndUpdate(
         id,
-        { firstName, lastName, phone, instagram },
+        { firstName, lastName, phone, instagram, avatar },
         { returnDocument: 'after', runValidators: true }
     );
     return updatedUser;

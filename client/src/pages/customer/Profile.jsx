@@ -27,7 +27,7 @@ export default function Profile() {
     onSuccess: (res) => {
       toast.success("Profile updated successfully!");
       setIsEditing(false);
-      setUser(res.data.data);
+      setUser(res.data);
       queryClient.invalidateQueries(["auth", "me"]);
     },
     onError: (err) => {
