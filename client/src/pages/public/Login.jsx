@@ -86,10 +86,10 @@ export default function Login() {
           <p className="text-[var(--color-text-muted)] text-lg">Your beauty, our passion</p>
           <div className="mt-10 grid grid-cols-2 gap-4">
             {[
-              { val: "1000+", label: "Happy Clients" },
-              { val: "10+", label: "Years Experience" },
-              { val: "50+", label: "Services" },
-              { val: "100%", label: "Satisfaction" },
+              { val: "Premium", label: "Quality Products" },
+              { val: "Expert", label: "Stylists & Artists" },
+              { val: "100%", label: "Hygienic Space" },
+              { val: "Relaxing", label: "Salon Vibe" },
             ].map(({ val, label }) => (
               <div key={label} className="glass rounded-2xl p-4 text-center">
                 <p className="font-display text-2xl font-bold text-gradient-rose">{val}</p>

@@ -3,7 +3,7 @@ import { motion, useScroll, useTransform, AnimatePresence, useInView } from "fra
 import { Link } from "react-router-dom";
 import {
   Sparkles, ArrowRight, MessageCircle, Star, CheckCircle,
-  ChevronDown, Clock, Award, Users, Shield, Plus, Minus, Camera, Package, ShoppingBag
+  ChevronDown, Clock, Award, Users, Shield, Plus, Minus, Camera, Package, ShoppingBag, Music
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { cmsService, serviceService, inventoryService } from "../../services";
@@ -194,11 +194,11 @@ function HeroSection({ settings }) {
 
 // ==================== STATS ====================
 function StatsSection() {
-  const stats = [
-    { icon: Users, value: "1000", suffix: "+", label: "Happy Clients" },
-    { icon: Award, value: "10", suffix: "+", label: "Years Experience" },
-    { icon: CheckCircle, value: "50", suffix: "+", label: "Services Offered" },
-    { icon: Star, value: "4.9", suffix: "★", label: "Average Rating" },
+  const promises = [
+    { icon: Sparkles, value: "Premium", label: "Quality Products" },
+    { icon: Award, value: "Expert", label: "Stylists & Artists" },
+    { icon: Shield, value: "100%", label: "Hygienic Space" },
+    { icon: Sparkles, value: "Relaxing", label: "Salon Vibe" },
   ];
   return (
     <section className="py-20 relative bg-gradient-to-b from-[var(--color-surface)] to-[var(--color-surface-2)] border-y border-[var(--color-border)] overflow-hidden">
@@ -207,9 +207,9 @@ function StatsSection() {
       
       <div className="max-w-6xl mx-auto px-4 relative z-10">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-          {stats.map((stat, i) => (
+          {promises.map((promise, i) => (
             <motion.div
-              key={stat.label}
+              key={promise.label}
               initial={{ opacity: 0, scale: 0.5, y: 30 }}
               whileInView={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ delay: i * 0.1, type: "spring", stiffness: 100 }}
@@ -217,12 +217,12 @@ function StatsSection() {
               className="text-center group"
             >
               <div className="w-16 h-16 rounded-3xl bg-[var(--color-surface-card)] border border-[var(--color-border)] shadow-lg flex items-center justify-center mx-auto mb-4 group-hover:-translate-y-2 group-hover:border-[var(--color-rose-400)] transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(244,63,94,0.2)]">
-                <stat.icon className="w-8 h-8 text-[var(--color-rose-500)] group-hover:scale-110 transition-transform" />
+                <promise.icon className="w-8 h-8 text-[var(--color-rose-500)] group-hover:scale-110 transition-transform" />
               </div>
-              <p className="font-display text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-text-primary)] to-[var(--color-text-secondary)]">
-                <CountUp end={stat.value} suffix={stat.suffix} />
+              <p className="font-display text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-text-primary)] to-[var(--color-text-secondary)]">
+                {promise.value}
               </p>
-              <p className="text-sm font-semibold text-[var(--color-text-muted)] mt-2 uppercase tracking-widest">{stat.label}</p>
+              <p className="text-sm font-semibold text-[var(--color-text-muted)] mt-2 uppercase tracking-widest">{promise.label}</p>
             </motion.div>
           ))}
         </div>
@@ -407,7 +407,7 @@ function WhyUsSection() {
   const reasons = [
     { icon: Award, title: "Certified Professionals", desc: "All our staff are trained and certified beauty experts." },
     { icon: Shield, title: "Premium Products Only", desc: "We use only top-quality, skin-safe beauty products." },
-    { icon: Users, title: "1000+ Happy Clients", desc: "A trusted name in beauty for over a decade." },
+    { icon: Sparkles, title: "Relaxing Vibe", desc: "A calm, luxurious environment designed for your ultimate comfort." },
     { icon: Star, title: "Loyalty Rewards", desc: "Earn Glow Points on every visit and redeem for free services." },
   ];
   return (
@@ -841,6 +841,50 @@ function CTASection() {
   );
 }
 
+// ==================== MUSIC PLAYER ====================
+function MusicPlayer() {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    audioRef.current = new Audio("https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=ambient-piano-amp-strings-10711.mp3");
+    audioRef.current.loop = true;
+    audioRef.current.volume = 0.3;
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
+
+  const togglePlay = () => {
+    if (!audioRef.current) return;
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play().catch(e => console.log("Audio play failed:", e));
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  return (
+    <motion.button
+      initial={{ opacity: 0, scale: 0 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: 1, type: "spring" }}
+      onClick={togglePlay}
+      className={`fixed bottom-6 left-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all ${
+        isPlaying ? "bg-[var(--color-rose-500)] text-white shadow-[0_0_20px_rgba(244,63,94,0.4)] animate-pulse" : "bg-white/80 text-[var(--color-rose-500)] backdrop-blur-md border border-[var(--color-rose-200)] hover:bg-[var(--color-rose-50)]"
+      }`}
+      aria-label="Toggle Background Music"
+    >
+      <Music className={`w-6 h-6 ${isPlaying ? 'animate-bounce' : ''}`} />
+    </motion.button>
+  );
+}
+
 // ==================== MAIN HOME ====================
 export default function Home() {
   const { data: settingsRes } = useQuery({
@@ -894,6 +938,8 @@ export default function Home() {
       <FAQSection faqs={faqs} />
       <TrophiesSection />
       <CTASection />
+      
+      <MusicPlayer />
 
       {/* WhatsApp Float Button */}
       <motion.a
