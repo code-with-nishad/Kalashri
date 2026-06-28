@@ -39,6 +39,13 @@ export default function App() {
   } = useRegisterSW({
     onRegistered(r) {
       console.log("SW Registered:", r);
+      // Periodically check for updates (every 1 hour)
+      if (r) {
+        setInterval(() => {
+          console.log("Checking for SW updates...");
+          r.update();
+        }, 60 * 60 * 1000);
+      }
     },
     onRegisterError(error) {
       console.error("SW Registration error:", error);
