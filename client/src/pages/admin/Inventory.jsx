@@ -2,12 +2,13 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Plus } from "lucide-react";
-import { inventoryService, aiService } from "../../services";
+import { inventoryService, aiService, uploadService } from "../../services";
 import { QUERY_KEYS } from "../../constants/queryKeys";
 import { Badge } from "../../components/ui/Badge";
 import { Modal } from "../../components/ui/Modal";
 import { toast } from "sonner";
-import { Sparkles, Trash2 } from "lucide-react";
+import { Sparkles, Trash2, Image as ImageIcon } from "lucide-react";
+import { useDropzone } from "react-dropzone";
 
 export default function Inventory() {
   const qc = useQueryClient();
@@ -17,6 +18,7 @@ export default function Inventory() {
   const [bulkModal, setBulkModal] = useState(false);
   const [bulkText, setBulkText] = useState("");
   const [parsedProducts, setParsedProducts] = useState(null);
+  const [uploading, setUploading] = useState(false);
   const emptyProductForm = { name: "", sku: "", brand: "", category: "", description: "", size: "", keyIngredients: "", benefits: "", unit: "", stockQuantity: 0, lowStockThreshold: 5, imageUrl: "" };
   const [form, setForm] = useState(emptyProductForm);
   const [tx, setTx] = useState({ type: "Restock", quantity: 1, reason: "" });
@@ -41,6 +43,58 @@ export default function Inventory() {
     updated[index][field] = value;
     setParsedProducts(updated);
   };
+
+  const handleImageUpload = async (e, isBulk, bulkIndex) => {
+    const input = e.target;
+    const files = input ? Array.from(input.files || []) : Array.from(e);
+    if (!files.length) return;
+
+    const imageFiles = files.filter(file => file.type.startsWith("image/"));
+    if (!imageFiles.length) {
+      toast.error("Only image files can be uploaded");
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const res = await uploadService.uploadImage(imageFiles[0]);
+      const url = res.data.url;
+      
+      if (isBulk) {
+        updateParsedProduct(bulkIndex, 'imageUrl', url);
+      } else {
+        setForm(f => ({ ...f, imageUrl: url }));
+      }
+      toast.success("Image uploaded");
+    } catch {
+      toast.error("Upload failed");
+    } finally {
+      setUploading(false);
+      if (input) input.value = "";
+    }
+  };
+
+  function DropzoneField({ isBulk, bulkIndex, currentUrl }) {
+    const onDrop = (acceptedFiles) => handleImageUpload(acceptedFiles, isBulk, bulkIndex);
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, accept: {'image/*': []}, maxFiles: 1 });
+
+    return (
+      <div className="flex items-center gap-3 w-full">
+        {currentUrl ? (
+          <div className="relative group inline-block flex-shrink-0">
+            <img src={currentUrl} alt="Uploaded" className="w-12 h-12 rounded-lg object-cover border border-[var(--color-border)]" />
+            <button type="button" aria-label="Remove" onClick={(e) => { e.stopPropagation(); isBulk ? updateParsedProduct(bulkIndex, 'imageUrl', "") : setForm(f => ({ ...f, imageUrl: "" })); }} className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 className="w-3 h-3" /></button>
+          </div>
+        ) : (
+          <div {...getRootProps()} className={`flex-1 border-2 border-dashed rounded-lg p-3 flex items-center justify-center text-center cursor-pointer transition-colors ${isDragActive ? "border-[var(--color-rose-500)] bg-[var(--color-rose-500)]/5" : "border-[var(--color-border)] hover:border-[var(--color-rose-400)] bg-[var(--color-surface-3)]"}`}>
+            <input {...getInputProps()} />
+            <ImageIcon className="w-4 h-4 mr-2 text-[var(--color-text-muted)]" />
+            <p className="text-xs text-[var(--color-text-muted)]">Drag image or click to upload</p>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   const { mutate: parseAI, isPending: isParsing } = useMutation({
     mutationFn: () => aiService.parseProducts(bulkText),
@@ -162,7 +216,7 @@ export default function Inventory() {
             { key: "sku", label: "SKU", placeholder: "SHMP-001" },
             { key: "brand", label: "Brand", placeholder: "SSCP Herbals" },
             { key: "category", label: "Category", placeholder: "Hair Care" },
-            { key: "imageUrl", label: "Image URL", placeholder: "https://example.com/image.jpg" },
+            { key: "imageUrl", label: "Product Image", type: "dropzone" },
             { key: "description", label: "Description", placeholder: "Short product description" },
             { key: "size", label: "Size", placeholder: "200 ml" },
             { key: "keyIngredients", label: "Key Ingredients", placeholder: "Aloe Vera, Neem, Tea Tree" },
@@ -173,14 +227,18 @@ export default function Inventory() {
           ].map(({ key, label, type = "text", placeholder }) => (
             <div key={key}>
               <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1">{label}</label>
-              <input value={form[key] || ""} type={type} onChange={e => setForm(f => ({ ...f, [key]: type === "number" ? Number(e.target.value) : e.target.value }))} placeholder={placeholder}
-                className="w-full px-4 py-2.5 rounded-xl bg-[var(--color-surface-3)] border border-[var(--color-border)] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-rose-500)] transition-all text-sm"
-              />
+              {type === "dropzone" ? (
+                <DropzoneField isBulk={false} currentUrl={form.imageUrl} />
+              ) : (
+                <input value={form[key] || ""} type={type} onChange={e => setForm(f => ({ ...f, [key]: type === "number" ? Number(e.target.value) : e.target.value }))} placeholder={placeholder}
+                  className="w-full px-4 py-2.5 rounded-xl bg-[var(--color-surface-3)] border border-[var(--color-border)] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-rose-500)] transition-all text-sm"
+                />
+              )}
             </div>
           ))}
           <div className="flex gap-3 pt-4 sticky bottom-0 bg-[var(--color-surface-card)]">
             <button onClick={() => { setCreateModal(false); setEditId(null); }} className="flex-1 py-2.5 border border-[var(--color-border)] text-[var(--color-text-secondary)] rounded-xl">Cancel</button>
-            <button onClick={() => editId ? update({ id: editId, data: form }) : create(form)} className="flex-1 py-2.5 -white font-medium rounded-xl transition-all">{editId ? "Save Changes" : "Create"}</button>
+            <button onClick={() => editId ? update({ id: editId, data: form }) : create(form)} disabled={uploading} className="flex-1 py-2.5 -white font-medium rounded-xl transition-all disabled:opacity-50">{uploading ? "Uploading..." : (editId ? "Save Changes" : "Create")}</button>
           </div>
         </div>
       </Modal>
@@ -223,13 +281,9 @@ export default function Inventory() {
                         <div className="text-xs text-[var(--color-text-muted)]">{p.stockQuantity} {p.unit}</div>
                       </div>
                     </div>
-                    <input
-                      type="text"
-                      placeholder="Image URL (optional)"
-                      value={p.imageUrl || ""}
-                      onChange={(e) => updateParsedProduct(i, 'imageUrl', e.target.value)}
-                      className="w-full px-3 py-1.5 rounded-lg bg-[var(--color-surface-3)] border border-[var(--color-border)] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-rose-500)] text-xs transition-all"
-                    />
+                    <div className="mt-2">
+                      <DropzoneField isBulk={true} bulkIndex={i} currentUrl={p.imageUrl} />
+                    </div>
                   </div>
                 ))}
               </div>
