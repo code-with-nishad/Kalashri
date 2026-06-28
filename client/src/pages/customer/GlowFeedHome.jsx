@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { 
   Sparkles, Heart, MessageCircle, Share2, Bookmark, Plus, 
   X, Camera, Search, User, Award, CheckCircle2, ChevronRight,
-  TrendingUp, Calendar, AlertCircle, Trash2, Image, ShieldAlert
+  TrendingUp, Calendar, AlertCircle, Trash2, ShieldAlert
 } from "lucide-react";
 import { glowFeedService, serviceService, uploadService } from "../../services";
 import { useAuthStore } from "../../store/authStore";
@@ -87,7 +87,7 @@ const compressImage = (file) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = (event) => {
-      const img = new Image();
+      const img = document.createElement("img");
       img.src = event.target.result;
       img.onload = () => {
         const canvas = document.createElement("canvas");
@@ -148,7 +148,7 @@ export default function GlowFeedHome() {
 
   // Create Post Form States
   const [caption, setCaption] = useState("");
-  const [isBeforeAfter, setIsBeforeAfter] = useState(false);
+  const [isBeforeAfter, setIsBeforeAfter] = useState(true);
   const [images, setImages] = useState([]);
   const [beforeImage, setBeforeImage] = useState("");
   const [afterImage, setAfterImage] = useState("");
@@ -706,26 +706,9 @@ export default function GlowFeedHome() {
                     />
                   </div>
 
-                  {/* Mode Selector */}
-                  <div className="flex gap-4 border-b pb-3">
-                    <button 
-                      type="button"
-                      onClick={() => setIsBeforeAfter(false)}
-                      className={`text-sm font-bold pb-1.5 transition-all ${!isBeforeAfter ? "text-[var(--color-rose-600)] border-b-2 border-[var(--color-rose-500)]" : "text-gray-400"}`}
-                    >
-                      Photos Grid
-                    </button>
-                    <button 
-                      type="button"
-                      onClick={() => setIsBeforeAfter(true)}
-                      className={`text-sm font-bold pb-1.5 transition-all ${isBeforeAfter ? "text-[var(--color-rose-600)] border-b-2 border-[var(--color-rose-500)]" : "text-gray-400"}`}
-                    >
-                      Before / After Slider
-                    </button>
-                  </div>
-
-                  {/* Image Selectors */}
-                  {isBeforeAfter ? (
+                  {/* Before / After Image Upload */}
+                  <div>
+                    <label className="block text-sm font-semibold text-[var(--color-text-secondary)] mb-2">Before / After Photos</label>
                     <div className="grid grid-cols-2 gap-4">
                       {/* Before Image */}
                       <div className="space-y-1">
@@ -761,26 +744,7 @@ export default function GlowFeedHome() {
                         )}
                       </div>
                     </div>
-                  ) : (
-                    <div>
-                      <label className="block text-sm font-semibold text-[var(--color-text-secondary)] mb-1">Images (up to 3)</label>
-                      <div className="grid grid-cols-3 gap-3">
-                        {images.map((img, i) => (
-                          <div key={i} className="relative aspect-square rounded-xl overflow-hidden border">
-                            <img src={img} alt="normal" className="w-full h-full object-cover" />
-                            <button type="button" onClick={() => setImages(prev => prev.filter((_, idx) => idx !== i))} className="absolute top-1.5 right-1.5 p-1 bg-black/60 text-white rounded-full"><X className="w-3 h-3" /></button>
-                          </div>
-                        ))}
-                        {images.length < 3 && (
-                          <label className="aspect-square rounded-xl border border-dashed hover:border-[var(--color-rose-400)] transition-colors flex flex-col items-center justify-center cursor-pointer bg-gray-50 text-gray-400">
-                            <input type="file" accept="image/*" multiple className="hidden" onChange={e => handleImageUpload(e, "normal")} />
-                            <Camera className="w-6 h-6 mb-1" />
-                            <span className="text-[10px] text-center">Add Photo</span>
-                          </label>
-                        )}
-                      </div>
-                    </div>
-                  )}
+                  </div>
 
                   {/* Services Tagging */}
                   <div>

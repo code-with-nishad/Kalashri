@@ -106,20 +106,32 @@ exports.getPosts = asyncHandler(async (req, res) => {
         query.isFeatured = true;
     }
 
+    const conditions = [];
+
     if (tag) {
+        const mongoose = require("mongoose");
         // Tag could be service ID or word matching caption
-        query.$or = [
-            { services: tag },
+        const tagOr = [
             { customServices: { $in: [tag] } },
             { caption: new RegExp(tag, "i") }
         ];
+        if (mongoose.Types.ObjectId.isValid(tag)) {
+            tagOr.push({ services: tag });
+        }
+        conditions.push({ $or: tagOr });
     }
 
     if (search) {
-        query.$or = [
-            { caption: new RegExp(search, "i") },
-            { customServices: { $in: [search] } }
-        ];
+        conditions.push({
+            $or: [
+                { caption: new RegExp(search, "i") },
+                { customServices: { $in: [search] } }
+            ]
+        });
+    }
+
+    if (conditions.length > 0) {
+        query.$and = conditions;
     }
 
     // Sort pinned posts first, then newest
