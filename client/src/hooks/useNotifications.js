@@ -6,6 +6,40 @@ import { toast } from "sonner"; // Assuming sonner is used for toasts (from pack
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../constants/queryKeys";
 
+const isDev = import.meta.env.DEV;
+const warnDev = (...args) => {
+    if (isDev) console.warn(...args);
+};
+
+let foregroundListenerOwner = null;
+const seenForegroundMessages = new Set();
+
+const rememberForegroundMessage = (id) => {
+    if (!id) return false;
+    if (seenForegroundMessages.has(id)) return true;
+
+    seenForegroundMessages.add(id);
+    if (seenForegroundMessages.size > 100) {
+        const oldest = seenForegroundMessages.values().next().value;
+        seenForegroundMessages.delete(oldest);
+    }
+
+    return false;
+};
+
+const getPayloadText = (payload) => {
+    const data = payload?.data || {};
+    const notification = payload?.notification || {};
+
+    return {
+        title: notification.title || data.title || "New Notification",
+        body: notification.body || data.body || "You have a new update.",
+        route: data.route || "/notifications",
+        type: data.type || "System",
+        notificationId: data.notificationId,
+    };
+};
+
 export const useNotifications = () => {
     const queryClient = useQueryClient();
     const { user } = useAuthStore();
