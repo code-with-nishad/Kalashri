@@ -255,8 +255,8 @@ function ServicesSection({ services = [] }) {
         </motion.h2>
       </div>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {(services.length ? services.slice(0, 8) : Array.from({ length: 4 })).map((svc, i) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {(services.length ? services.slice(0, 4) : Array.from({ length: 4 })).map((svc, i) => (
           <motion.div
             key={svc?._id || i}
             initial={{ opacity: 0, y: 40 }}
