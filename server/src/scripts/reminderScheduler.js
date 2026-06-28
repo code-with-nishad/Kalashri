@@ -65,6 +65,45 @@ const startScheduler = () => {
     });
     
     console.log("⏰ Reminder scheduler started");
+
+    // Unread Notifications Reminder (Runs every 10 minutes)
+    cron.schedule("*/10 * * * *", async () => {
+        try {
+            const Notification = require("../models/Notification");
+            const User = require("../models/User");
+
+            // Find notifications that are unread and created within the last 24 hours
+            const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
+            
+            const unreadNotifications = await Notification.find({
+                isRead: false,
+                createdAt: { $gte: yesterday }
+            });
+
+            if (unreadNotifications.length === 0) return;
+
+            // Group by user
+            const userUnreadMap = {};
+            unreadNotifications.forEach(n => {
+                const uid = n.user.toString();
+                if (!userUnreadMap[uid]) userUnreadMap[uid] = 0;
+                userUnreadMap[uid]++;
+            });
+
+            // Send a single push to each user
+            for (const [userId, count] of Object.entries(userUnreadMap)) {
+                await notificationService.sendToUser(
+                    userId,
+                    "System",
+                    "Unread Alerts 🔔",
+                    `You have ${count} unread notification${count > 1 ? 's' : ''} waiting for you. Tap to view!`,
+                    { route: "/notifications" }
+                );
+            }
+        } catch (error) {
+            console.error("Error in unread reminder scheduler:", error);
+        }
+    });
 };
 
 module.exports = { startScheduler };

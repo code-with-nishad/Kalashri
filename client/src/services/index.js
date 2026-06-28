@@ -44,6 +44,7 @@ export const notificationService = {
   markAsRead: (id) => api.patch(`/notifications/${id}/read`),
   markAllAsRead: () => api.patch("/notifications/read-all"),
   delete: (id) => api.delete(`/notifications/${id}`),
+  broadcast: (data) => api.post("/notifications/broadcast", data),
 };
 
 export const cmsService = {

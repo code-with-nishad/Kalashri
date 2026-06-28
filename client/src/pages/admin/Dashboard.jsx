@@ -7,6 +7,9 @@ import { StatCard } from "../../components/ui/Card";
 import { formatCurrency, timeAgo } from "../../utils";
 import { SkeletonCard } from "../../components/ui/Skeleton";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
+import { useState } from "react";
+import BroadcastAlertModal from "../../components/admin/BroadcastAlertModal";
+import { Radio } from "lucide-react";
 
 const CHART_COLORS = ["#ff2d6b", "#8b5cf6", "#06b6d4", "#10b981", "#f59e0b"];
 
@@ -16,13 +19,25 @@ export default function AdminDashboard() {
 
   const stats = dashData?.data;
   const activities = activityData?.data?.slice(0, 8) || [];
+  const [isBroadcastModalOpen, setIsBroadcastModalOpen] = useState(false);
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="font-display text-3xl font-bold text-[var(--color-text-primary)]">Admin Dashboard</h1>
-        <p className="text-[var(--color-text-muted)] text-sm mt-1">Real-time insights for Gayatri Beauty Studio</p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="font-display text-3xl font-bold text-[var(--color-text-primary)]">Admin Dashboard</h1>
+          <p className="text-[var(--color-text-muted)] text-sm mt-1">Real-time insights for Gayatri Beauty Studio</p>
+        </div>
+        <button
+          onClick={() => setIsBroadcastModalOpen(true)}
+          className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--color-rose-500)]/10 text-[var(--color-rose-500)] hover:bg-[var(--color-rose-500)] hover:text-white border border-[var(--color-rose-500)]/20 font-medium rounded-xl transition-all shadow-[var(--shadow-glow-rose)]"
+        >
+          <Radio className="w-4 h-4 animate-pulse" />
+          Broadcast Alert
+        </button>
       </div>
+
+      <BroadcastAlertModal isOpen={isBroadcastModalOpen} onClose={() => setIsBroadcastModalOpen(false)} />
 
       {/* Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
