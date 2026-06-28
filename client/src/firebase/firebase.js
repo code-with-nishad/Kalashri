@@ -33,12 +33,18 @@ export const requestFirebaseNotificationPermission = async () => {
         const permission = await Notification.requestPermission();
         
         if (permission === "granted") {
-            const vapidKey = import.meta.env.VITE_FIREBASE_VAPID_KEY;
+            const vapidKey = import.meta.env.VITE_VAPID_PUBLIC_KEY || import.meta.env.VITE_FIREBASE_VAPID_KEY;
             if (!vapidKey) {
                 console.warn("VITE_FIREBASE_VAPID_KEY is not defined.");
             }
 
-            const currentToken = await getToken(messaging, { vapidKey });
+            // Use the active service worker registration from Vite PWA
+            const registration = await navigator.serviceWorker.ready;
+
+            const currentToken = await getToken(messaging, { 
+                vapidKey,
+                serviceWorkerRegistration: registration 
+            });
             if (currentToken) {
                 return currentToken;
             } else {

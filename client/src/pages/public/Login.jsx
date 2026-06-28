@@ -32,7 +32,7 @@ export default function Login() {
     audio.play().catch(e => console.log("Audio play failed:", e));
   };
 
-  const triggerRoyalWelcome = () => {
+  const triggerRoyalWelcome = (userObj) => {
     playLoginSound();
     confetti({
       particleCount: 150,
@@ -40,13 +40,21 @@ export default function Login() {
       origin: { y: 0.6 },
       colors: ['#f43f5e', '#eab308', '#ec4899', '#ffffff'] // Rose, Gold, Pink
     });
+    
+    // Personalized welcome toast
+    const name = userObj?.firstName || "Beautiful";
+    toast.success(`Welcome back, ${name}! ✨`, {
+      description: "Ready for your glow up?",
+      duration: 5000,
+    });
   };
 
   const onSubmit = (data) => {
     login(data, {
       onSuccess: (res) => {
-        triggerRoyalWelcome();
-        navigate(res?.data?.user?.role === "admin" || res?.data?.role === "admin" ? "/admin" : from, { replace: true });
+        const loggedInUser = res?.data?.user || res?.data;
+        triggerRoyalWelcome(loggedInUser);
+        navigate(loggedInUser?.role === "admin" ? "/admin" : from, { replace: true });
       },
     });
   };
@@ -56,8 +64,9 @@ export default function Login() {
   const handleGoogleSuccess = (credentialResponse) => {
     googleLoginMutation({ token: credentialResponse.credential }, {
       onSuccess: (res) => {
-        triggerRoyalWelcome();
-        navigate(res?.data?.user?.role === "admin" || res?.data?.role === "admin" ? "/admin" : from, { replace: true });
+        const loggedInUser = res?.data?.user || res?.data;
+        triggerRoyalWelcome(loggedInUser);
+        navigate(loggedInUser?.role === "admin" ? "/admin" : from, { replace: true });
       }
     });
   };

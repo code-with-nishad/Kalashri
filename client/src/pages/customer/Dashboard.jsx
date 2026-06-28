@@ -12,6 +12,7 @@ import { Badge } from "../../components/ui/Badge";
 import { APPOINTMENT_STATUSES } from "../../constants";
 import ProductCarousel from "../../components/products/ProductCarousel";
 import ProductModal from "../../components/products/ProductModal";
+import DailyTipModal from "../../components/ui/DailyTipModal";
 
 export default function CustomerDashboard() {
   const user = useAuthStore((s) => s.user);
@@ -112,11 +113,19 @@ export default function CustomerDashboard() {
             </h1>
             <p className="text-[var(--color-text-muted)] mt-1">Welcome back to your royal beauty dashboard</p>
           </div>
-          <Link to="/book" className="inline-flex items-center gap-2 px-6 py-3 -white font-medium rounded-xl transition-all hover:shadow-[var(--shadow-glow-rose)] hover:-translate-y-0.5">
+          <Link 
+            to="/book" 
+            className={cn(
+              "inline-flex items-center gap-2 px-6 py-3 text-white font-medium rounded-xl transition-all hover:shadow-[var(--shadow-glow-rose)] hover:-translate-y-0.5",
+              !upcoming ? "animate-pulse ring-4 ring-[var(--color-rose-500)]/50 shadow-[var(--shadow-glow-rose)] bg-[var(--color-rose-600)]" : "bg-[var(--color-rose-500)]"
+            )}
+          >
             <Calendar className="w-4 h-4" /> Book Appointment
           </Link>
         </div>
       </motion.div>
+
+      <DailyTipModal />
 
       {/* Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
