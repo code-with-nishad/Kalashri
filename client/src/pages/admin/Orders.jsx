@@ -91,8 +91,8 @@ export default function Orders() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        {order.product?.image && (
-                          <img src={order.product.image} alt={order.product.name} className="w-10 h-10 rounded-lg object-cover bg-white" />
+                        {(order.product?.imageUrl || order.product?.image) && (
+                          <img src={order.product.imageUrl || order.product.image} alt={order.product.name} className="w-10 h-10 rounded-lg object-cover bg-white" />
                         )}
                         <div>
                           <div className="text-sm font-medium text-[var(--color-text-primary)]">{order.product?.name}</div>

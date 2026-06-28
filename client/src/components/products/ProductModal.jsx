@@ -18,7 +18,7 @@ export default function ProductModal({ product, isOpen, onClose }) {
 
   if (!isOpen || !product) return null;
 
-  const images = product.gallery?.length > 0 ? product.gallery : [product.image];
+  const images = product.gallery?.length > 0 ? product.gallery : [product.imageUrl || product.image];
 
   return (
     <AnimatePresence>

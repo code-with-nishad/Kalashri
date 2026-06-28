@@ -28,7 +28,7 @@ export default function ProductCard({ product, onViewDetails }) {
         <motion.img
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.4 }}
-          src={product.image}
+          src={product.imageUrl || product.image}
           alt={product.name}
           className="w-full h-full object-contain relative z-10 drop-shadow-xl mix-blend-multiply"
         />
