@@ -19,12 +19,17 @@ const registerUser = async (userData) => {
         );
     }
 
+    const userCount = await User.countDocuments();
+    const isEarlyBird = userCount < 50;
+
     const user = await User.create({
         firstName,
         lastName,
         email,
         phone,
         password,
+        glowPoints: isEarlyBird ? 10 : 0,
+        lifetimeGlowPoints: isEarlyBird ? 10 : 0,
     });
 
     return user;
@@ -82,6 +87,9 @@ const googleLogin = async (token) => {
     let user = await User.findOne({ email }).select("+password");
 
     if (!user) {
+        const userCount = await User.countDocuments();
+        const isEarlyBird = userCount < 50;
+
         user = await User.create({
             firstName: given_name || "User",
             lastName: family_name || "Name",
@@ -89,7 +97,9 @@ const googleLogin = async (token) => {
             phone: `google_${Date.now()}_${sub.slice(-4)}`,
             password: crypto.randomBytes(16).toString("hex"),
             googleId: sub,
-            isVerified: true
+            isVerified: true,
+            glowPoints: isEarlyBird ? 10 : 0,
+            lifetimeGlowPoints: isEarlyBird ? 10 : 0,
         });
     } else {
         if (!user.googleId) {

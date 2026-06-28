@@ -12,6 +12,7 @@ import { SALON_NAME, SALON_TAGLINE, SALON_WHATSAPP, SALON_INSTAGRAM } from "../.
 import { formatCurrency } from "../../utils";
 import AIConsultant from "../../components/ai/AIConsultant";
 import SocialProofPopup from "../../components/ui/SocialProofPopup";
+import GrandOpeningFX from "../../components/ui/GrandOpeningFX";
 
 // ==================== NUMBER COUNTER ====================
 function CountUp({ end, suffix = "", duration = 2000 }) {
@@ -940,7 +941,8 @@ export default function Home() {
   const products = productsRes?.data?.products || [];
 
   return (
-    <div className="overflow-x-hidden">
+    <div className="overflow-x-hidden relative">
+      <GrandOpeningFX />
       <HeroSection settings={settings} />
       <StatsSection />
       <ServicesSection services={services} />

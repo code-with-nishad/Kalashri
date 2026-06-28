@@ -93,7 +93,7 @@ export default function LaunchModal() {
                     Get 10 Bonus Glow Points & "Founding Queen" Title!
                   </p>
                   <p className="text-xs text-[var(--color-text-muted)] mt-1 font-medium">
-                    Strictly limited to the <span className="text-[var(--color-rose-500)] font-bold">First 50 Customers</span> who register and book!
+                    Strictly limited to the <span className="text-[var(--color-rose-500)] font-bold">First 50 Customers</span> who register!
                   </p>
                 </div>
 
