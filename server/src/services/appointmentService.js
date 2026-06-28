@@ -184,7 +184,7 @@ const updateAppointmentStatus = async (appointmentId, updateData) => {
             const message = `Sorry, your appointment on ${new Date(appointment.appointmentDate).toDateString()} at ${appointment.appointmentTime} was declined.${reasonText}${rescheduleText}`;
             
             // Sorry Card Notification
-            notificationService.createNotification(appointment.customer._id, "Appointment", title, message).catch(console.error);
+            notificationService.createNotification(appointment.customer._id, "Appointment", title, message, { route: `/appointments/${appointment._id}` }).catch(console.error);
             
             // Send Email
             if (appointment.customer.email) {

@@ -12,18 +12,31 @@ export const useNotifications = () => {
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
     const [fcmToken, setFcmToken] = useState(null);
-    const [permissionStatus, setPermissionStatus] = useState(Notification.permission);
+    const [permissionStatus, setPermissionStatus] = useState(getNotificationPermissionStatus());
+
+    const fetchNotifications = useCallback(async () => {
+        if (!user) return;
 
     // Fetch initial notifications
     const fetchNotifications = async () => {
         try {
-            const data = await api.get("/notifications");
-            setNotifications(data.data);
-            setUnreadCount(data.data.filter((n) => !n.isRead).length);
+            const response = await api.get("/notifications");
+            const items = response.data || [];
+            setNotifications(items);
+            setUnreadCount(items.filter((n) => !n.isRead).length);
         } catch (error) {
             console.error("Error fetching notifications:", error);
         }
-    };
+    }, [user]);
+
+    const registerToken = useCallback(async (token) => {
+        if (!user || !token) return;
+
+        const userId = user._id || user.id;
+        if (!userId) return;
+
+        const storageKey = `fcm-token:${userId}`;
+        if (localStorage.getItem(storageKey) === token) return;
 
     // Register Token with backend
     const registerToken = async (token) => {
@@ -60,55 +73,69 @@ export const useNotifications = () => {
     };
 
     useEffect(() => {
-        if (user) {
-            fetchNotifications();
-            initFCM();
-        }
-    }, [user]);
+        if (!user) return;
 
-    // Listen for foreground messages
+        fetchNotifications();
+        initFCM();
+    }, [fetchNotifications, initFCM, user]);
+
     useEffect(() => {
-        if (user && fcmToken) {
-            const listen = async () => {
-                const payload = await onMessageListener();
-                if (payload) {
-                    console.log("Foreground message received:", payload);
-                    
-                    const newNotification = {
-                        _id: payload.data.notificationId || Date.now().toString(),
-                        title: payload.notification.title,
-                        body: payload.notification.body,
-                        type: payload.data.type || "System",
-                        route: payload.data.route || "/",
-                        isRead: false,
-                        createdAt: new Date().toISOString(),
-                    };
-                    
-                    setNotifications((prev) => [newNotification, ...prev]);
-                    setUnreadCount((prev) => prev + 1);
-                    
-                    toast.success(payload.notification.title, {
-                        description: payload.notification.body,
-                        action: {
-                            label: "View",
-                            onClick: () => {
-                                if (payload.data.route) window.location.href = payload.data.route;
-                            }
-                        }
-                    });
+        if (!user || !fcmToken || foregroundListenerOwner) return;
 
-                    // Invalidate queries so that dashboards and lists auto-refresh
-                    queryClient.invalidateQueries({ queryKey: QUERY_KEYS.APPOINTMENTS });
-                    queryClient.invalidateQueries({ queryKey: QUERY_KEYS.DASHBOARD_STATS });
-                    queryClient.invalidateQueries({ queryKey: QUERY_KEYS.NOTIFICATIONS });
+        let cancelled = false;
+        let unsubscribe = () => {};
+        foregroundListenerOwner = listenerId.current;
 
-                    // Re-listen
-                    listen();
-                }
+        subscribeToForegroundMessages((payload) => {
+            const { title, body, route, type, notificationId } = getPayloadText(payload);
+            const messageId = notificationId || `${title}:${body}:${route}`;
+
+            if (rememberForegroundMessage(messageId)) return;
+
+            const newNotification = {
+                _id: notificationId || `${Date.now()}`,
+                title,
+                body,
+                type,
+                route,
+                isRead: false,
+                createdAt: new Date().toISOString(),
             };
-            listen();
-        }
-    }, [user, fcmToken]);
+
+            setNotifications((prev) => [newNotification, ...prev]);
+            setUnreadCount((prev) => prev + 1);
+
+            toast.success(title, {
+                id: messageId,
+                description: body,
+                action: {
+                    label: "View",
+                    onClick: () => {
+                        window.location.assign(route);
+                    },
+                },
+            });
+
+            queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MY_APPOINTMENTS });
+            queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ALL_APPOINTMENTS });
+            queryClient.invalidateQueries({ queryKey: QUERY_KEYS.DASHBOARD_STATS });
+            queryClient.invalidateQueries({ queryKey: QUERY_KEYS.NOTIFICATIONS });
+        }).then((cleanup) => {
+            if (cancelled) {
+                cleanup();
+                return;
+            }
+            unsubscribe = cleanup;
+        });
+
+        return () => {
+            cancelled = true;
+            unsubscribe();
+            if (foregroundListenerOwner === listenerId.current) {
+                foregroundListenerOwner = null;
+            }
+        };
+    }, [fcmToken, queryClient, user]);
 
     const markAsRead = async (id) => {
         try {

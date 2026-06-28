@@ -29,32 +29,32 @@ try {
 
 export const requestFirebaseNotificationPermission = async () => {
     try {
-        if (!messaging) throw new Error("Firebase Messaging not initialized");
+        const messaging = await getMessagingInstance();
+        if (!messaging) return null;
 
-        console.log("Requesting notification permission...");
-        const permission = await Notification.requestPermission();
-        
-        if (permission === "granted") {
-            const vapidKey = cleanEnv(import.meta.env.VITE_VAPID_PUBLIC_KEY) || cleanEnv(import.meta.env.VITE_FIREBASE_VAPID_KEY);
-            if (!vapidKey) {
-                console.warn("VITE_FIREBASE_VAPID_KEY is not defined.");
-            }
+        const permission = Notification.permission === "granted"
+            ? "granted"
+            : await Notification.requestPermission();
 
-            // Use the active service worker registration from Vite PWA
-            const registration = await navigator.serviceWorker.ready;
+        if (permission !== "granted") {
+            warnDev("Notification permission was not granted.");
+            return null;
+        }
 
-            const currentToken = await getToken(messaging, { 
-                vapidKey,
-                serviceWorkerRegistration: registration 
-            });
-            if (currentToken) {
-                return currentToken;
-            } else {
-                console.warn("No registration token available. Request permission to generate one.");
-                return null;
-            }
-        } else {
-            console.warn("Notification permission denied.");
+        const vapidKey = cleanEnv(import.meta.env.VITE_VAPID_PUBLIC_KEY) || cleanEnv(import.meta.env.VITE_FIREBASE_VAPID_KEY);
+        if (!vapidKey) {
+            warnDev("VITE_VAPID_PUBLIC_KEY or VITE_FIREBASE_VAPID_KEY is not defined.");
+            return null;
+        }
+
+        const registration = await navigator.serviceWorker.ready;
+        const currentToken = await getToken(messaging, {
+            vapidKey,
+            serviceWorkerRegistration: registration,
+        });
+
+        if (!currentToken) {
+            warnDev("No Firebase registration token was returned.");
             return null;
         }
     } catch (err) {
