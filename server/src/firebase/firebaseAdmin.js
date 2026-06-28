@@ -22,6 +22,8 @@ try {
             credential: cert(serviceAccount),
         });
         console.log("🔥 Firebase Admin SDK Initialized Successfully.");
+    } else if (!serviceAccount) {
+        console.warn("⚠️  Firebase Admin credentials not found. Set FIREBASE_SERVICE_ACCOUNT on the server or add firebaseServiceAccount.json for push notifications.");
     }
 } catch (error) {
     console.error("🔥 Error initializing Firebase Admin SDK:", error);

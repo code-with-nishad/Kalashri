@@ -32,16 +32,35 @@ try {
     console.error("🔥 Error initializing Firebase:", error);
 }
 
-export const requestFirebaseNotificationPermission = async () => {
+const waitForServiceWorker = async (timeoutMs = 20000) => {
+    if (!("serviceWorker" in navigator)) return null;
+
+    const existing = await navigator.serviceWorker.getRegistration();
+    if (existing?.active) return existing;
+
+    try {
+        return await Promise.race([
+            navigator.serviceWorker.ready,
+            new Promise((_, reject) =>
+                setTimeout(() => reject(new Error("Service worker registration timed out")), timeoutMs)
+            ),
+        ]);
+    } catch {
+        return navigator.serviceWorker.getRegistration();
+    }
+};
+
+export const requestFirebaseNotificationPermission = async ({ requestPermission = true } = {}) => {
     try {
         if (!messaging) {
             warnDev("Firebase messaging is not initialized.");
             return null;
         }
 
-        const permission = Notification.permission === "granted"
-            ? "granted"
-            : await Notification.requestPermission();
+        let permission = Notification.permission;
+        if (permission === "default" && requestPermission) {
+            permission = await Notification.requestPermission();
+        }
 
         if (permission !== "granted") {
             warnDev("Notification permission was not granted.");
@@ -54,7 +73,12 @@ export const requestFirebaseNotificationPermission = async () => {
             return null;
         }
 
-        const registration = await navigator.serviceWorker.ready;
+        const registration = await waitForServiceWorker();
+        if (!registration) {
+            warnDev("No active service worker found for FCM.");
+            return null;
+        }
+
         const currentToken = await getToken(messaging, {
             vapidKey,
             serviceWorkerRegistration: registration,

@@ -58,11 +58,12 @@ const bookAppointment = async (userId, appointmentData) => {
     });
 
     // Notify Customer
-    notificationService.createNotification(
+    notificationService.sendToUser(
         userId,
         "Appointment",
         "Booking Requested 📅",
-        `Your appointment request for ${appointmentDate} at ${appointmentTime} has been received and is pending confirmation.`
+        `Your appointment request for ${appointmentDate} at ${appointmentTime} has been received and is pending confirmation.`,
+        { route: "/appointments" }
     ).catch(console.error);
 
     // Notify Admins
@@ -72,7 +73,8 @@ const bookAppointment = async (userId, appointmentData) => {
             admin._id,
             "Appointment",
             "New Booking Request 🛎️",
-            `A new appointment has been requested for ${appointmentDate} at ${appointmentTime}.`
+            `A new appointment has been requested for ${appointmentDate} at ${appointmentTime}.`,
+            { route: "/admin/appointments" }
         ).catch(console.error);
     }
 
@@ -184,7 +186,7 @@ const updateAppointmentStatus = async (appointmentId, updateData) => {
             const message = `Sorry, your appointment on ${new Date(appointment.appointmentDate).toDateString()} at ${appointment.appointmentTime} was declined.${reasonText}${rescheduleText}`;
             
             // Sorry Card Notification
-            notificationService.createNotification(appointment.customer._id, "Appointment", title, message, { route: `/appointments/${appointment._id}` }).catch(console.error);
+            notificationService.sendToUser(appointment.customer._id, "Appointment", title, message, { route: `/appointments/${appointment._id}` }).catch(console.error);
             
             // Send Email
             if (appointment.customer.email) {
@@ -194,7 +196,7 @@ const updateAppointmentStatus = async (appointmentId, updateData) => {
         }
     } else if (appointment.status === "Confirmed" && paymentStatus === "Paid" && previousPaymentStatus === "Verification Pending") {
         // Just send payment verified notification if status was already confirmed somehow
-        notificationService.createNotification(appointment.customer._id, "Payment Verified", "Payment Verified ✅", "Your manual UPI payment has been successfully verified. Your appointment is confirmed.").catch(console.error);
+        notificationService.sendToUser(appointment.customer._id, "Payment Verified", "Payment Verified ✅", "Your manual UPI payment has been successfully verified. Your appointment is confirmed.", { route: `/appointments/${appointment._id}` }).catch(console.error);
     }
 
     // Loyalty Engine logic: Automatically award points when status changes to Completed for the first time

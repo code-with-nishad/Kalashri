@@ -7,6 +7,58 @@ const { getMessaging } = require("firebase-admin/messaging");
 // We still need to require firebaseAdmin to ensure it initializes
 require("../firebase/firebaseAdmin");
 
+const isFirebaseReady = () => getApps().length > 0;
+
+const toFcmData = (data = {}) =>
+    Object.fromEntries(
+        Object.entries(data)
+            .filter(([, value]) => value !== undefined && value !== null)
+            .map(([key, value]) => [key, String(value)])
+    );
+
+const buildFcmMessage = (tokens, title, body, options = {}) => {
+    const route = options.route || "/";
+    const type = options.type || "System";
+
+    const data = toFcmData({
+        route,
+        type,
+        title,
+        body,
+        notificationId: options.notificationId,
+    });
+
+    return {
+        tokens,
+        notification: {
+            title,
+            body,
+            ...(options.image && { image: options.image }),
+        },
+        data,
+        webpush: {
+            notification: {
+                title,
+                body,
+                icon: options.icon || "/favicon.png",
+                badge: "/favicon.png",
+            },
+        },
+        android: {
+            notification: {
+                sound: "default",
+            },
+        },
+        apns: {
+            payload: {
+                aps: {
+                    sound: "default",
+                },
+            },
+        },
+    };
+};
+
 /**
  * Save notification to MongoDB
  */
@@ -26,36 +78,21 @@ const saveDatabaseNotification = async (userId, type, title, body, options = {})
  * Send FCM push notification to a specific token
  */
 const sendNotification = async (token, title, body, data = {}) => {
-    if (getApps().length === 0) return false;
+    if (!isFirebaseReady()) {
+        console.warn("FCM skipped: Firebase Admin is not initialized.");
+        return false;
+    }
 
     try {
-        const message = {
-            notification: {
-                title,
-                body,
-                ...(data.image && { image: data.image })
-            },
-            android: {
-                notification: {
-                    sound: 'default'
-                }
-            },
-            apns: {
-                payload: {
-                    aps: {
-                        sound: 'default'
-                    }
-                }
-            },
-            data: {
-                click_action: "FLUTTER_NOTIFICATION_CLICK", // for cross-platform support
-                route: data.route || "/",
-                type: data.type || "System"
-            },
-            token,
-        };
+        const { tokens, ...message } = buildFcmMessage([token], title, body, {
+            route: data.route,
+            type: data.type,
+            image: data.image,
+            icon: data.icon,
+            notificationId: data.notificationId,
+        });
 
-        const response = await getMessaging().send(message);
+        const response = await getMessaging().send({ ...message, token });
         console.log("Successfully sent FCM message:", response);
         return true;
     } catch (error) {
@@ -80,34 +117,19 @@ const sendToUser = async (userId, type, title, body, options = {}) => {
     // 2. Fetch all FCM tokens for user
     const userTokens = await FCMToken.find({ user: userId });
     
-    if (userTokens.length > 0 && getApps().length > 0) {
+    if (userTokens.length === 0) {
+        console.warn(`No FCM tokens registered for user ${userId}. In-app notification saved; push not sent.`);
+    } else if (!isFirebaseReady()) {
+        console.warn(`FCM skipped for user ${userId}: Firebase Admin is not initialized.`);
+    } else {
         const tokens = userTokens.map(t => t.token);
-        
-        const message = {
-            notification: {
-                title,
-                body,
-                ...(options.image && { image: options.image })
-            },
-            android: {
-                notification: {
-                    sound: 'default'
-                }
-            },
-            apns: {
-                payload: {
-                    aps: {
-                        sound: 'default'
-                    }
-                }
-            },
-            data: {
-                route: options.route || "/",
-                type: type || "System",
-                notificationId: dbNotification._id.toString()
-            },
-            tokens,
-        };
+        const message = buildFcmMessage(tokens, title, body, {
+            route: options.route,
+            type,
+            image: options.image,
+            icon: options.icon,
+            notificationId: dbNotification._id.toString(),
+        });
 
         try {
             const response = await getMessaging().sendEachForMulticast(message);
@@ -150,33 +172,17 @@ const sendToMany = async (userIds, type, title, body, options = {}) => {
 
     const userTokens = await FCMToken.find({ user: { $in: userIds } });
     
-    if (userTokens.length > 0 && getApps().length > 0) {
+    if (userTokens.length > 0) {
+        if (!isFirebaseReady()) {
+            console.warn("FCM bulk send skipped: Firebase Admin is not initialized.");
+        } else {
         const tokens = userTokens.map(t => t.token);
-        
-        const message = {
-            notification: {
-                title,
-                body,
-                ...(options.image && { image: options.image })
-            },
-            android: {
-                notification: {
-                    sound: 'default'
-                }
-            },
-            apns: {
-                payload: {
-                    aps: {
-                        sound: 'default'
-                    }
-                }
-            },
-            data: {
-                route: options.route || "/",
-                type: type || "System"
-            },
-            tokens,
-        };
+        const message = buildFcmMessage(tokens, title, body, {
+            route: options.route,
+            type,
+            image: options.image,
+            icon: options.icon,
+        });
 
         try {
             const response = await getMessaging().sendEachForMulticast(message);
@@ -198,14 +204,15 @@ const sendToMany = async (userIds, type, title, body, options = {}) => {
         } catch (error) {
             console.error("Error sending bulk multicast:", error);
         }
+        }
     }
     
     return dbNotifications;
 };
 
 // Compatibility wrapper for old createNotification calls
-const createNotification = async (userId, type, title, body) => {
-    return await sendToUser(userId, type, title, body);
+const createNotification = async (userId, type, title, body, options = {}) => {
+    return await sendToUser(userId, type, title, body, options);
 };
 
 // Existing logic for retrieving/managing notifications
