@@ -60,6 +60,11 @@ export const truncate = (str, n = 80) =>
 export const glowPointsFromAmount = (amount) =>
   Math.floor((amount || 0) / 100);
 
+export const isPriceSet = (amount) => typeof amount === "number" && amount > 0;
+
+export const formatPriceOrTbd = (amount) =>
+  isPriceSet(amount) ? formatCurrency(amount) : "Price on request";
+
 /** Prefer imageUrl (Cloudinary) over legacy image field */
 export const getProductImage = (product) => {
   if (!product) return null;

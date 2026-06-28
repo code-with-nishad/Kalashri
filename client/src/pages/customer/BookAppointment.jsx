@@ -5,7 +5,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { CheckCircle, Sparkles, Clock, Check, ChevronRight, Calendar as CalIcon, CreditCard, Upload, Plus, X } from "lucide-react";
 import { serviceService, appointmentService, uploadService } from "../../services";
 import { QUERY_KEYS } from "../../constants/queryKeys";
-import { formatCurrency, glowPointsFromAmount } from "../../utils";
+import { isPriceSet, glowPointsFromAmount } from "../../utils";
 import { toast } from "sonner";
 
 const STEPS = ["Select Services", "Schedule & Notes", "Payment", "Confirm"];
@@ -88,13 +88,12 @@ export default function BookAppointment() {
 
   const totalSelectedCount = selectedServices.length + customServices.length;
 
-  const totalAmount = selectedServices.reduce((sum, s) => sum + s.price, 0);
   const totalDuration = selectedServices.reduce((sum, s) => sum + s.duration, 0);
 
   const canNext = [
     totalSelectedCount > 0,
     !!date && !!time,
-    paymentMethod === "Cash" || totalAmount === 0 || (paymentMethod === "Manual UPI" && transactionId.trim().length > 3),
+    paymentMethod === "Cash" || (paymentMethod === "Manual UPI" && transactionId.trim().length > 3),
     true,
   ];
 
@@ -140,10 +139,13 @@ export default function BookAppointment() {
           <p className="text-sm text-[var(--color-text-muted)]">Services: <span className="text-[var(--color-text-primary)]">{booked.services?.map(s => s.serviceName).join(", ")}</span></p>
           <p className="text-sm text-[var(--color-text-muted)]">Date: <span className="text-[var(--color-text-primary)]">{booked.appointmentDate}</span></p>
           <p className="text-sm text-[var(--color-text-muted)]">Time: <span className="text-[var(--color-text-primary)]">{booked.appointmentTime}</span></p>
-          <p className="text-sm text-[var(--color-text-muted)]">Total: <span className="text-[var(--color-rose-400)] font-bold">{formatCurrency(booked.totalAmount)}</span></p>
-          <div className="flex items-center gap-1.5 text-yellow-400 text-sm font-medium">
-            <Sparkles className="w-4 h-4" /> You'll earn {glowPointsFromAmount(booked.totalAmount)} Glow Points on completion
-          </div>
+          <p className="text-sm text-[var(--color-text-muted)]">Status: <span className="text-yellow-400 font-medium">Pending confirmation</span></p>
+          <p className="text-xs text-[var(--color-text-muted)]">Pricing will be confirmed by the salon after your request is accepted.</p>
+          {isPriceSet(booked.totalAmount) && (
+            <div className="flex items-center gap-1.5 text-yellow-400 text-sm font-medium">
+              <Sparkles className="w-4 h-4" /> You'll earn {glowPointsFromAmount(booked.totalAmount)} Glow Points on completion
+            </div>
+          )}
         </div>
         <button onClick={() => navigate("/appointments")} className="w-full py-3.5 -white font-semibold rounded-xl transition-all">
           View My Appointments
@@ -231,7 +233,6 @@ export default function BookAppointment() {
                     <div>
                       <p className="font-medium text-[var(--color-text-primary)] text-sm">{svc.name}</p>
                       <div className="flex items-center gap-3 mt-1">
-                        <span className="text-[var(--color-rose-400)] text-sm font-semibold">{formatCurrency(svc.price)}</span>
                         <span className="text-xs text-[var(--color-text-muted)] flex items-center gap-0.5"><Clock className="w-3 h-3" />{svc.duration}min</span>
                       </div>
                     </div>
@@ -240,21 +241,14 @@ export default function BookAppointment() {
               })}
             </div>
             {(selectedServices.length > 0 || customServices.length > 0) && (
-              <div className="mt-4 p-4 rounded-xl bg-[var(--color-surface-card)] border border-[var(--color-border)] space-y-2">
-                <div className="flex justify-between items-center">
-                  <p className="text-sm text-[var(--color-text-muted)]">
-                    {totalSelectedCount} service{totalSelectedCount > 1 ? "s" : ""} · {totalDuration} min
-                    {customServices.length > 0 && " (+ custom requests)"}
-                  </p>
-                  <p className="font-bold text-[var(--color-rose-400)]">
-                    {totalAmount > 0 ? formatCurrency(totalAmount) : "Price TBD"}
-                  </p>
-                </div>
-                {customServices.length > 0 && (
-                  <p className="text-xs text-[var(--color-text-muted)]">
-                    Custom services will be priced after admin review.
-                  </p>
-                )}
+              <div className="mt-4 p-4 rounded-xl bg-[var(--color-surface-card)] border border-[var(--color-border)]">
+                <p className="text-sm text-[var(--color-text-muted)]">
+                  {totalSelectedCount} service{totalSelectedCount > 1 ? "s" : ""} · {totalDuration} min
+                  {customServices.length > 0 && " (+ custom requests)"}
+                </p>
+                <p className="text-xs text-[var(--color-text-muted)] mt-2">
+                  Final pricing will be confirmed by the salon after your request is accepted.
+                </p>
               </div>
             )}
           </motion.div>
@@ -324,7 +318,7 @@ export default function BookAppointment() {
                     {/* Placeholder QR Code - user can replace later */}
                     <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=gayatribeautystudio@upi&pn=Gayatri%20Beauty%20Studio" alt="UPI QR" className="w-full h-full object-contain rounded-lg" />
                   </div>
-                  <p className="text-lg font-bold text-[var(--color-rose-400)] pt-2">Amount: {formatCurrency(totalAmount)}</p>
+                  <p className="text-sm text-[var(--color-text-muted)] pt-2">Amount will be confirmed by the salon after your booking is accepted.</p>
                 </div>
                 
                 <div>
@@ -377,13 +371,11 @@ export default function BookAppointment() {
                 {selectedServices.map(s => (
                   <div key={s._id} className="flex justify-between py-1.5 text-sm">
                     <span className="text-[var(--color-text-primary)]">{s.name}</span>
-                    <span className="text-[var(--color-rose-400)]">{formatCurrency(s.price)}</span>
                   </div>
                 ))}
                 {customServices.map((request, index) => (
                   <div key={`custom-${index}`} className="flex justify-between py-1.5 text-sm">
                     <span className="text-[var(--color-text-primary)]">{request} <span className="text-[var(--color-text-muted)]">(Custom)</span></span>
-                    <span className="text-[var(--color-text-muted)]">TBD</span>
                   </div>
                 ))}
               </div>
@@ -393,9 +385,8 @@ export default function BookAppointment() {
                 <div className="flex justify-between"><span className="text-[var(--color-text-muted)]">Duration</span><span className="text-[var(--color-text-primary)]">{totalDuration} min</span></div>
                 {notes && <div className="flex justify-between"><span className="text-[var(--color-text-muted)]">Notes</span><span className="text-[var(--color-text-primary)] text-right max-w-xs">{notes}</span></div>}
               </div>
-              <div className="border-t border-[var(--color-border)] pt-3 flex justify-between font-semibold">
-                <span className="text-[var(--color-text-primary)]">Total</span>
-                <span className="text-[var(--color-rose-400)] text-lg">{totalAmount > 0 ? formatCurrency(totalAmount) : "To be confirmed"}</span>
+              <div className="border-t border-[var(--color-border)] pt-3 text-sm">
+                <p className="text-[var(--color-text-muted)]">Pricing will be confirmed by the salon after acceptance.</p>
               </div>
               <div className="border-t border-[var(--color-border)] pt-3 text-sm flex justify-between">
                 <span className="text-[var(--color-text-muted)]">Payment Method</span>
@@ -407,9 +398,6 @@ export default function BookAppointment() {
                   <span className="text-[var(--color-text-primary)]">{transactionId}</span>
                 </div>
               )}
-              <div className="flex items-center gap-1.5 text-yellow-400 text-sm mt-2">
-                <Sparkles className="w-4 h-4" /> You'll earn {glowPointsFromAmount(totalAmount)} Glow Points after completion
-              </div>
             </div>
           </motion.div>
         )}

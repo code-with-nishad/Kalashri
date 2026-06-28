@@ -1,6 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Star, Check, Info, ShieldCheck, Truck, Droplets } from "lucide-react";
-import { formatCurrency } from "../../utils";
 import { Badge } from "../ui/Badge";
 import { useState } from "react";
 import { useAuthStore } from "../../store/authStore";

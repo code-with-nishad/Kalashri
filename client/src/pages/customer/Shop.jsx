@@ -14,8 +14,6 @@ const CATEGORIES = ["All", "Hair Care", "Skin Care", "Makeup", "Body Care", "Fac
 const SORTS = [
   { id: "default", label: "Most Popular" },
   { id: "newest", label: "Newest" },
-  { id: "price-asc", label: "Price: Low to High" },
-  { id: "price-desc", label: "Price: High to Low" },
   { id: "rating", label: "Highest Rated" },
 ];
 
@@ -50,9 +48,7 @@ export default function Shop() {
       result = result.filter((p) => p.category === selectedCategory);
     }
 
-    if (selectedSort === "price-asc") result.sort((a, b) => a.price - b.price);
-    else if (selectedSort === "price-desc") result.sort((a, b) => b.price - a.price);
-    else if (selectedSort === "newest") result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    if (selectedSort === "newest") result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     else if (selectedSort === "rating") result.sort((a, b) => (b.rating || 0) - (a.rating || 0));
     else result.sort((a, b) => (b.isFeatured ? 1 : 0) - (a.isFeatured ? 1 : 0));
 

@@ -10,7 +10,6 @@ import { useState, useRef, useEffect, useMemo } from "react";
 import { cmsService, serviceService, inventoryService } from "../../services";
 import { QUERY_KEYS } from "../../constants/queryKeys";
 import { SALON_NAME, SALON_TAGLINE, SALON_WHATSAPP, SALON_INSTAGRAM } from "../../constants";
-import { formatCurrency } from "../../utils";
 import { useAuthStore } from "../../store/authStore";
 import ProductImage from "../../components/products/ProductImage";
 import AIConsultant from "../../components/ai/AIConsultant";
@@ -357,8 +356,7 @@ function ServicesSection({ services = [], bookLink, isAuthenticated }) {
               <h3 className="font-display font-bold text-[var(--color-text-primary)] text-lg mb-2">{svc?.name || "Loading..."}</h3>
               <p className="text-sm text-[var(--color-text-muted)] mb-4 line-clamp-2">{svc?.description}</p>
               
-              <div className="flex items-center justify-between pt-4 border-t border-[var(--color-border)]">
-                <span className="text-[var(--color-rose-500)] font-bold text-lg">{svc ? formatCurrency(svc.price) : "—"}</span>
+              <div className="flex items-center justify-end pt-4 border-t border-[var(--color-border)]">
                 <span className="text-xs font-semibold text-[var(--color-text-muted)] flex items-center gap-1 bg-[var(--color-surface-2)] px-2 py-1 rounded-lg">
                   <Clock className="w-3.5 h-3.5" /> {svc?.duration} min
                 </span>
@@ -455,13 +453,7 @@ function FeaturedProductsSection({ products = [] }) {
               <h3 className="font-display font-bold text-[var(--color-text-primary)] text-lg mb-2 line-clamp-2 leading-tight">{p.name}</h3>
               <p className="text-xs text-[var(--color-text-muted)] mb-4 line-clamp-2 flex-1">{p.description}</p>
               
-              <div className="flex items-center justify-between pt-4 border-t border-[var(--color-border)]">
-                <div className="flex flex-col">
-                  {p.originalPrice && (
-                    <span className="text-[10px] text-[var(--color-text-muted)] line-through">{formatCurrency(p.originalPrice)}</span>
-                  )}
-                  <span className="text-[var(--color-rose-600)] font-black text-lg">{formatCurrency(p.price)}</span>
-                </div>
+              <div className="flex items-center justify-end pt-4 border-t border-[var(--color-border)]">
                 <Link
                   to="/products"
                   className="w-10 h-10 rounded-full bg-[var(--color-rose-500)] text-white flex items-center justify-center hover:scale-110 hover:shadow-lg transition-transform"

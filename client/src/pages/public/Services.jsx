@@ -4,7 +4,6 @@ import { Clock, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { serviceService } from "../../services";
 import { QUERY_KEYS } from "../../constants/queryKeys";
-import { formatCurrency } from "../../utils";
 import { SkeletonCard } from "../../components/ui/Skeleton";
 
 export default function Services() {
@@ -34,8 +33,7 @@ export default function Services() {
                 <div className="p-5">
                   <h3 className="font-display font-semibold text-[var(--color-text-primary)] text-lg mb-1">{svc.name}</h3>
                   <p className="text-sm text-[var(--color-text-muted)] mb-3 line-clamp-2">{svc.description}</p>
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-[var(--color-rose-400)] font-bold text-lg">{formatCurrency(svc.price)}</span>
+                  <div className="flex items-center justify-end mb-4">
                     <span className="text-xs text-[var(--color-text-muted)] flex items-center gap-1"><Clock className="w-3 h-3" />{svc.duration} min</span>
                   </div>
                   <Link to="/register" className="w-full py-2.5 -white text-sm font-medium rounded-xl transition-all text-center block">Book Now</Link>

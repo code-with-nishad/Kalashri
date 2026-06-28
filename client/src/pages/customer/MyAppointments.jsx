@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Calendar, Clock, ArrowLeft, ArrowRight, CheckCircle } from "lucide-react";
 import { appointmentService, notificationService } from "../../services";
 import { QUERY_KEYS } from "../../constants/queryKeys";
-import { formatDate, formatCurrency } from "../../utils";
+import { formatDate, formatPriceOrTbd, isPriceSet } from "../../utils";
 import { Badge } from "../../components/ui/Badge";
 import { SkeletonTable } from "../../components/ui/Skeleton";
 
@@ -56,7 +56,9 @@ export default function MyAppointments() {
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
-                  <span className="font-semibold text-[var(--color-rose-400)]">{formatCurrency(a.totalAmount)}</span>
+                  {isPriceSet(a.totalAmount) && (
+                    <span className="font-semibold text-[var(--color-rose-400)]">{formatPriceOrTbd(a.totalAmount)}</span>
+                  )}
                   <Badge variant={statusBadge[a.status]}>{a.status}</Badge>
                   <ArrowRight className="w-4 h-4 text-[var(--color-text-muted)] group-hover:text-[var(--color-text-primary)] transition-colors" />
                 </div>

@@ -4,13 +4,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ShoppingBag, Trash2, Minus, Plus, Clock, CheckCircle, Package } from "lucide-react";
 import { useCartStore } from "../../store/cartStore";
 import { orderService } from "../../services";
-import { formatCurrency, formatDate } from "../../utils";
+import { formatDate, isPriceSet, formatPriceOrTbd } from "../../utils";
 import { Badge } from "../ui/Badge";
 import { toast } from "sonner";
 
 export default function CartSidebar() {
   const queryClient = useQueryClient();
-  const { items, updateQuantity, removeItem, clearCart, getTotal, getItemCount } = useCartStore();
+  const { items, updateQuantity, removeItem, clearCart, getItemCount } = useCartStore();
   const [activeTab, setActiveTab] = useState("cart");
 
   const { data: ordersData, isLoading: ordersLoading } = useQuery({
@@ -34,7 +34,6 @@ export default function CartSidebar() {
     onError: (err) => toast.error(err.message || "Failed to reserve products"),
   });
 
-  const cartTotal = getTotal();
   const cartCount = getItemCount();
 
   return (
@@ -87,7 +86,6 @@ export default function CartSidebar() {
                     )}
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-[var(--color-text-primary)] line-clamp-2">{item.product.name}</p>
-                      <p className="text-xs text-[var(--color-rose-400)] font-semibold mt-0.5">{formatCurrency(item.product.price)}</p>
                       <div className="flex items-center gap-2 mt-2">
                         <button
                           onClick={() => updateQuantity(item.product._id, item.quantity - 1)}
@@ -145,7 +143,9 @@ export default function CartSidebar() {
                     <p className="text-sm font-medium text-[var(--color-text-primary)] line-clamp-1">{order.product?.name || "Product"}</p>
                     <p className="text-xs text-[var(--color-text-muted)]">Qty: {order.quantity}</p>
                   </div>
-                  <p className="text-sm font-bold text-[var(--color-text-primary)]">{formatCurrency(order.totalAmount)}</p>
+                  {isPriceSet(order.totalAmount) && (
+                    <p className="text-sm font-bold text-[var(--color-text-primary)]">{formatPriceOrTbd(order.totalAmount)}</p>
+                  )}
                 </div>
               </div>
             ))
@@ -153,11 +153,7 @@ export default function CartSidebar() {
         </div>
 
         {activeTab === "cart" && items.length > 0 && (
-          <div className="p-4 border-t border-[var(--color-border)] space-y-3">
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-[var(--color-text-muted)]">Total</span>
-              <span className="text-lg font-bold text-[var(--color-rose-400)]">{formatCurrency(cartTotal)}</span>
-            </div>
+          <div className="p-4 border-t border-[var(--color-border)]">
             <button
               onClick={() => checkout()}
               disabled={isPending}

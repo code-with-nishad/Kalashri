@@ -23,6 +23,13 @@ const createAppointmentSchema = z.object({
     { message: "Select at least one service or add a custom service request" }
 );
 
+const servicePriceSchema = z.object({
+    serviceName: z.string().min(1),
+    price: z.number().min(0),
+    duration: z.number().min(0).optional(),
+    isCustom: z.boolean().optional(),
+});
+
 const updateAppointmentStatusSchema = z.object({
     status: z.enum(["Pending", "Confirmed", "Completed", "Cancelled", "Payment Failed"]).optional(),
     paymentStatus: z.enum(["Unpaid", "Verification Pending", "Pending", "Paid", "Rejected"]).optional(),
@@ -30,6 +37,8 @@ const updateAppointmentStatusSchema = z.object({
     suggestedTimeFrame: z.string().optional(),
     transactionId: z.string().optional(),
     paymentScreenshot: z.string().optional(),
+    totalAmount: z.number().min(0).optional(),
+    services: z.array(servicePriceSchema).optional(),
 });
 
 module.exports = {

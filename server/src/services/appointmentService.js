@@ -29,13 +29,12 @@ const bookAppointment = async (userId, appointmentData) => {
         }
 
         services.forEach((service) => {
-            totalAmount += service.price;
             totalDuration += service.duration;
 
             servicesSnapshot.push({
                 service: service._id,
                 serviceName: service.name,
-                price: service.price,
+                price: 0,
                 duration: service.duration,
                 isCustom: false,
             });
@@ -126,7 +125,7 @@ const updateAppointmentStatus = async (appointmentId, updateData) => {
         throw new AppError(errors, 400);
     }
 
-    const { status, paymentStatus, paymentMethod, suggestedTimeFrame, transactionId, paymentScreenshot } = validationResult.data;
+    const { status, paymentStatus, paymentMethod, suggestedTimeFrame, transactionId, paymentScreenshot, totalAmount, services } = validationResult.data;
 
     const appointment = await Appointment.findById(appointmentId).populate("customer", "firstName lastName email phone");
 
@@ -153,6 +152,25 @@ const updateAppointmentStatus = async (appointmentId, updateData) => {
     if (suggestedTimeFrame) appointment.suggestedTimeFrame = suggestedTimeFrame;
     if (transactionId) appointment.transactionId = transactionId;
     if (paymentScreenshot) appointment.paymentScreenshot = paymentScreenshot;
+
+    if (services && services.length > 0) {
+        services.forEach((updated, index) => {
+            if (appointment.services[index]) {
+                appointment.services[index].price = updated.price;
+                if (updated.duration !== undefined) {
+                    appointment.services[index].duration = updated.duration;
+                }
+            }
+        });
+        appointment.markModified("services");
+        appointment.totalAmount = totalAmount ?? services.reduce((sum, s) => sum + s.price, 0);
+    } else if (totalAmount !== undefined) {
+        appointment.totalAmount = totalAmount;
+    }
+
+    if (status === "Completed" && appointment.totalAmount <= 0) {
+        throw new AppError("Please set service prices before marking as completed", 400);
+    }
     
     // Auto-confirm if paid via manual verification
     if (paymentStatus === "Paid" && appointment.paymentMethod === "Manual UPI" && status !== "Completed") {

@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { ShoppingBag, Clock, CheckCircle } from "lucide-react";
 import { orderService } from "../../services";
 import { Badge } from "../../components/ui/Badge";
-import { formatDate } from "../../utils";
+import { formatDate, formatPriceOrTbd, isPriceSet } from "../../utils";
 
 export default function Cart() {
   const { data, isLoading } = useQuery({ queryKey: ["my-orders"], queryFn: orderService.getMyOrders });
@@ -54,14 +54,18 @@ export default function Cart() {
                         <p className="text-xs text-[var(--color-text-muted)]">Qty: {item.quantity}</p>
                       </div>
                     </div>
-                    <p className="text-sm font-bold text-[var(--color-text-primary)]">₹{item.price * item.quantity}</p>
+                    {isPriceSet(item.price) && (
+                      <p className="text-sm font-bold text-[var(--color-text-primary)]">{formatPriceOrTbd(item.price * item.quantity)}</p>
+                    )}
                   </div>
                 ))}
               </div>
-              <div className="mt-4 pt-4 border-t border-[var(--color-border)] flex justify-between items-center">
-                <p className="text-sm text-[var(--color-text-muted)] font-medium">Total Amount</p>
-                <p className="text-lg font-bold text-gradient-rose">₹{order.totalAmount}</p>
-              </div>
+              {isPriceSet(order.totalAmount) && (
+                <div className="mt-4 pt-4 border-t border-[var(--color-border)] flex justify-between items-center">
+                  <p className="text-sm text-[var(--color-text-muted)] font-medium">Total Amount</p>
+                  <p className="text-lg font-bold text-gradient-rose">{formatPriceOrTbd(order.totalAmount)}</p>
+                </div>
+              )}
             </motion.div>
           ))
         )}

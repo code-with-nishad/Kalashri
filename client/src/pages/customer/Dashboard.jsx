@@ -7,7 +7,7 @@ import { useAuthStore } from "../../store/authStore";
 import { useNotifications } from "../../hooks/useNotifications";
 import { appointmentService, notificationService, rewardService, authService, serviceService, inventoryService } from "../../services";
 import { QUERY_KEYS } from "../../constants/queryKeys";
-import { formatDate, formatCurrency, getMembershipColor, cn } from "../../utils";
+import { formatDate, getMembershipColor, cn, formatPriceOrTbd, isPriceSet } from "../../utils";
 import { StatCard } from "../../components/ui/Card";
 import { Badge } from "../../components/ui/Badge";
 import { APPOINTMENT_STATUSES } from "../../constants";
@@ -229,7 +229,6 @@ export default function CustomerDashboard() {
                   )}
                   <div className="flex items-center gap-3 mt-3 text-xs text-[var(--color-text-muted)]">
                     <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {svc.duration} min</span>
-                    <span className="font-bold text-[var(--color-rose-400)] text-sm">{formatCurrency(svc.price)}</span>
                   </div>
                 </div>
                 <Link to={`/book?service=${svc._id}`}
@@ -284,7 +283,9 @@ export default function CustomerDashboard() {
                   ))}
                 </div>
                 <p className="text-[var(--color-text-muted)] text-sm">{formatDate(upcoming.appointmentDate)} at {upcoming.appointmentTime}</p>
-                <p className="text-[var(--color-rose-400)] font-semibold mt-1">{formatCurrency(upcoming.totalAmount)}</p>
+                {isPriceSet(upcoming.totalAmount) && (
+                  <p className="text-[var(--color-rose-400)] font-semibold mt-1">{formatPriceOrTbd(upcoming.totalAmount)}</p>
+                )}
               </div>
               <div className="flex items-center gap-3">
                 <Badge variant={upcoming.status === "Confirmed" ? "success" : "warning"}>{upcoming.status}</Badge>
@@ -337,7 +338,9 @@ export default function CustomerDashboard() {
                     <p className="text-xs text-[var(--color-text-muted)]">{formatDate(a.appointmentDate)}</p>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-sm font-semibold text-[var(--color-rose-400)]">{formatCurrency(a.totalAmount)}</span>
+                    {isPriceSet(a.totalAmount) && (
+                      <span className="text-sm font-semibold text-[var(--color-rose-400)]">{formatPriceOrTbd(a.totalAmount)}</span>
+                    )}
                     <Badge variant={a.status === "Completed" ? "info" : a.status === "Confirmed" ? "success" : a.status === "Cancelled" ? "error" : "warning"}>
                       {a.status}
                     </Badge>

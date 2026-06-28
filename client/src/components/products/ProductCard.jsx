@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import { Star, ShoppingBag, Eye, Plus } from "lucide-react";
 
 import { Badge } from "../ui/Badge";
-import { formatCurrency } from "../../utils";
 import ProductImage from "./ProductImage";
 
 export default function ProductCard({ product, onViewDetails, onAddToCart }) {
@@ -64,12 +63,9 @@ export default function ProductCard({ product, onViewDetails, onAddToCart }) {
         </p>
 
         <div className="mt-auto space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-base font-bold text-[var(--color-rose-400)]">{formatCurrency(product.price)}</span>
-            {(product.stockQuantity ?? 0) < 1 && (
-              <span className="text-[10px] text-red-400 font-medium">Out of stock</span>
-            )}
-          </div>
+          {(product.stockQuantity ?? 0) < 1 && (
+            <span className="text-[10px] text-red-400 font-medium">Out of stock</span>
+          )}
 
           <div className="flex gap-2">
             {onAddToCart && (

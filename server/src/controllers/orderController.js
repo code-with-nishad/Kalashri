@@ -18,13 +18,11 @@ exports.createOrder = asyncHandler(async (req, res) => {
         throw new AppError("Not enough stock available", 400);
     }
 
-    const totalAmount = product.price * quantity;
-
     const order = await Order.create({
         user: req.user._id,
         product: productId,
         quantity,
-        totalAmount,
+        totalAmount: 0,
     });
 
     sendResponse(res, 201, true, "Product reserved successfully", order);
@@ -49,7 +47,7 @@ exports.getAllOrders = asyncHandler(async (req, res) => {
 
 exports.updateOrderStatus = asyncHandler(async (req, res) => {
     const { orderId } = req.params;
-    const { status } = req.body;
+    const { status, totalAmount } = req.body;
 
     const order = await Order.findById(orderId).populate("product").populate("user");
     if (!order) {
@@ -64,6 +62,13 @@ exports.updateOrderStatus = asyncHandler(async (req, res) => {
     order.status = status;
 
     if (status === "Completed" && !order.pointsAwarded) {
+        if (totalAmount !== undefined && totalAmount > 0) {
+            order.totalAmount = totalAmount;
+        }
+        if (order.totalAmount <= 0) {
+            throw new AppError("Please set the order price before completing", 400);
+        }
+
         // Deduct stock
         if (order.product.stockQuantity >= order.quantity) {
             order.product.stockQuantity -= order.quantity;
