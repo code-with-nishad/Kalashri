@@ -40,13 +40,17 @@ export default function BookAppointment() {
   const services = data?.data || [];
 
   useEffect(() => {
-    if (serviceIdParam && services.length > 0 && selectedServices.length === 0) {
-      const matched = services.find(s => s._id === serviceIdParam);
-      if (matched) {
-        setSelectedServices([matched]);
+    if (services.length > 0 && selectedServices.length === 0) {
+      const serviceParam = searchParams.get("service") || searchParams.get("services");
+      if (serviceParam) {
+        const ids = serviceParam.split(",");
+        const matched = services.filter(s => ids.includes(s._id));
+        if (matched.length > 0) {
+          setSelectedServices(matched);
+        }
       }
     }
-  }, [services, serviceIdParam]);
+  }, [services, searchParams]);
 
   const { mutate: book, isPending } = useMutation({
     mutationFn: appointmentService.book,

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard, Calendar, Gift, Trophy, Bell, User,
   Sparkles, ShoppingBag, ChevronLeft, ChevronRight,
-  LogOut, History,
+  LogOut, History, Share2,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn, getInitials, getMembershipColor } from "../../utils";
@@ -19,8 +19,7 @@ const navItems = [
   { icon: Calendar, label: "Book", to: "/book" },
   { icon: History, label: "My Appts", to: "/appointments" },
   { icon: ShoppingBag, label: "Shop", to: "/products" },
-
-  { icon: Gift, label: "Rewards", to: "/rewards" },
+  { icon: Share2, label: "GlowFeed", to: "/feed" },
   { icon: Trophy, label: "Leaderboard", to: "/leaderboard" },
   { icon: User, label: "Profile", to: "/profile" },
 ];

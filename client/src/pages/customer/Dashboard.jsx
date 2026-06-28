@@ -148,7 +148,9 @@ export default function CustomerDashboard() {
         <StatCard icon={Sparkles} label="Glow Points" value={user?.glowPoints || 0} sub="Current Balance" color="rose" />
         <StatCard icon={Calendar} label="Total Appointments" value={appointments.length} sub="All time" color="blue" />
         <StatCard icon={Bell} label="Notifications" value={unreadCount} sub="Unread" color="purple" />
-        <StatCard icon={Gift} label="Rewards Available" value={rewards.length} sub="Eligible to redeem" color="gold" />
+        <Link to="/rewards" className="block">
+          <StatCard icon={Gift} label="Rewards Available" value={rewards.length} sub="Click to redeem" color="gold" className="h-full hover:border-[var(--color-rose-300)]" />
+        </Link>
       </div>
 
       {/* Membership Card */}

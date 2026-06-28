@@ -5,7 +5,7 @@ import {
   LayoutDashboard, Users, Calendar, Star, Package,
   BarChart3, Trophy, Globe, Activity, Bell, Settings,
   Sparkles, ChevronLeft, ChevronRight, LogOut, Wrench,
-  ShoppingCart, Menu, X
+  ShoppingCart, Menu, X, ShieldAlert
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "../../utils";
@@ -46,6 +46,7 @@ const navGroups = [  {
       { icon: Package, label: "Inventory", to: "/admin/inventory" },
       { icon: Globe, label: "CMS", to: "/admin/cms" },
       { icon: Bell, label: "Notifications", to: "/admin/notifications" },
+      { icon: ShieldAlert, label: "Feed Moderation", to: "/admin/moderation" },
       { icon: Settings, label: "Settings", to: "/admin/settings" },
     ],
   },

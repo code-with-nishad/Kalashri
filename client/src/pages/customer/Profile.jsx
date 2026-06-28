@@ -70,6 +70,11 @@ function ProfileSidebar({ user, formData, setFormData, isEditing, setIsEditing, 
             <p className="text-[10px] text-[var(--color-text-muted)] mt-0.5">Monthly</p>
           </div>
         </div>
+        <div className="mt-5 pt-4 border-t border-[var(--color-border)]">
+          <Link to="/rewards" className="flex items-center justify-center gap-2 w-full py-2.5 bg-gradient-to-r from-[var(--color-rose-500)] to-[var(--color-rose-600)] hover:opacity-90 text-white text-xs font-semibold rounded-xl transition-all shadow-md">
+            <Gift className="w-4 h-4" /> Go to Rewards Store 🎁
+          </Link>
+        </div>
       </motion.div>
 
       <div className="rounded-2xl bg-[var(--color-surface-card)] border border-[var(--color-border)] p-5 space-y-4 shadow-[var(--shadow-card)]">

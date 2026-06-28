@@ -31,6 +31,8 @@ const Leaderboard = lazy(() => import("../pages/customer/Leaderboard"));
 const NotificationsPage = lazy(() => import("../pages/customer/Notifications"));
 const CustomerProfile = lazy(() => import("../pages/customer/Profile"));
 const CustomerShop = lazy(() => import("../pages/customer/Shop"));
+const GlowFeedHome = lazy(() => import("../pages/customer/GlowFeedHome"));
+const AdminGlowModeration = lazy(() => import("../pages/admin/AdminGlowModeration"));
 
 // Admin Pages
 const AdminDashboard = lazy(() => import("../pages/admin/Dashboard"));
@@ -97,6 +99,7 @@ const router = createBrowserRouter([
           { path: "/notifications", element: <Suspense fallback={<PageLoader />}><NotificationsPage /></Suspense> },
           { path: "/profile", element: <Suspense fallback={<PageLoader />}><CustomerProfile /></Suspense> },
           { path: "/products", element: <Suspense fallback={<PageLoader />}><CustomerShop /></Suspense> },
+          { path: "/feed", element: <Suspense fallback={<PageLoader />}><GlowFeedHome /></Suspense> },
           { path: "/cart", element: <Navigate to="/products" replace /> },
         ],
       },
@@ -124,6 +127,7 @@ const router = createBrowserRouter([
           { path: "/admin/activity", element: <Suspense fallback={<PageLoader />}><AdminActivity /></Suspense> },
           { path: "/admin/notifications", element: <Suspense fallback={<PageLoader />}><AdminNotifications /></Suspense> },
           { path: "/admin/settings", element: <Suspense fallback={<PageLoader />}><AdminSettings /></Suspense> },
+          { path: "/admin/moderation", element: <Suspense fallback={<PageLoader />}><AdminGlowModeration /></Suspense> },
         ],
       },
     ],

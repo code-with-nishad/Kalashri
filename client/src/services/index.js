@@ -143,3 +143,16 @@ export const orderService = {
 export const journeyService = {
   getMyJourney: () => api.get("/journey/me"),
 };
+
+export const glowFeedService = {
+  getPosts: (params) => api.get("/feed", { params }),
+  createPost: (data) => api.post("/feed", data),
+  toggleLike: (id) => api.post(`/feed/${id}/like`),
+  getComments: (id) => api.get(`/feed/${id}/comments`),
+  createComment: (id, data) => api.post(`/feed/${id}/comments`, data),
+  deletePost: (id) => api.delete(`/feed/${id}`),
+  getTrending: () => api.get("/feed/trending"),
+  getModerationQueue: () => api.get("/feed/admin/moderation"),
+  moderatePost: (id, data) => api.patch(`/feed/admin/moderation/${id}`, data),
+};
+
