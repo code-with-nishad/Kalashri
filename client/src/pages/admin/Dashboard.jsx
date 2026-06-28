@@ -126,6 +126,18 @@ export default function AdminDashboard() {
           </div>
         </div>
       )}
+      {/* Floating Users Count */}
+      <motion.div 
+        initial={{ opacity: 0, y: 50, scale: 0.8 }} 
+        animate={{ opacity: 1, y: 0, scale: 1 }} 
+        className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-5 py-3 bg-[var(--color-surface)] border border-[var(--color-rose-500)]/30 shadow-[var(--shadow-glow-rose)] rounded-full backdrop-blur-md"
+      >
+        <div className="w-2 h-2 rounded-full bg-[var(--color-rose-500)] animate-pulse" />
+        <span className="text-[var(--color-text-primary)] font-medium text-sm flex items-center gap-2">
+          <Users className="w-4 h-4 text-[var(--color-rose-400)]" />
+          <span className="font-bold">{stats?.totalCustomers || 0}</span> Users Live
+        </span>
+      </motion.div>
     </div>
   );
 }

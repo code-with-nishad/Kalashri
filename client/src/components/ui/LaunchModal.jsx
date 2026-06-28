@@ -90,10 +90,10 @@ export default function LaunchModal() {
                     <Sparkles className="w-4 h-4" /> Grand Launch Offer
                   </p>
                   <p className="text-[var(--color-text-primary)] font-bold text-lg mt-1">
-                    Get 10% OFF your first booking!
+                    Get 10 Bonus Glow Points & "Founding Queen" Title!
                   </p>
-                  <p className="text-xs text-[var(--color-text-muted)] mt-1">
-                    Use code <span className="font-mono font-bold bg-[var(--color-surface-card)] px-2 py-0.5 rounded border border-[var(--color-border)]">GLOW10</span> at salon checkout
+                  <p className="text-xs text-[var(--color-text-muted)] mt-1 font-medium">
+                    Strictly limited to the <span className="text-[var(--color-rose-500)] font-bold">First 50 Customers</span> who register and book!
                   </p>
                 </div>
 
