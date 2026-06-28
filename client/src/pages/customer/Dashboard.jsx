@@ -13,6 +13,7 @@ import { APPOINTMENT_STATUSES } from "../../constants";
 import ProductCarousel from "../../components/products/ProductCarousel";
 import ProductModal from "../../components/products/ProductModal";
 import DailyTipModal from "../../components/ui/DailyTipModal";
+import LaunchModal from "../../components/ui/LaunchModal";
 
 export default function CustomerDashboard() {
   const user = useAuthStore((s) => s.user);
@@ -92,6 +93,7 @@ export default function CustomerDashboard() {
 
   return (
     <div className="space-y-8">
+      <LaunchModal />
       {/* Greeting */}
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
         <div className="flex items-start justify-between flex-wrap gap-4">
