@@ -26,9 +26,10 @@ export function useInstallPrompt() {
   }, []);
 
   const triggerInstall = async () => {
-    if (!installPromptEvent) return false;
+    if (!installPromptEvent) {
+      return false;
+    }
 
-    // Show the browser's install prompt
     installPromptEvent.prompt();
 
     // Wait for the user's choice

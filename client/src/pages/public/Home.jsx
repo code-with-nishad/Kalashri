@@ -13,8 +13,6 @@ import { SALON_NAME, SALON_TAGLINE, SALON_WHATSAPP, SALON_INSTAGRAM } from "../.
 import { useAuthStore } from "../../store/authStore";
 import ProductImage from "../../components/products/ProductImage";
 import AIConsultant from "../../components/ai/AIConsultant";
-import SocialProofPopup from "../../components/ui/SocialProofPopup";
-import GrandOpeningFX from "../../components/ui/GrandOpeningFX";
 
 // ==================== NUMBER COUNTER ====================
 function CountUp({ end, suffix = "", duration = 2000 }) {
@@ -952,12 +950,12 @@ function MusicPlayer() {
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: 1, type: "spring" }}
       onClick={togglePlay}
-      className={`fixed bottom-24 md:bottom-6 left-4 md:left-6 z-50 w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center shadow-lg transition-all ${
-        isPlaying ? "bg-[var(--color-rose-500)] text-white shadow-[0_0_20px_rgba(244,63,94,0.4)] animate-pulse" : "bg-white/80 text-[var(--color-rose-500)] backdrop-blur-md border border-[var(--color-rose-200)] hover:bg-[var(--color-rose-50)]"
+      className={`fixed bottom-28 md:bottom-6 left-4 md:left-6 z-50 w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center shadow-lg transition-all ${
+        isPlaying ? "bg-[var(--color-rose-500)] text-white shadow-[0_0_20px_rgba(244,63,94,0.4)]" : "bg-white/80 text-[var(--color-rose-500)] backdrop-blur-md border border-[var(--color-rose-200)] hover:bg-[var(--color-rose-50)]"
       }`}
       aria-label="Toggle Background Music"
     >
-      <Music className={`w-6 h-6 ${isPlaying ? 'animate-bounce' : ''}`} />
+      <Music className="w-6 h-6" />
     </motion.button>
   );
 }
@@ -1012,7 +1010,6 @@ export default function Home() {
 
   return (
     <div className="overflow-x-hidden relative">
-      <GrandOpeningFX />
       <HeroSection settings={settings} bookLink={bookLink} isAuthenticated={isAuthenticated} />
       <StatsSection />
       <HowItWorksSection bookLink={bookLink} />
@@ -1027,7 +1024,6 @@ export default function Home() {
       <CTASection bookLink={bookLink} />
       
       <MusicPlayer />
-      <SocialProofPopup />
 
       {/* WhatsApp Float Button */}
       <motion.a

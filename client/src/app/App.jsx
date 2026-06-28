@@ -33,7 +33,7 @@ export default function App() {
     };
   }, []);
 
-  const { needRefresh, applyUpdate, dismissUpdate } = usePwaUpdate();
+  const { needRefresh, isUpdating, applyUpdate, dismissUpdate } = usePwaUpdate();
 
   if (!isOnline) {
     return <OfflinePage />;
@@ -59,8 +59,9 @@ export default function App() {
       <InstallBanner />
       <UpdateToast
         needRefresh={needRefresh}
-        updateServiceWorker={applyUpdate}
-        close={dismissUpdate}
+        isUpdating={isUpdating}
+        onUpdate={applyUpdate}
+        onDismiss={dismissUpdate}
       />
 
       {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}

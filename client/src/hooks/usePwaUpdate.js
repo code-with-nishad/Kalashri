@@ -1,33 +1,39 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRegisterSW } from "virtual:pwa-register/react";
-import { toast } from "sonner";
 import { BUILD_ID } from "../generated/buildMeta.js";
 
 const UPDATE_CHECK_INTERVAL_MS = 5 * 60 * 1000;
-const UPDATE_TOAST_ID = "pwa-update";
+
+const waitForWaitingWorker = (registration, timeoutMs = 4000) =>
+    new Promise((resolve) => {
+        if (registration?.waiting) {
+            resolve(registration.waiting);
+            return;
+        }
+
+        const installing = registration?.installing;
+        if (!installing) {
+            resolve(null);
+            return;
+        }
+
+        const timeout = window.setTimeout(() => resolve(null), timeoutMs);
+
+        installing.addEventListener("statechange", () => {
+            if (installing.state === "installed" && registration.waiting) {
+                window.clearTimeout(timeout);
+                resolve(registration.waiting);
+            }
+            if (installing.state === "redundant") {
+                window.clearTimeout(timeout);
+                resolve(null);
+            }
+        });
+    });
 
 export function usePwaUpdate() {
     const registrationRef = useRef(null);
-    const updateToastShownRef = useRef(false);
-    const updateServiceWorkerRef = useRef(() => Promise.resolve());
-    const setNeedRefreshRef = useRef(() => {});
-
-    const showUpdateToast = useCallback(() => {
-        if (updateToastShownRef.current) return;
-
-        updateToastShownRef.current = true;
-        toast.info("App update available", {
-            id: UPDATE_TOAST_ID,
-            description: "A new version is ready with the latest features.",
-            duration: Infinity,
-            action: {
-                label: "Update",
-                onClick: () => {
-                    updateServiceWorkerRef.current(true);
-                },
-            },
-        });
-    }, []);
+    const [isUpdating, setIsUpdating] = useState(false);
 
     const {
         needRefresh: [needRefresh, setNeedRefresh],
@@ -41,20 +47,9 @@ export function usePwaUpdate() {
             console.error("Service worker registration failed:", error);
         },
         onNeedRefresh() {
-            setNeedRefreshRef.current(true);
-            showUpdateToast();
+            setNeedRefresh(true);
         },
     });
-
-    useEffect(() => {
-        updateServiceWorkerRef.current = updateServiceWorker;
-        setNeedRefreshRef.current = setNeedRefresh;
-    }, [updateServiceWorker, setNeedRefresh]);
-
-    const showUpdatePrompt = useCallback(() => {
-        setNeedRefresh(true);
-        showUpdateToast();
-    }, [setNeedRefresh, showUpdateToast]);
 
     const checkRemoteVersion = useCallback(async () => {
         try {
@@ -66,12 +61,13 @@ export function usePwaUpdate() {
 
             const { buildId } = await response.json();
             if (buildId && buildId !== BUILD_ID) {
-                showUpdatePrompt();
+                await registrationRef.current?.update();
+                setNeedRefresh(true);
             }
         } catch {
             // Ignore network errors during version check
         }
-    }, [showUpdatePrompt]);
+    }, [setNeedRefresh]);
 
     const checkForUpdates = useCallback(() => {
         registrationRef.current?.update();
@@ -108,20 +104,57 @@ export function usePwaUpdate() {
         };
     }, [checkForUpdates]);
 
-    const applyUpdate = useCallback(() => {
-        toast.dismiss(UPDATE_TOAST_ID);
-        updateToastShownRef.current = false;
-        updateServiceWorker(true);
-    }, [updateServiceWorker]);
+    const applyUpdate = useCallback(async () => {
+        if (isUpdating) return;
+        setIsUpdating(true);
+
+        const registration = registrationRef.current;
+
+        try {
+            await registration?.update();
+        } catch {
+            // Continue to reload fallback
+        }
+
+        const waitingWorker = registration?.waiting || (await waitForWaitingWorker(registration));
+
+        if (waitingWorker) {
+            const reloaded = new Promise((resolve) => {
+                const onControllerChange = () => {
+                    navigator.serviceWorker.removeEventListener("controllerchange", onControllerChange);
+                    resolve(true);
+                };
+                navigator.serviceWorker.addEventListener("controllerchange", onControllerChange);
+            });
+
+            try {
+                await updateServiceWorker(true);
+            } catch {
+                waitingWorker.postMessage({ type: "SKIP_WAITING" });
+            }
+
+            const didReload = await Promise.race([
+                reloaded,
+                new Promise((resolve) => window.setTimeout(() => resolve(false), 2500)),
+            ]);
+
+            if (!didReload) {
+                window.location.reload();
+            }
+            return;
+        }
+
+        window.location.reload();
+    }, [isUpdating, updateServiceWorker]);
 
     const dismissUpdate = useCallback(() => {
         setNeedRefresh(false);
-        toast.dismiss(UPDATE_TOAST_ID);
-        updateToastShownRef.current = false;
+        setIsUpdating(false);
     }, [setNeedRefresh]);
 
     return {
         needRefresh,
+        isUpdating,
         applyUpdate,
         dismissUpdate,
         checkForUpdates,
