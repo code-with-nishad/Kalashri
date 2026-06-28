@@ -29,6 +29,7 @@ const navGroups = [  {
     items: [
       { icon: Users, label: "Customers", to: "/admin/customers" },
       { icon: Calendar, label: "Appointments", to: "/admin/appointments" },
+      { icon: ShoppingCart, label: "Orders", to: "/admin/orders" },
       { icon: Wrench, label: "Services", to: "/admin/services" },
     ],
   },

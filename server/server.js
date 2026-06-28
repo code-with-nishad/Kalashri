@@ -17,6 +17,7 @@ const uploadRoutes = require("./src/routes/uploadRoutes");
 const paymentRoutes = require("./src/routes/paymentRoutes");
 const inventoryRoutes = require("./src/routes/inventoryRoutes");
 const aiRoutes = require("./src/routes/aiRoutes");
+const orderRoutes = require("./src/routes/orderRoutes");
 
 dotenv.config();
 
@@ -63,6 +64,7 @@ app.use("/api/activities", activityRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/inventory", inventoryRoutes);
 app.use("/api/ai", aiRoutes);
+app.use("/api/orders", orderRoutes);
 
 app.get("/", (req, res) => {
     res.status(200).json({

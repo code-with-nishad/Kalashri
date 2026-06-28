@@ -120,3 +120,10 @@ export const uploadService = {
     });
   },
 };
+
+export const orderService = {
+  create: (data) => api.post("/orders", data),
+  getMyOrders: () => api.get("/orders/my-orders"),
+  getAllOrders: () => api.get("/orders"),
+  updateStatus: (id, data) => api.put(`/orders/${id}/status`, data),
+};

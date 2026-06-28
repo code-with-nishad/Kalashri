@@ -3,9 +3,18 @@ import { X, Star, Check, Info, ShieldCheck, Truck, Droplets } from "lucide-react
 import { formatCurrency } from "../../utils";
 import { Badge } from "../ui/Badge";
 import { useState } from "react";
+import { useAuthStore } from "../../store/authStore";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { orderService } from "../../services";
 
 export default function ProductModal({ product, isOpen, onClose }) {
   const [activeImage, setActiveImage] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+  const [isReserving, setIsReserving] = useState(false);
+  
+  const user = useAuthStore((s) => s.user);
+  const navigate = useNavigate();
 
   if (!isOpen || !product) return null;
 
@@ -156,17 +165,43 @@ export default function ProductModal({ product, isOpen, onClose }) {
             {/* Sticky Action Bar for mobile / bottom of scroll */}
             <div className="mt-8 pt-6 border-t border-[var(--color-border)] flex gap-4">
               <button 
-                disabled
-                className="flex-1 py-4 bg-[var(--color-surface-card)] text-[var(--color-text-muted)] font-bold rounded-2xl border border-[var(--color-border)] cursor-not-allowed flex items-center justify-center gap-2"
+                onClick={async () => {
+                  if (!user) {
+                    toast.error("Please login to reserve products");
+                    navigate("/login");
+                    return;
+                  }
+                  
+                  try {
+                    setIsReserving(true);
+                    await orderService.create({ productId: product._id, quantity });
+                    toast.success("Product reserved successfully! You can pick it up at the salon.");
+                    onClose();
+                  } catch (error) {
+                    toast.error(error?.response?.data?.message || "Failed to reserve product");
+                  } finally {
+                    setIsReserving(false);
+                  }
+                }}
+                disabled={isReserving || product.stockQuantity < 1}
+                className="flex-1 py-4 bg-gradient-to-r from-[var(--color-rose-500)] to-[var(--color-rose-600)] hover:from-[var(--color-rose-400)] hover:to-[var(--color-rose-500)] text-white font-bold rounded-2xl transition-all shadow-[0_4px_14px_rgba(244,63,94,0.3)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
-                Buy Now (Coming Soon)
+                {isReserving ? "Reserving..." : product.stockQuantity < 1 ? "Out of Stock" : "Reserve for Pickup"}
               </button>
-              <button 
-                disabled
-                className="w-14 h-14 bg-[var(--color-surface-card)] text-[var(--color-text-muted)] rounded-2xl border border-[var(--color-border)] cursor-not-allowed flex items-center justify-center"
-              >
-                +
-              </button>
+              
+              <div className="flex bg-[var(--color-surface-card)] border border-[var(--color-border)] rounded-2xl overflow-hidden">
+                <button 
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  className="w-12 h-14 text-[var(--color-text-primary)] hover:bg-[var(--color-border)] transition-colors flex items-center justify-center"
+                >-</button>
+                <div className="w-12 h-14 flex items-center justify-center font-bold text-[var(--color-text-primary)] border-x border-[var(--color-border)]">
+                  {quantity}
+                </div>
+                <button 
+                  onClick={() => setQuantity(Math.min(product.stockQuantity || 1, quantity + 1))}
+                  className="w-12 h-14 text-[var(--color-text-primary)] hover:bg-[var(--color-border)] transition-colors flex items-center justify-center"
+                >+</button>
+              </div>
             </div>
           </div>
         </motion.div>
