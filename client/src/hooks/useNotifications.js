@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { requestFirebaseNotificationPermission, subscribeToForegroundMessages } from "../firebase/firebase";
 import api from "../services/api";
 import { useAuthStore } from "../store/authStore";
-import { toast } from "sonner"; // Assuming sonner is used for toasts (from package.json)
+import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../constants/queryKeys";
 
@@ -11,7 +11,45 @@ const warnDev = (...args) => {
     if (isDev) console.warn(...args);
 };
 
-let foregroundListenerOwner = null;
+// ── Shared singleton foreground listener ──────────────────────────────
+// Because the hook is used in multiple components simultaneously,
+// we use a module-level event bus so only ONE Firebase onMessage
+// subscription exists, and every mounted hook instance receives events.
+const listeners = new Set();
+let sharedUnsubscribe = null;
+let sharedSubscribing = false;
+
+const notifyListeners = (payload) => {
+    listeners.forEach((fn) => {
+        try { fn(payload); } catch (e) { console.error(e); }
+    });
+};
+
+const ensureForegroundListener = () => {
+    if (sharedUnsubscribe || sharedSubscribing) return;
+    sharedSubscribing = true;
+
+    subscribeToForegroundMessages(notifyListeners)
+        .then((cleanup) => {
+            sharedUnsubscribe = cleanup;
+            sharedSubscribing = false;
+        })
+        .catch((err) => {
+            console.error("Failed to subscribe to foreground messages:", err);
+            sharedSubscribing = false;
+        });
+};
+
+const addForegroundListener = (fn) => {
+    listeners.add(fn);
+    ensureForegroundListener();
+    return () => {
+        listeners.delete(fn);
+        // Don't tear down the shared subscription — keep it alive
+    };
+};
+
+// ── De-duplication ────────────────────────────────────────────────────
 const seenForegroundMessages = new Set();
 
 const rememberForegroundMessage = (id) => {
@@ -48,6 +86,7 @@ const getNotificationPermissionStatus = () => {
     }
 };
 
+// ── Hook ──────────────────────────────────────────────────────────────
 export const useNotifications = () => {
     const queryClient = useQueryClient();
     const { user } = useAuthStore();
@@ -55,9 +94,8 @@ export const useNotifications = () => {
     const [unreadCount, setUnreadCount] = useState(0);
     const [fcmToken, setFcmToken] = useState(null);
     const [permissionStatus, setPermissionStatus] = useState(getNotificationPermissionStatus());
-    const listenerId = useRef(`listener-${Date.now()}`);
 
-    // Fetch initial notifications
+    // Fetch notifications from backend
     const fetchNotifications = useCallback(async () => {
         if (!user) return;
         try {
@@ -70,7 +108,7 @@ export const useNotifications = () => {
         }
     }, [user]);
 
-    // Register Token with backend
+    // Register FCM token with backend
     const registerToken = useCallback(async (token) => {
         if (!user || !token) return;
 
@@ -81,10 +119,10 @@ export const useNotifications = () => {
         if (localStorage.getItem(storageKey) === token) return;
 
         try {
-            await api.post("/notifications/register-token", { 
-                token, 
-                device: navigator.userAgent, 
-                platform: "web" 
+            await api.post("/notifications/register-token", {
+                token,
+                device: navigator.userAgent,
+                platform: "web"
             });
             localStorage.setItem(storageKey, token);
             console.log("FCM Token registered with backend");
@@ -93,44 +131,44 @@ export const useNotifications = () => {
         }
     }, [user]);
 
-    // Initialize FCM
+    // Initialize FCM — request permission & get token
     const initFCM = useCallback(async (isManual = false) => {
         if (!user) return;
-        
-        // On mobile, requestPermission on load is often blocked.
-        // We only auto-init if already granted, OR if the user manually clicked a button.
-        if (Notification.permission === "granted" || isManual) {
-            const token = await requestFirebaseNotificationPermission();
-            if (token) {
-                setFcmToken(token);
-                setPermissionStatus("granted");
-                await registerToken(token);
+
+        try {
+            if (Notification.permission === "granted" || isManual) {
+                const token = await requestFirebaseNotificationPermission();
+                if (token) {
+                    setFcmToken(token);
+                    setPermissionStatus("granted");
+                    await registerToken(token);
+                } else if (Notification.permission === "denied") {
+                    setPermissionStatus("denied");
+                }
             } else if (Notification.permission === "denied") {
                 setPermissionStatus("denied");
             }
-        } else if (Notification.permission === "denied") {
-            setPermissionStatus("denied");
+        } catch (error) {
+            console.error("Error initializing FCM:", error);
         }
     }, [user, registerToken]);
 
+    // On mount: fetch notifications & init FCM
     useEffect(() => {
         if (!user) return;
-
         fetchNotifications();
         initFCM();
     }, [fetchNotifications, initFCM, user]);
 
+    // Subscribe to foreground messages via the shared listener
     useEffect(() => {
-        if (!user || !fcmToken || foregroundListenerOwner) return;
+        if (!user || !fcmToken) return;
 
-        let cancelled = false;
-        let unsubscribe = () => {};
-        foregroundListenerOwner = listenerId.current;
-
-        subscribeToForegroundMessages((payload) => {
+        const handlePayload = (payload) => {
             const { title, body, route, type, notificationId } = getPayloadText(payload);
             const messageId = notificationId || `${title}:${body}:${route}`;
 
+            // Skip duplicates
             if (rememberForegroundMessage(messageId)) return;
 
             const newNotification = {
@@ -161,27 +199,16 @@ export const useNotifications = () => {
             queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ALL_APPOINTMENTS });
             queryClient.invalidateQueries({ queryKey: QUERY_KEYS.DASHBOARD_STATS });
             queryClient.invalidateQueries({ queryKey: QUERY_KEYS.NOTIFICATIONS });
-        }).then((cleanup) => {
-            if (cancelled) {
-                cleanup();
-                return;
-            }
-            unsubscribe = cleanup;
-        });
-
-        return () => {
-            cancelled = true;
-            unsubscribe();
-            if (foregroundListenerOwner === listenerId.current) {
-                foregroundListenerOwner = null;
-            }
         };
+
+        const removeListener = addForegroundListener(handlePayload);
+        return removeListener;
     }, [fcmToken, queryClient, user]);
 
     const markAsRead = async (id) => {
         try {
             await api.patch(`/notifications/${id}/read`);
-            setNotifications(notifications.map(n => n._id === id ? { ...n, isRead: true } : n));
+            setNotifications((prev) => prev.map(n => n._id === id ? { ...n, isRead: true } : n));
             setUnreadCount(prev => Math.max(0, prev - 1));
         } catch (error) {
             console.error("Error marking as read:", error);
@@ -191,7 +218,7 @@ export const useNotifications = () => {
     const markAllAsRead = async () => {
         try {
             await api.patch(`/notifications/read-all`);
-            setNotifications(notifications.map(n => ({ ...n, isRead: true })));
+            setNotifications((prev) => prev.map(n => ({ ...n, isRead: true })));
             setUnreadCount(0);
         } catch (error) {
             console.error("Error marking all as read:", error);
@@ -202,7 +229,7 @@ export const useNotifications = () => {
         notifications,
         unreadCount,
         permissionStatus,
-        requestPermission: () => initFCM(true), // Expose to let users manually request
+        requestPermission: () => initFCM(true),
         markAsRead,
         markAllAsRead,
         fetchNotifications
