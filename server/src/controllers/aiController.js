@@ -1,6 +1,7 @@
 const asyncHandler = require("../utils/asyncHandler");
 const sendResponse = require("../utils/sendResponse");
 const Service = require("../models/Service");
+const { jsonrepair } = require("jsonrepair");
 
 exports.getAIChatResponse = asyncHandler(async (req, res, next) => {
     const { messages } = req.body;
@@ -103,6 +104,7 @@ CRITICAL: Return ONLY valid JSON starting with [ and ending with ]. Do not inclu
                 model: process.env.GROQ_STREAM_MODEL || "llama-3.1-8b-instant",
                 messages: groqMessages,
                 temperature: 0.1,
+                max_tokens: 8192,
             })
         });
 
@@ -121,7 +123,13 @@ CRITICAL: Return ONLY valid JSON starting with [ and ending with ]. Do not inclu
             reply = reply.replace(/^\`\`\`/, "").replace(/\`\`\`$/, "").trim();
         }
 
-        const parsedProducts = JSON.parse(reply);
+        let parsedProducts;
+        try {
+            parsedProducts = JSON.parse(reply);
+        } catch (e) {
+            console.warn("AI Parse Products JSON error, attempting repair...");
+            parsedProducts = JSON.parse(jsonrepair(reply));
+        }
 
         sendResponse(res, 200, true, "Parsed successfully", parsedProducts);
     } catch (err) {
@@ -165,6 +173,7 @@ CRITICAL: Return ONLY valid JSON starting with [ and ending with ]. Do not inclu
                 model: process.env.GROQ_STREAM_MODEL || "llama-3.1-8b-instant",
                 messages: groqMessages,
                 temperature: 0.1,
+                max_tokens: 8192,
             })
         });
 
@@ -183,7 +192,13 @@ CRITICAL: Return ONLY valid JSON starting with [ and ending with ]. Do not inclu
             reply = reply.replace(/^\`\`\`/, "").replace(/\`\`\`$/, "").trim();
         }
 
-        const parsedServices = JSON.parse(reply);
+        let parsedServices;
+        try {
+            parsedServices = JSON.parse(reply);
+        } catch (e) {
+            console.warn("AI Parse Services JSON error, attempting repair...");
+            parsedServices = JSON.parse(jsonrepair(reply));
+        }
 
         sendResponse(res, 200, true, "Parsed successfully", parsedServices);
     } catch (err) {
