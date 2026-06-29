@@ -66,8 +66,8 @@ const startScheduler = () => {
     
     console.log("⏰ Reminder scheduler started");
 
-    // Unread Notifications Reminder (Runs every 10 minutes)
-    cron.schedule("*/10 * * * *", async () => {
+    // Unread Notifications Reminder (Runs every 24 hours)
+    cron.schedule("0 0 * * *", async () => {
         try {
             const Notification = require("../models/Notification");
             const User = require("../models/User");
