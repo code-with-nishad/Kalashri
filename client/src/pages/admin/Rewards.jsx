@@ -12,7 +12,7 @@ export default function Rewards() {
   const qc = useQueryClient();
   const [modal, setModal] = useState(null);
   const [form, setForm] = useState({ title: "", description: "", glowPointsRequired: "", discountAmount: "", minimumBill: "", isActive: true });
-  const [redeemModal, setRedeemModal] = useState(null);
+
 
   const { data } = useQuery({ queryKey: QUERY_KEYS.REWARDS, queryFn: rewardService.getAll });
   const { data: redemptionsData } = useQuery({ queryKey: QUERY_KEYS.ALL_REDEMPTIONS, queryFn: rewardService.getAllRedemptions });

@@ -21,7 +21,7 @@ export default function Services() {
   const [bulkText, setBulkText] = useState("");
   const [parsedServices, setParsedServices] = useState(null);
 
-  const { data, isLoading } = useQuery({ queryKey: QUERY_KEYS.SERVICES, queryFn: serviceService.getAll });
+  const { data } = useQuery({ queryKey: QUERY_KEYS.SERVICES, queryFn: serviceService.getAll });
   const services = data?.data || [];
 
   const { mutate: createSvc, isPending: creating } = useMutation({

@@ -60,23 +60,23 @@ export default function AdminGlowModeration() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {posts.map(post => (
+          {posts.filter(post => post.user).map(post => (
             <div key={post._id} className="bg-white border rounded-2xl overflow-hidden flex flex-col justify-between shadow-sm">
               <div className="p-5 space-y-4">
                 {/* User details */}
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center font-bold text-sm overflow-hidden text-gray-700">
-                    {post.user.avatar ? (
-                      <img src={post.user.avatar} alt={post.user.firstName} className="w-full h-full object-cover" />
+                    {post.user?.avatar ? (
+                      <img src={post.user.avatar} alt={post.user?.firstName} className="w-full h-full object-cover" />
                     ) : (
-                      post.user.firstName[0]
+                      post.user?.firstName?.[0] || "?"
                     )}
                   </div>
                   <div>
                     <h4 className="font-semibold text-sm text-[var(--color-text-primary)]">
-                      {post.user.firstName} {post.user.lastName}
+                      {post.user?.firstName || 'Unknown'} {post.user?.lastName || 'User'}
                     </h4>
-                    <p className="text-xs text-[var(--color-text-muted)]">{post.user.email} · {post.user.phone}</p>
+                    <p className="text-xs text-[var(--color-text-muted)]">{post.user?.email || 'No email'} · {post.user?.phone || 'No phone'}</p>
                   </div>
                 </div>
 
