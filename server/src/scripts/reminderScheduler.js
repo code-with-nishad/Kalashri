@@ -104,6 +104,72 @@ const startScheduler = () => {
             console.error("Error in unread reminder scheduler:", error);
         }
     });
+    // Smart Re-booking Reminders (Runs every day at 10:00 AM)
+    cron.schedule("0 10 * * *", async () => {
+        try {
+            const Appointment = require("../models/Appointment");
+            const aiRecommendationService = require("../services/aiRecommendationService");
+            
+            // Find completed appointments from exactly 28 days ago
+            const twentyEightDaysAgoStart = new Date();
+            twentyEightDaysAgoStart.setDate(twentyEightDaysAgoStart.getDate() - 28);
+            twentyEightDaysAgoStart.setHours(0, 0, 0, 0);
+
+            const twentyEightDaysAgoEnd = new Date(twentyEightDaysAgoStart);
+            twentyEightDaysAgoEnd.setHours(23, 59, 59, 999);
+
+            const targetAppointments = await Appointment.find({
+                status: "Completed",
+                appointmentDate: {
+                    $gte: twentyEightDaysAgoStart,
+                    $lte: twentyEightDaysAgoEnd
+                }
+            }).populate("customer", "firstName lastName _id pushSubscriptions");
+
+            for (const appt of targetAppointments) {
+                if (!appt.customer) continue;
+
+                const customerId = appt.customer._id;
+                
+                // Check if user already has an upcoming appointment
+                const upcomingAppts = await Appointment.find({
+                    customer: customerId,
+                    status: { $in: ["Pending", "Confirmed"] },
+                    appointmentDate: { $gte: new Date() }
+                });
+
+                if (upcomingAppts.length > 0) {
+                    continue; // Skip, they are already booked
+                }
+
+                // AI Re-booking generation
+                const customerName = appt.customer.firstName || "Queen";
+                const pastServiceName = appt.services?.[0]?.serviceName || "treatment";
+                
+                // Get day of week
+                const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+                const dayOfWeek = days[appt.appointmentDate.getDay()];
+                const timeStr = appt.appointmentTime;
+
+                const message = await aiRecommendationService.generateRebookingMessage(
+                    customerName,
+                    pastServiceName,
+                    dayOfWeek,
+                    timeStr
+                );
+
+                await notificationService.sendToUser(
+                    customerId,
+                    "Rebooking",
+                    "Time for your glow-up ✨",
+                    message,
+                    { route: "/book" }
+                );
+            }
+        } catch (error) {
+            console.error("Error in smart re-booking scheduler:", error);
+        }
+    });
 };
 
 module.exports = { startScheduler };
