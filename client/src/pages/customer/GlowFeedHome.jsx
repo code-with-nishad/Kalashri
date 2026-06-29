@@ -382,7 +382,7 @@ export default function GlowFeedHome() {
           </div>
         ) : (
           <div className="space-y-6">
-            {posts.map(post => {
+            {posts.filter(post => post.user).map(post => {
               const liked = post.likes.includes(user?._id);
               return (
                 <motion.article 
@@ -394,22 +394,22 @@ export default function GlowFeedHome() {
                   <div className="p-4 flex items-center justify-between border-b border-gray-50">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-[var(--color-rose-500)] text-white font-bold flex items-center justify-center overflow-hidden">
-                        {post.user.avatar ? (
-                          <img src={post.user.avatar} alt={post.user.firstName} className="w-full h-full object-cover" />
+                        {post.user?.avatar ? (
+                          <img src={post.user.avatar} alt={post.user?.firstName} className="w-full h-full object-cover" />
                         ) : (
-                          getInitials(post.user.firstName, post.user.lastName)
+                          getInitials(post.user?.firstName, post.user?.lastName)
                         )}
                       </div>
                       <div>
                         <div className="flex items-center gap-1.5">
                           <span className="font-semibold text-sm text-[var(--color-text-primary)]">
-                            {post.user.firstName} {post.user.lastName}
+                            {post.user?.firstName || 'Unknown'} {post.user?.lastName || 'User'}
                           </span>
                           <span className="text-[10px] px-2 py-0.5 rounded-full" style={{
-                            color: getMembershipColor(post.user.membership),
-                            background: `${getMembershipColor(post.user.membership)}15`
+                            color: getMembershipColor(post.user?.membership),
+                            background: `${getMembershipColor(post.user?.membership)}15`
                           }}>
-                            {post.user.membership}
+                            {post.user?.membership}
                           </span>
                         </div>
                         <span className="text-xs text-[var(--color-text-muted)]">
@@ -418,7 +418,7 @@ export default function GlowFeedHome() {
                       </div>
                     </div>
 
-                    {(post.user._id === user?._id || user?.role === "admin") && (
+                    {(post.user?._id === user?._id || user?.role === "admin") && (
                       <button 
                         onClick={() => deleteMutation.mutate(post._id)}
                         className="p-2 text-gray-400 hover:text-red-500 rounded-lg hover:bg-red-50 transition-colors"
@@ -557,7 +557,7 @@ export default function GlowFeedHome() {
         <div className="bg-white border border-[var(--color-border)] rounded-2xl p-5 shadow-sm space-y-4">
           <h3 className="font-display font-semibold text-lg text-[var(--color-text-primary)]">Top Glow Stars ✨</h3>
           <div className="space-y-3">
-            {trendingInfo.topStars.map(star => (
+            {trendingInfo.topStars.filter(Boolean).map(star => (
               <div key={star._id} className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-full bg-pink-100 flex items-center justify-center overflow-hidden">
                   {star.avatar ? (
@@ -599,18 +599,18 @@ export default function GlowFeedHome() {
                 {comments.length === 0 ? (
                   <p className="text-center py-12 text-sm text-[var(--color-text-muted)]">No comments yet. Write the first reply!</p>
                 ) : (
-                  comments.map(c => (
+                  comments.filter(c => c.user).map(c => (
                     <div key={c._id} className="flex gap-3">
                       <div className="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center text-xs font-bold overflow-hidden">
-                        {c.user.avatar ? (
-                          <img src={c.user.avatar} alt={c.user.firstName} className="w-full h-full object-cover" />
+                        {c.user?.avatar ? (
+                          <img src={c.user.avatar} alt={c.user?.firstName} className="w-full h-full object-cover" />
                         ) : (
-                          getInitials(c.user.firstName, c.user.lastName)
+                          getInitials(c.user?.firstName, c.user?.lastName)
                         )}
                       </div>
                       <div className="flex-1 bg-gray-50 p-3 rounded-2xl text-sm">
                         <p className="font-semibold text-xs text-[var(--color-text-primary)]">
-                          {c.user.firstName} {c.user.lastName}
+                          {c.user?.firstName || 'Unknown'} {c.user?.lastName || 'User'}
                         </p>
                         <p className="text-[var(--color-text-secondary)] mt-1">{c.text}</p>
                       </div>
