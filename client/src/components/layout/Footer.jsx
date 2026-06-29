@@ -52,7 +52,7 @@ export default function Footer() {
                 { to: "/services", label: "Services" },
                 { to: "/products", label: "Shop Products" },
                 { to: "/gallery", label: "Gallery" },
-                { to: "/offers", label: "Offers" },
+                { to: "/awards", label: "Awards" },
                 { to: "/about", label: "About Us" },
                 { to: "/contact", label: "Contact" },
                 { to: "/register", label: "Book Appointment" },

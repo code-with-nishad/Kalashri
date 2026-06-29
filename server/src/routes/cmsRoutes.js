@@ -10,6 +10,7 @@ const {
     getTestimonials, createTestimonial, updateTestimonial, deleteTestimonial,
     getOffers, createOffer, updateOffer, deleteOffer,
     getFAQs, createFAQ, updateFAQ, deleteFAQ,
+    getAwards, createAward, updateAward, deleteAward,
 } = require("../controllers/cmsController");
 
 // PUBLIC ROUTES (No Auth Required)
@@ -20,6 +21,7 @@ router.get("/settings", getSettings);
 router.get("/testimonials", getTestimonials);
 router.get("/offers", getOffers);
 router.get("/faqs", getFAQs);
+router.get("/awards", getAwards);
 
 // TESTIMONIAL SUBMISSION (Protected - user must be logged in to submit a testimonial)
 router.post("/testimonials", protect, createTestimonial);
@@ -52,5 +54,9 @@ router.delete("/offers/:id", deleteOffer);
 router.post("/faqs", createFAQ);
 router.put("/faqs/:id", updateFAQ);
 router.delete("/faqs/:id", deleteFAQ);
+
+router.post("/awards", createAward);
+router.put("/awards/:id", updateAward);
+router.delete("/awards/:id", deleteAward);
 
 module.exports = router;

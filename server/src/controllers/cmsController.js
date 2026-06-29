@@ -119,3 +119,21 @@ exports.deleteFAQ = asyncHandler(async (req, res) => {
     await cmsService.deleteFAQ(req.params.id);
     sendResponse(res, 200, true, "FAQ deleted successfully", null);
 });
+
+// --- AWARDS ---
+exports.getAwards = asyncHandler(async (req, res) => {
+    const data = await cmsService.getAwards();
+    sendResponse(res, 200, true, "Awards retrieved successfully", data);
+});
+exports.createAward = asyncHandler(async (req, res) => {
+    const data = await cmsService.createAward(req.body);
+    sendResponse(res, 201, true, "Award created successfully", data);
+});
+exports.updateAward = asyncHandler(async (req, res) => {
+    const data = await cmsService.updateAward(req.params.id, req.body);
+    sendResponse(res, 200, true, "Award updated successfully", data);
+});
+exports.deleteAward = asyncHandler(async (req, res) => {
+    await cmsService.deleteAward(req.params.id);
+    sendResponse(res, 200, true, "Award deleted successfully", null);
+});

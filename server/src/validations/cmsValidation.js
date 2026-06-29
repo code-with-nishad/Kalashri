@@ -102,6 +102,12 @@ const faqSchema = z.object({
     active: z.boolean().optional(),
 });
 
+const awardSchema = z.object({
+    title: z.string().min(1, "Title is required"),
+    description: z.string().optional(),
+    image: z.string().optional(),
+});
+
 module.exports = {
     gallerySchema,
     certificateSchema,
@@ -110,4 +116,5 @@ module.exports = {
     testimonialSchema,
     offerSchema,
     faqSchema,
+    awardSchema,
 };

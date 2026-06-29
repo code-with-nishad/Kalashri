@@ -12,7 +12,7 @@ const AdminLayout = lazy(() => import("../components/layout/AdminLayout"));
 const Home = lazy(() => import("../pages/public/Home"));
 const Services = lazy(() => import("../pages/public/Services"));
 const Gallery = lazy(() => import("../pages/public/Gallery"));
-const Offers = lazy(() => import("../pages/public/Offers"));
+const Awards = lazy(() => import("../pages/public/Awards"));
 const About = lazy(() => import("../pages/public/About"));
 const Contact = lazy(() => import("../pages/public/Contact"));
 const Login = lazy(() => import("../pages/public/Login"));
@@ -67,7 +67,7 @@ const router = createBrowserRouter([
       { path: "/services", element: <Suspense fallback={<PageLoader />}><Services /></Suspense> },
       { path: "/products", element: <Suspense fallback={<PageLoader />}><Products /></Suspense> },
       { path: "/gallery", element: <Suspense fallback={<PageLoader />}><Gallery /></Suspense> },
-      { path: "/offers", element: <Suspense fallback={<PageLoader />}><Offers /></Suspense> },
+      { path: "/awards", element: <Suspense fallback={<PageLoader />}><Awards /></Suspense> },
       { path: "/about", element: <Suspense fallback={<PageLoader />}><About /></Suspense> },
       { path: "/contact", element: <Suspense fallback={<PageLoader />}><Contact /></Suspense> },
     ],

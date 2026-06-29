@@ -15,7 +15,7 @@ const publicLinks = [
   { to: "/services", label: "Services" },
   { to: "/products", label: "Products" },
   { to: "/gallery", label: "Gallery" },
-  { to: "/offers", label: "Offers" },
+  { to: "/awards", label: "Awards" },
   { to: "/about", label: "About" },
   { to: "/contact", label: "Contact" },
 ];

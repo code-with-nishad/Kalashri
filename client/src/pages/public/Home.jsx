@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import {
   Sparkles, Calendar, Star, Gift,
-  ShoppingBag, Tag, Users, Crown,
+  ShoppingBag, Tag, Users, Crown, Award,
   ArrowRight, Video, MessageCircle, Heart, ChevronRight,
 } from "lucide-react";
 import { useAuthStore } from "../../store/authStore";
@@ -118,7 +118,7 @@ export default function Home() {
     { icon: Video, label: "GlowFeed", subtext: "Community", to: "/feed", bg: "bg-pink-50", fg: "text-pink-500" },
     { icon: Crown, label: "Rewards", subtext: "Earn & Redeem", to: isAuthenticated ? "/customer/rewards" : "/register", bg: "bg-amber-50", fg: "text-amber-500" },
     { icon: ShoppingBag, label: "Shop", subtext: "Products", to: "/shop", bg: "bg-sky-50", fg: "text-sky-500" },
-    { icon: Tag, label: "Offers", subtext: "Best Deals", to: "/offers", bg: "bg-emerald-50", fg: "text-emerald-500" },
+    { icon: Award, label: "Awards", subtext: "Trophies", to: "/awards", bg: "bg-emerald-50", fg: "text-emerald-500" },
     { icon: Gift, label: "Gift", subtext: "Cards", to: "/shop", bg: "bg-rose-50", fg: "text-[var(--color-rose-500)]" },
     { icon: Users, label: "Refer", subtext: "Invite Friends", to: isAuthenticated ? "/customer/rewards" : "/register", bg: "bg-violet-50", fg: "text-violet-500" },
   ];

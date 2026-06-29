@@ -75,6 +75,10 @@ export const cmsService = {
   createTestimonial: (data) => api.post("/cms/testimonials", data),
   updateTestimonial: (id, data) => api.put(`/cms/testimonials/${id}`, data),
   deleteTestimonial: (id) => api.delete(`/cms/testimonials/${id}`),
+  getAwards: () => api.get("/cms/awards"),
+  createAward: (data) => api.post("/cms/awards", data),
+  updateAward: (id, data) => api.put(`/cms/awards/${id}`, data),
+  deleteAward: (id) => api.delete(`/cms/awards/${id}`),
 };
 
 export const adminService = {

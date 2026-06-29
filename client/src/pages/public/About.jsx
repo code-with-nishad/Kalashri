@@ -587,65 +587,6 @@ function GallerySection({ gallery = [] }) {
   );
 }
 
-// ==================== OFFERS ====================
-function OffersSection({ offers = [] }) {
-  if (!offers.length) return null;
-  return (
-    <section className="py-24 bg-[var(--color-surface-2)] relative border-y border-[var(--color-border)] overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-yellow-500/5 via-[var(--color-surface-2)] to-[var(--color-surface-2)] pointer-events-none" />
-      
-      <div className="max-w-7xl mx-auto px-4 relative z-10">
-        <div className="text-center mb-16">
-          <motion.p
-            initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-            className="text-yellow-500 text-sm font-bold tracking-[0.2em] uppercase mb-4"
-          >Special Deals</motion.p>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            className="font-display text-4xl md:text-5xl font-bold text-[var(--color-text-primary)]"
-          >
-            Current <span className="text-gradient-gold">Offers</span>
-          </motion.h2>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {offers.map((offer, i) => {
-            const daysLeft = Math.max(0, Math.ceil((new Date(offer.endDate) - new Date()) / (1000 * 60 * 60 * 24)));
-            return (
-              <motion.div
-                key={offer._id}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1, type: "spring" }}
-                viewport={{ once: true, margin: "-50px" }}
-                className="rounded-[2rem] overflow-hidden bg-[var(--color-surface-card)] border-2 border-yellow-500/20 hover:border-yellow-400 shadow-lg hover:shadow-[0_0_30px_rgba(250,204,21,0.2)] transition-all hover:-translate-y-2 group relative"
-              >
-                {offer.bannerImage && (
-                  <div className="relative overflow-hidden">
-                    <img src={offer.bannerImage} alt={offer.title} className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-700" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                    <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
-                      <span className="px-4 py-1.5 bg-yellow-400 text-yellow-950 rounded-full text-sm font-black uppercase tracking-wider shadow-lg">
-                        {offer.discountText}
-                      </span>
-                    </div>
-                  </div>
-                )}
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-3 text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider">
-                    <span>Limited Time</span>
-                    <span className={daysLeft <= 3 ? "text-red-500 animate-pulse" : "text-emerald-500"}>{daysLeft} days left</span>
-                  </div>
-                  <h3 className="font-display font-bold text-[var(--color-text-primary)] text-xl mb-2">{offer.title}</h3>
-                  <p className="text-sm text-[var(--color-text-secondary)]">{offer.description}</p>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-}
 
 // ==================== TESTIMONIALS ====================
 function TestimonialsSection({ testimonials = [] }) {
@@ -982,10 +923,7 @@ export default function About() {
     queryKey: QUERY_KEYS.GALLERY,
     queryFn: cmsService.getGallery,
   });
-  const { data: offersRes } = useQuery({
-    queryKey: QUERY_KEYS.OFFERS,
-    queryFn: cmsService.getOffers,
-  });
+
   const { data: testimonialRes } = useQuery({
     queryKey: QUERY_KEYS.TESTIMONIALS,
     queryFn: cmsService.getTestimonials,
@@ -1003,7 +941,7 @@ export default function About() {
   const settings = settingsRes?.data;
   const services = servicesRes?.data || [];
   const gallery = galleryRes?.data || [];
-  const offers = offersRes?.data || [];
+
   const testimonials = testimonialRes?.data || [];
   const faqs = faqRes?.data || [];
   const products = productsRes?.data || [];
@@ -1017,7 +955,7 @@ export default function About() {
       <FeaturedProductsSection products={products} />
       <WhyUsSection />
       <GallerySection gallery={gallery} />
-      <OffersSection offers={offers} />
+
       <TestimonialsSection testimonials={testimonials} />
       <FAQSection faqs={faqs} />
       <TrophiesSection />

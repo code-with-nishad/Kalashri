@@ -5,6 +5,7 @@ const Setting = require("../models/Setting");
 const Testimonial = require("../models/Testimonial");
 const Offer = require("../models/Offer");
 const FAQ = require("../models/FAQ");
+const Award = require("../models/Award");
 const AppError = require("../utils/AppError");
 
 const {
@@ -15,6 +16,7 @@ const {
     testimonialSchema,
     offerSchema,
     faqSchema,
+    awardSchema,
 } = require("../validations/cmsValidation");
 
 // --- GALLERY ---
@@ -105,3 +107,15 @@ exports.updateFAQ = async (id, data) => {
     return FAQ.findByIdAndUpdate(id, validated, { returnDocument: 'after' });
 };
 exports.deleteFAQ = async (id) => FAQ.findByIdAndDelete(id);
+
+// --- AWARDS ---
+exports.getAwards = async () => Award.find().sort("-createdAt");
+exports.createAward = async (data) => {
+    const validated = awardSchema.parse(data);
+    return Award.create(validated);
+};
+exports.updateAward = async (id, data) => {
+    const validated = awardSchema.partial().parse(data);
+    return Award.findByIdAndUpdate(id, validated, { returnDocument: 'after' });
+};
+exports.deleteAward = async (id) => Award.findByIdAndDelete(id);

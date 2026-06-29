@@ -125,7 +125,7 @@ export default function CustomerDashboard() {
             </div>
             <div>
               <h3 className="font-semibold text-blue-900">Never Miss an Update!</h3>
-              <p className="text-sm text-blue-700 mt-0.5">Enable push notifications for appointment reminders and offers.</p>
+              <p className="text-sm text-blue-700 mt-0.5">Enable push notifications for appointment reminders and updates.</p>
             </div>
           </div>
           <button onClick={requestPermission} className="px-5 py-2.5 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium rounded-xl transition-all shadow-sm">

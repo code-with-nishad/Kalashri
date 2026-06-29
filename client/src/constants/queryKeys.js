@@ -9,6 +9,7 @@ export const QUERY_KEYS = {
   ACHIEVEMENTS: ["cms", "achievements"],
   OFFERS: ["cms", "offers"],
   FAQS: ["cms", "faqs"],
+  AWARDS: ["cms", "awards"],
   TESTIMONIALS: ["cms", "testimonials"],
 
   // Services
