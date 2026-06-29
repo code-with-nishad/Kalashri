@@ -167,7 +167,7 @@ export default function Home() {
             {/* CTAs */}
             <div className="flex gap-3 justify-center md:justify-start">
               <Link
-                to={bookLink}
+                to="/register"
                 className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3.5
                            bg-[var(--color-rose-500)] text-white font-bold rounded-2xl
                            shadow-lg shadow-rose-500/30 active:scale-95 transition-transform text-sm"
