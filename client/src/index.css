@@ -236,3 +236,140 @@ body {
   animation: shimmer 1.5s infinite;
   border-radius: var(--radius);
 }
+/* ================================================================
+   HOME PAGE — extra animations & mobile polish
+   Append this block to your existing global CSS file (index.css)
+   ================================================================ */
+
+/* ── Ambient background blobs ─────────────────────────────────── */
+.home-blob-1 {
+  position: absolute;
+  top: -120px;
+  right: -180px;
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(circle, rgba(255, 182, 193, 0.35) 0%, transparent 68%);
+  border-radius: 50%;
+  animation: homeBlobDrift1 14s ease-in-out infinite;
+}
+
+.home-blob-2 {
+  position: absolute;
+  bottom: 20%;
+  left: -160px;
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, rgba(216, 180, 254, 0.22) 0%, transparent 68%);
+  border-radius: 50%;
+  animation: homeBlobDrift2 18s ease-in-out infinite;
+}
+
+@keyframes homeBlobDrift1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(-18px, 28px) scale(1.06); }
+  66%       { transform: translate(22px, -16px) scale(0.94); }
+}
+
+@keyframes homeBlobDrift2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%       { transform: translate(26px, -36px) scale(1.09); }
+}
+
+
+/* ── Hero entrance (opacity + upward slide) ───────────────────── */
+.home-hero-enter {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.65s ease-out, transform 0.65s ease-out;
+}
+.home-hero-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* ── Generic scroll-reveal ────────────────────────────────────── */
+.home-reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+.home-reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* ── Marquee ──────────────────────────────────────────────────── */
+.home-marquee {
+  animation: homeMarquee 22s linear infinite;
+  /* padding gives breathing room at the start */
+  padding-left: 1rem;
+}
+
+@keyframes homeMarquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* pause on hover / focus (accessibility) */
+.home-marquee:hover,
+.home-marquee:focus-within {
+  animation-play-state: paused;
+}
+
+
+/* ── GlowFeed animated border ─────────────────────────────────── */
+.home-glowfeed-card {
+  border: 1.5px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+}
+.home-glowfeed-card::before {
+  content: "";
+  position: absolute;
+  inset: -1.5px;
+  border-radius: 1.5rem;         /* matches rounded-3xl */
+  background: linear-gradient(135deg, #d8b4fe 0%, #f9a8d4 50%, #fbcfe8 100%);
+  opacity: 0.55;
+  z-index: 0;
+  animation: homeBorderPulse 3s ease-in-out infinite;
+}
+
+@keyframes homeBorderPulse {
+  0%, 100% { opacity: 0.40; }
+  50%       { opacity: 0.75; }
+}
+
+
+/* ── Mobile-specific touch polish ─────────────────────────────── */
+@media (max-width: 768px) {
+  /* Remove iOS tap highlight flash — we use active:scale instead */
+  a, button {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Prevent text selection during swipe on quick-link row */
+  .scrollbar-hide {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+}
+
+
+/* ── Reduced motion: strip all home-specific animations ───────── */
+@media (prefers-reduced-motion: reduce) {
+  .home-hero-enter,
+  .home-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .home-blob-1,
+  .home-blob-2,
+  .home-marquee,
+  .home-glowfeed-card::before {
+    animation: none;
+  }
+}
