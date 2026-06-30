@@ -62,12 +62,11 @@ export function usePwaUpdate() {
             const { buildId } = await response.json();
             if (buildId && buildId !== BUILD_ID) {
                 await registrationRef.current?.update();
-                setNeedRefresh(true);
             }
         } catch {
             // Ignore network errors during version check
         }
-    }, [setNeedRefresh]);
+    }, []);
 
     const checkForUpdates = useCallback(() => {
         registrationRef.current?.update();
@@ -119,13 +118,11 @@ export function usePwaUpdate() {
         const waitingWorker = registration?.waiting || (await waitForWaitingWorker(registration));
 
         if (waitingWorker) {
-            const reloaded = new Promise((resolve) => {
-                const onControllerChange = () => {
-                    navigator.serviceWorker.removeEventListener("controllerchange", onControllerChange);
-                    resolve(true);
-                };
-                navigator.serviceWorker.addEventListener("controllerchange", onControllerChange);
-            });
+            const onControllerChange = () => {
+                navigator.serviceWorker.removeEventListener("controllerchange", onControllerChange);
+                window.location.reload();
+            };
+            navigator.serviceWorker.addEventListener("controllerchange", onControllerChange);
 
             try {
                 await updateServiceWorker(true);
@@ -133,14 +130,10 @@ export function usePwaUpdate() {
                 waitingWorker.postMessage({ type: "SKIP_WAITING" });
             }
 
-            const didReload = await Promise.race([
-                reloaded,
-                new Promise((resolve) => window.setTimeout(() => resolve(false), 2500)),
-            ]);
-
-            if (!didReload) {
+            // Fallback reload if controllerchange doesn't fire within 2.5 seconds
+            window.setTimeout(() => {
                 window.location.reload();
-            }
+            }, 2500);
             return;
         }
 
