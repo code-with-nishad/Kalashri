@@ -217,6 +217,18 @@ export default function Home() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
             </div>
 
+            {/* Promo Bubble */}
+            <div className="absolute -right-4 md:-right-8 top-6 z-30 animate-bounce" style={{ animationDuration: '3s' }}>
+              <div className="relative bg-gradient-to-r from-rose-500 to-purple-600 rounded-2xl shadow-[0_8px_20px_rgba(244,63,94,0.4)] px-4 py-2.5 border-2 border-white/20 backdrop-blur-md">
+                {/* Ping animation behind */}
+                <div className="absolute inset-0 rounded-2xl border-2 border-rose-400 animate-ping opacity-20" />
+                <div className="flex flex-col items-center gap-0.5">
+                  <span className="text-[9px] font-bold uppercase tracking-widest text-rose-200">Limited Time</span>
+                  <span className="text-xs md:text-sm font-black text-white whitespace-nowrap drop-shadow-sm">Free Registration 🎉</span>
+                </div>
+              </div>
+            </div>
+
             {/* rating badge */}
             <HeroBadge className="-left-3 top-1/4" delay={0}>
               <div className="flex items-center gap-1.5">
