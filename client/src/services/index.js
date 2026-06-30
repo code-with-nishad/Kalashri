@@ -163,3 +163,8 @@ export const glowFeedService = {
   moderatePost: (id, data) => api.patch(`/feed/admin/moderation/${id}`, data),
 };
 
+export const reviewService = {
+  create: (data) => api.post("/reviews", data),
+  getPublicReviews: () => api.get("/reviews/public"),
+  getMyReviews: () => api.get("/reviews/my-reviews"),
+};

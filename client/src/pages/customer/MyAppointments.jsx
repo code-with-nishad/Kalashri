@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -7,8 +8,12 @@ import { QUERY_KEYS } from "../../constants/queryKeys";
 import { formatDate, formatPriceOrTbd, isPriceSet } from "../../utils";
 import { Badge } from "../../components/ui/Badge";
 import { SkeletonTable } from "../../components/ui/Skeleton";
+import ReviewModal from "../../components/reviews/ReviewModal";
 
 export default function MyAppointments() {
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const [selectedAppointmentId, setSelectedAppointmentId] = useState(null);
+
   const { data, isLoading } = useQuery({ queryKey: QUERY_KEYS.MY_APPOINTMENTS, queryFn: appointmentService.getMyAppointments });
   const appointments = data?.data || [];
 
@@ -59,6 +64,18 @@ export default function MyAppointments() {
                   {isPriceSet(a.totalAmount) && (
                     <span className="font-semibold text-[var(--color-rose-400)]">{formatPriceOrTbd(a.totalAmount)}</span>
                   )}
+                  {a.status === "Completed" && (
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setSelectedAppointmentId(a._id);
+                        setReviewModalOpen(true);
+                      }}
+                      className="px-3 py-1.5 text-xs font-medium bg-[var(--color-rose-500)]/10 text-[var(--color-rose-500)] rounded-lg hover:bg-[var(--color-rose-500)] hover:text-white transition-colors flex items-center gap-1"
+                    >
+                      Leave Review
+                    </button>
+                  )}
                   <Badge variant={statusBadge[a.status]}>{a.status}</Badge>
                   <ArrowRight className="w-4 h-4 text-[var(--color-text-muted)] group-hover:text-[var(--color-text-primary)] transition-colors" />
                 </div>
@@ -66,6 +83,17 @@ export default function MyAppointments() {
             </motion.div>
           ))}
         </div>
+      )}
+
+      {selectedAppointmentId && (
+        <ReviewModal
+          open={reviewModalOpen}
+          onClose={() => {
+            setReviewModalOpen(false);
+            setTimeout(() => setSelectedAppointmentId(null), 300); // clear after animation
+          }}
+          appointmentId={selectedAppointmentId}
+        />
       )}
     </div>
   );

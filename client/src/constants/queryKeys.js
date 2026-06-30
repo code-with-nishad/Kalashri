@@ -21,6 +21,10 @@ export const QUERY_KEYS = {
   ALL_APPOINTMENTS: ["appointments", "all"],
   APPOINTMENT: (id) => ["appointments", id],
 
+  // Reviews
+  PUBLIC_REVIEWS: ["reviews", "public"],
+  MY_REVIEWS: ["reviews", "my"],
+
   // Rewards
   REWARDS: ["rewards"],
   MY_REDEMPTIONS: ["rewards", "redemptions", "my"],

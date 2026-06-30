@@ -14,6 +14,7 @@ import { QUERY_KEYS } from "../../constants/queryKeys";
 import ServicesSection from "../../components/home/ServicesSection";
 import FeaturedProductsSection from "../../components/home/FeaturedProductsSection";
 import AIConsultant from "../../components/ai/AIConsultant";
+import FloatingReviews from "../../components/home/FloatingReviews";
 
 /* ─── Custom hook: fire once when element enters viewport ─── */
 function useScrollReveal(threshold = 0.12) {
@@ -271,6 +272,9 @@ export default function Home() {
 
         {/* ── marquee ── */}
         <MarqueeStrip />
+
+        {/* ── Floating Reviews ── */}
+        <FloatingReviews />
 
         {/* ════════════════════════════════════════════════════
             QUICK LINKS
