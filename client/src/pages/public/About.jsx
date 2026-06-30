@@ -386,8 +386,6 @@ function ServicesSection({ services = [], bookLink, isAuthenticated }) {
 
 // ==================== FEATURED PRODUCTS ====================
 function FeaturedProductsSection({ products = [] }) {
-  if (!products.length) return null;
-
   const featured = useMemo(() => {
     return [...products]
       .sort((a, b) => {
@@ -399,6 +397,8 @@ function FeaturedProductsSection({ products = [] }) {
       })
       .slice(0, 4);
   }, [products]);
+
+  if (!products.length) return null;
 
   return (
     <section className="py-24 px-4 max-w-7xl mx-auto relative">

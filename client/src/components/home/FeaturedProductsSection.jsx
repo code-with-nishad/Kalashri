@@ -5,8 +5,6 @@ import { ArrowRight, ShoppingBag } from "lucide-react";
 import ProductImage from "../products/ProductImage";
 
 export default function FeaturedProductsSection({ products = [] }) {
-  if (!products.length) return null;
-
   const featured = useMemo(() => {
     return [...products]
       .sort((a, b) => {
@@ -18,6 +16,8 @@ export default function FeaturedProductsSection({ products = [] }) {
       })
       .slice(0, 4);
   }, [products]);
+
+  if (!products.length) return null;
 
   return (
     <section className="py-12 relative">
