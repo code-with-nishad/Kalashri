@@ -9,6 +9,7 @@ import { useLogout } from "../../hooks/useAuth";
 import { SALON_NAME, SALON_INSTAGRAM } from "../../constants";
 import Footer from "./Footer";
 import MobileBookBar from "../pwa/MobileBookBar";
+import { useVisitor } from "../../hooks/useVisitor";
 
 const publicLinks = [
   { to: "/", label: "Home" },
@@ -27,6 +28,9 @@ export default function PublicLayout() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const user = useAuthStore((s) => s.user);
   const { mutate: logout } = useLogout();
+
+  // Initialize visitor tracking (inside Router context)
+  useVisitor();
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20);
@@ -108,9 +112,10 @@ export default function PublicLayout() {
                 </Link>
                 <Link
                   to="/register"
-                  className="px-5 py-2 btn-primary text-sm font-medium rounded-xl transition-all hover:shadow-[var(--shadow-glow-rose)]"
+                  className="px-5 py-2 btn-primary text-sm font-medium rounded-xl transition-all hover:shadow-[var(--shadow-glow-rose)] relative overflow-hidden"
                 >
-                  Reserve Appointment
+                  <span className="relative z-10">Join Free - Start Booking</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-rose-400 to-purple-400 opacity-0 hover:opacity-100 transition-opacity" />
                 </Link>
               </>
             )}
@@ -164,7 +169,7 @@ export default function PublicLayout() {
                   ) : (
                     <>
                       <Link to="/login" className="flex-1 text-center py-2.5 border border-[var(--color-border)] text-[var(--color-text-secondary)] text-sm font-medium rounded-xl">Login</Link>
-                      <Link to="/register" className="flex-1 text-center py-2.5 btn-primary text-sm font-medium rounded-xl">Reserve Appointment</Link>
+                      <Link to="/register" className="flex-1 text-center py-2.5 btn-primary text-sm font-medium rounded-xl">Join Free - Start Booking</Link>
                     </>
                   )}
                 </div>

@@ -71,3 +71,13 @@ export const getProductImage = (product) => {
   return product.imageUrl || product.image || product.gallery?.[0] || null;
 };
 
+export const formatDuration = (seconds) => {
+  if (!seconds) return "0s";
+  if (seconds < 60) return `${Math.round(seconds)}s`;
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h`;
+  const days = Math.floor(hours / 24);
+  return `${days}d`;
+};

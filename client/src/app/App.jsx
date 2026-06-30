@@ -9,6 +9,7 @@ import UpdateToast from "../components/pwa/UpdateToast";
 import InstallBanner from "../components/pwa/InstallBanner";
 import OfflinePage from "../components/pwa/OfflinePage";
 import { usePwaUpdate } from "../hooks/usePwaUpdate";
+import { useVisitor } from "../hooks/useVisitor";
 
 const PING_TIMEOUT = 1200; // ms to wait before showing the splash screen
 

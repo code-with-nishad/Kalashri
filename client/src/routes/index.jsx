@@ -49,6 +49,8 @@ const AdminActivity = lazy(() => import("../pages/admin/ActivityLog"));
 const AdminNotifications = lazy(() => import("../pages/admin/Notifications"));
 const AdminSettings = lazy(() => import("../pages/admin/Settings"));
 const AdminOrders = lazy(() => import("../pages/admin/Orders"));
+const AdminVisitors = lazy(() => import("../pages/admin/Visitors"));
+const AdminVisitorDetails = lazy(() => import("../pages/admin/VisitorDetails"));
 
 // Loading fallback
 const PageLoader = () => (
@@ -128,6 +130,8 @@ const router = createBrowserRouter([
           { path: "/admin/notifications", element: <Suspense fallback={<PageLoader />}><AdminNotifications /></Suspense> },
           { path: "/admin/settings", element: <Suspense fallback={<PageLoader />}><AdminSettings /></Suspense> },
           { path: "/admin/moderation", element: <Suspense fallback={<PageLoader />}><AdminGlowModeration /></Suspense> },
+          { path: "/admin/visitors", element: <Suspense fallback={<PageLoader />}><AdminVisitors /></Suspense> },
+          { path: "/admin/visitors/:id", element: <Suspense fallback={<PageLoader />}><AdminVisitorDetails /></Suspense> },
         ],
       },
     ],

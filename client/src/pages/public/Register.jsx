@@ -28,16 +28,19 @@ export default function Register() {
   const { mutate: register, isPending } = useRegister();
   const navigate = useNavigate();
 
+  // Get visitor ID from localStorage for linking
+  const visitorId = localStorage.getItem("visitor_id");
+
   const { register: reg, handleSubmit, formState: { errors } } = useForm({ resolver: zodResolver(schema) });
 
   const onSubmit = (data) => {
-    register(data, { onSuccess: () => navigate("/login") });
+    register({ ...data, visitorId }, { onSuccess: () => navigate("/login") });
   };
 
   const { mutate: googleLoginMutation } = useGoogleLogin();
 
   const handleGoogleSuccess = (credentialResponse) => {
-    googleLoginMutation({ token: credentialResponse.credential }, {
+    googleLoginMutation({ token: credentialResponse.credential, visitorId }, {
       onSuccess: (res) => {
         navigate(res?.data?.user?.role === "admin" || res?.data?.role === "admin" ? "/admin" : "/dashboard", { replace: true });
       }

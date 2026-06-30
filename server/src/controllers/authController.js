@@ -39,10 +39,10 @@ exports.login = asyncHandler(async (req, res) => {
 });
 
 exports.googleLogin = asyncHandler(async (req, res) => {
-    const { token } = req.body;
+    const { token, visitorId } = req.body;
     if (!token) throw new AppError("Google token is required", 400);
 
-    const user = await authService.googleLogin(token);
+    const user = await authService.googleLogin(token, visitorId);
     
     sendToken(
         user,

@@ -168,3 +168,13 @@ export const reviewService = {
   getPublicReviews: () => api.get("/reviews/public"),
   getMyReviews: () => api.get("/reviews/my-reviews"),
 };
+
+export const visitorService = {
+  track: (data) => api.post("/visitors/track", data),
+  trackEvent: (data) => api.post("/visitors/event", data),
+  updateTimeSpent: (data) => api.post("/visitors/time-spent", data),
+  getAnalytics: (params) => api.get("/visitors/analytics", { params }),
+  getVisitorsList: (params) => api.get("/visitors/list", { params }),
+  getVisitorDetails: (id) => api.get(`/visitors/${id}`),
+  getRegistrationFunnel: () => api.get("/visitors/funnel/registration"),
+};

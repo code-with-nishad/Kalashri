@@ -112,7 +112,7 @@ export default function Home() {
     : "/register";
 
   const { data: servicesData } = useQuery({ queryKey: QUERY_KEYS.SERVICES, queryFn: serviceService.getAll });
-  const { data: inventoryData } = useQuery({ queryKey: QUERY_KEYS.INVENTORY, queryFn: inventoryService.getAll });
+  const { data: inventoryData } = useQuery({ queryKey: QUERY_KEYS.INVENTORY, queryFn: inventoryService.getProducts });
 
   const quickLinks = [
     { icon: Calendar, label: "Book", subtext: "Appointment", to: bookLink, bg: "bg-rose-50", fg: "text-[var(--color-rose-500)]" },
@@ -169,26 +169,27 @@ export default function Home() {
             <div className="flex flex-wrap justify-center md:justify-start gap-x-4 gap-y-2 text-sm text-gray-700 font-semibold mb-2">
               <div className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-emerald-500" /> Free Registration</div>
               <div className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-emerald-500" /> No Card Required</div>
+              <div className="flex items-center gap-1.5 text-rose-600 font-bold"><Clock className="w-4 h-4" /> Book Instantly</div>
             </div>
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start w-full max-w-md mx-auto md:mx-0">
               <Link
-                to={isAuthenticated ? "/book" : "/register"}
+                to="/register"
                 className="flex-1 flex items-center justify-center gap-2 px-6 py-4
                            bg-gradient-to-r from-rose-500 to-rose-600 text-white font-bold rounded-2xl
-                           shadow-[0_8px_20px_rgba(244,63,94,0.3)] hover:shadow-[0_12px_25px_rgba(244,63,94,0.4)] hover:-translate-y-0.5 active:scale-95 transition-all text-base"
+                           shadow-[0_8px_20px_rgba(244,63,94,0.3)] hover:shadow-[0_12px_25px_rgba(244,63,94,0.4)] hover:-translate-y-0.5 active:scale-95 transition-all text-base animate-pulse"
               >
-                Reserve My Appointment <ArrowRight className="w-5 h-5" />
+                Create Free Account <ArrowRight className="w-5 h-5" />
               </Link>
-              {!isAuthenticated && (
+              {isAuthenticated && (
                 <Link
-                  to="/register"
+                  to="/book"
                   className="flex-1 flex items-center justify-center px-6 py-4
                              bg-white text-rose-600 border-2 border-rose-100 hover:bg-rose-50 hover:border-rose-200
                              font-bold rounded-2xl active:scale-95 transition-all text-base"
                 >
-                  Create Free Account
+                  Book Appointment
                 </Link>
               )}
             </div>
@@ -288,6 +289,90 @@ export default function Home() {
             {quickLinks.map((link) => (
               <QuickLink key={link.label} {...link} />
             ))}
+          </div>
+        </section>
+
+        {/* ════════════════════════════════════════════════════
+            SOCIAL PROOF SECTION
+        ════════════════════════════════════════════════════ */}
+        <section className="py-8 bg-gradient-to-b from-transparent via-rose-50/50 to-transparent rounded-[3rem] px-4 md:px-8 home-reveal home-reveal-visible">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-display font-black text-gray-900 mb-3">Trusted by multiple Happy Clients</h2>
+            <p className="text-gray-500 text-sm max-w-md mx-auto font-medium">Join our growing community of beauty enthusiasts.</p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            {[
+              { label: "5-Star Rating", value: "4.9/5", icon: Star, color: "text-amber-500" },
+              { label: "Happy Clients", value: "multiple", icon: Heart, color: "text-rose-500" },
+              { label: "Appointments", value: "fast", icon: Calendar, color: "text-purple-500" },
+              { label: "Rewards Given", value: "50+", icon: Gift, color: "text-emerald-500" },
+            ].map((stat, i) => (
+              <div key={i} className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm text-center">
+                <stat.icon className={`w-6 h-6 mx-auto mb-2 ${stat.color}`} />
+                <div className="text-2xl font-black text-gray-900">{stat.value}</div>
+                <div className="text-xs text-gray-500 font-medium">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+
+          <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm max-w-2xl mx-auto">
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0">
+                <div className="w-12 h-12 bg-gradient-to-br from-rose-400 to-purple-400 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                  P
+                </div>
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center gap-1 mb-1">
+                  {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 text-amber-400 fill-amber-400" />)}
+                </div>
+                <p className="text-gray-700 text-sm font-medium mb-2">"The app made booking so easy! I earned my first reward within a week. Highly recommend!"</p>
+                <p className="text-gray-500 text-xs font-semibold">Priya S. • Regular Customer</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ════════════════════════════════════════════════════
+            WHAT YOU GET SECTION
+        ════════════════════════════════════════════════════ */}
+        <section className="py-8 home-reveal home-reveal-visible">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-display font-black text-gray-900 mb-3">What You Get When You Join</h2>
+            <p className="text-gray-500 text-sm max-w-md mx-auto font-medium">Premium benefits, completely free.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
+            {[
+              { icon: Gift, title: "Free Loyalty Points", desc: "Earn points on every booking automatically", highlight: true },
+              { icon: Wallet, title: "Track Your Progress", desc: "See your beauty journey grow", highlight: false },
+              { icon: Crown, title: "VIP Early Access", desc: "Be first to know about new offers", highlight: false },
+              { icon: Smartphone, title: "Priority Booking", desc: "Skip the queue, book instantly", highlight: false },
+              { icon: CalendarCheck2, title: "Easy Rescheduling", desc: "Change appointments in 1 tap", highlight: false },
+              { icon: MessageCircle, title: "Direct Support", desc: "Chat with our team anytime", highlight: false },
+            ].map((benefit, i) => (
+              <div key={i} className={`rounded-2xl p-5 border ${benefit.highlight ? 'bg-gradient-to-br from-rose-50 to-purple-50 border-rose-200' : 'bg-white border-gray-100'} shadow-sm`}>
+                <div className="flex items-start gap-4">
+                  <div className={`w-12 h-12 rounded-xl ${benefit.highlight ? 'bg-rose-500' : 'bg-gray-100'} flex items-center justify-center flex-shrink-0`}>
+                    <benefit.icon className={`w-6 h-6 ${benefit.highlight ? 'text-white' : 'text-gray-600'}`} />
+                  </div>
+                  <div>
+                    <h3 className={`font-bold ${benefit.highlight ? 'text-rose-600' : 'text-gray-900'} mb-1`}>{benefit.title}</h3>
+                    <p className="text-sm text-gray-500">{benefit.desc}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-8 flex justify-center">
+            <Link
+              to="/register"
+              className="px-8 py-4 bg-gradient-to-r from-rose-500 to-purple-600 text-white font-bold rounded-2xl shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all flex items-center gap-2"
+            >
+              Start Earning Rewards Now <ArrowRight className="w-5 h-5" />
+            </Link>
           </div>
         </section>
 
@@ -447,6 +532,24 @@ export default function Home() {
         </section>
 
       </main>
+
+      {/* Sticky Mobile Registration Banner */}
+      {!isAuthenticated && (
+        <div className="fixed bottom-20 left-4 right-4 md:hidden z-50">
+          <div className="bg-gradient-to-r from-rose-500 to-purple-600 rounded-2xl shadow-2xl p-4 flex items-center gap-3">
+            <div className="flex-1">
+              <p className="text-white font-bold text-sm">Join Free - Book Instantly</p>
+              <p className="text-white/80 text-xs">Skip the wait, earn rewards</p>
+            </div>
+            <Link
+              to="/register"
+              className="px-4 py-2 bg-white text-rose-600 font-bold rounded-xl text-sm shadow-lg active:scale-95 transition-transform"
+            >
+              Register Now
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* Floating AI chat */}
       <AIConsultant />

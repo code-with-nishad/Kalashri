@@ -21,6 +21,7 @@ const orderRoutes = require("./src/routes/orderRoutes");
 const journeyRoutes = require("./src/routes/journeyRoutes");
 const glowFeedRoutes = require("./src/routes/glowFeedRoutes");
 const reviewRoutes = require("./src/routes/reviewRoutes");
+const visitorRoutes = require("./src/routes/visitorRoutes");
 
 dotenv.config();
 
@@ -86,6 +87,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/journey", journeyRoutes);
 app.use("/api/feed", glowFeedRoutes);
 app.use("/api/reviews", reviewRoutes);
+app.use("/api/visitors", visitorRoutes);
 
 app.get("/", (req, res) => {
     res.status(200).json({

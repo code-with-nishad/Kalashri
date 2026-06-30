@@ -5,7 +5,7 @@ import {
   LayoutDashboard, Users, Calendar, Star, Package,
   BarChart3, Trophy, Globe, Activity, Bell, Settings,
   Sparkles, ChevronLeft, ChevronRight, LogOut, Wrench,
-  ShoppingCart, Menu, X, ShieldAlert
+  ShoppingCart, Menu, X, ShieldAlert, Eye
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "../../utils";
@@ -22,6 +22,7 @@ const navGroups = [  {
       { icon: LayoutDashboard, label: "Dashboard", to: "/admin" },
       { icon: BarChart3, label: "Analytics", to: "/admin/analytics" },
       { icon: Activity, label: "Activity Log", to: "/admin/activity" },
+      { icon: Eye, label: "Visitors", to: "/admin/visitors" },
     ],
   },
   {

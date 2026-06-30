@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const Visitor = require("../models/Visitor");
 const AppError = require("../utils/AppError");
 const { OAuth2Client } = require("google-auth-library");
 const crypto = require("crypto");
@@ -6,7 +7,7 @@ const crypto = require("crypto");
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const registerUser = async (userData) => {
-    const { firstName, lastName, email, phone, password } = userData;
+    const { firstName, lastName, email, phone, password, visitorId } = userData;
 
     const existingUser = await User.findOne({
         $or: [{ email }, { phone }],
@@ -31,6 +32,20 @@ const registerUser = async (userData) => {
         glowPoints: isEarlyBird ? 10 : 0,
         lifetimeGlowPoints: isEarlyBird ? 10 : 0,
     });
+
+    // Link visitor to user if visitorId provided
+    if (visitorId) {
+        const visitor = await Visitor.findOne({ visitorId });
+        if (visitor && !visitor.userId) {
+            visitor.userId = user._id;
+            visitor.registered = true;
+            visitor.events.push({
+                type: "register_complete",
+                timestamp: new Date(),
+            });
+            await visitor.save();
+        }
+    }
 
     return user;
 };
@@ -75,7 +90,7 @@ const updateCurrentUser = async (id, data) => {
     return updatedUser;
 };
 
-const googleLogin = async (token) => {
+const googleLogin = async (token, visitorId) => {
     const ticket = await client.verifyIdToken({
         idToken: token,
         audience: process.env.GOOGLE_CLIENT_ID,
@@ -85,6 +100,7 @@ const googleLogin = async (token) => {
     const { email, given_name, family_name, sub } = payload;
 
     let user = await User.findOne({ email }).select("+password");
+    const isNewUser = !user;
 
     if (!user) {
         const userCount = await User.countDocuments();
@@ -106,6 +122,20 @@ const googleLogin = async (token) => {
             user.googleId = sub;
             user.isVerified = true;
             await user.save();
+        }
+    }
+
+    // Link visitor to user if visitorId provided and it's a new user
+    if (visitorId && isNewUser) {
+        const visitor = await Visitor.findOne({ visitorId });
+        if (visitor && !visitor.userId) {
+            visitor.userId = user._id;
+            visitor.registered = true;
+            visitor.events.push({
+                type: "register_complete",
+                timestamp: new Date(),
+            });
+            await visitor.save();
         }
     }
 
