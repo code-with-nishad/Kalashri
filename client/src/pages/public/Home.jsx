@@ -5,6 +5,7 @@ import {
   Sparkles, Calendar, Star, Gift,
   ShoppingBag, Tag, Users, Crown, Award,
   ArrowRight, Video, MessageCircle, Heart, ChevronRight,
+  Clock, ShieldCheck, CheckCircle2, Wallet, Scissors, CalendarCheck2, CheckCircle, Smartphone
 } from "lucide-react";
 import { useAuthStore } from "../../store/authStore";
 import { SALON_WHATSAPP, SALON_INSTAGRAM } from "../../constants";
@@ -144,68 +145,64 @@ export default function Home() {
                       home-hero-enter ${mounted ? "home-hero-visible" : ""}`}
         >
 
-          {/* ── Hero text ── */}
-          <div className="flex-1 space-y-5 text-center md:text-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-50 border border-rose-100 text-rose-600 text-xs font-semibold">
-              <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse" />
-              Now accepting bookings
+          {/* ── Hero text (Optimized for CRO) ── */}
+          <div className="flex-1 space-y-6 text-center md:text-left">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-50 border border-rose-100 text-rose-600 text-xs font-bold shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
+              Official Gayatri Beauty Studio App
             </div>
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold leading-[1.1] text-[var(--color-text-primary)]">
-              Look Beautiful.<br />
-              <span className="relative inline-block">
-                <span className="text-[var(--color-rose-500)]">Feel Confident.</span>
-                {/* underline accent */}
-                <span className="absolute -bottom-1 left-0 h-[3px] w-full bg-gradient-to-r from-rose-400 via-pink-300 to-transparent rounded-full" />
+            <h1 className="text-[2.5rem] leading-[1.1] md:text-[3.5rem] lg:text-[4.2rem] font-display font-black text-gray-900 tracking-tight">
+              Book Your Salon Appointment in <br className="hidden md:block" />
+              <span className="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-rose-500 to-purple-600">
+                30 Seconds.
+                <span className="absolute -bottom-1.5 left-0 h-[4px] w-full bg-gradient-to-r from-rose-400 via-pink-400 to-transparent rounded-full opacity-70" />
               </span>
             </h1>
 
-            <p className="text-[var(--color-text-muted)] text-sm md:text-base max-w-sm mx-auto md:mx-0 leading-relaxed">
-              Your premium beauty destination. Book, earn rewards and shine every day.
+            <p className="text-gray-600 text-[15px] md:text-lg max-w-lg mx-auto md:mx-0 leading-relaxed font-medium">
+              Skip the calls. Book instantly, earn loyalty rewards, and manage your beauty schedule with zero wait time.
             </p>
 
-            {/* CTAs */}
-            <div className="flex gap-3 justify-center md:justify-start">
-              <Link
-                to="/register"
-                className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3.5
-                           bg-[var(--color-rose-500)] text-white font-bold rounded-2xl
-                           shadow-lg shadow-rose-500/30 active:scale-95 transition-transform text-sm"
-              >
-                Book Now <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                to="/services"
-                className="flex-1 md:flex-none flex items-center justify-center px-6 py-3.5
-                           bg-white text-[var(--color-rose-600)] border border-[var(--color-rose-200)]
-                           font-bold rounded-2xl active:scale-95 transition-transform text-sm"
-              >
-                Services
-              </Link>
+            {/* Benefit Microcopy */}
+            <div className="flex flex-wrap justify-center md:justify-start gap-x-4 gap-y-2 text-sm text-gray-700 font-semibold mb-2">
+              <div className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-emerald-500" /> Free Registration</div>
+              <div className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-emerald-500" /> No Card Required</div>
             </div>
 
-            {/* Social links */}
-            <div className="flex items-center justify-center md:justify-start gap-3 pt-3 border-t border-[var(--color-border)]">
-              <a
-                href={SALON_INSTAGRAM} target="_blank" rel="noreferrer"
-                className="flex items-center gap-2 px-3.5 py-2 bg-rose-50 rounded-xl border border-rose-100 active:scale-95 transition-transform"
+            {/* CTAs */}
+            <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start w-full max-w-md mx-auto md:mx-0">
+              <Link
+                to={isAuthenticated ? "/book" : "/register"}
+                className="flex-1 flex items-center justify-center gap-2 px-6 py-4
+                           bg-gradient-to-r from-rose-500 to-rose-600 text-white font-bold rounded-2xl
+                           shadow-[0_8px_20px_rgba(244,63,94,0.3)] hover:shadow-[0_12px_25px_rgba(244,63,94,0.4)] hover:-translate-y-0.5 active:scale-95 transition-all text-base"
               >
-                <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-yellow-400 via-rose-500 to-purple-500 text-white flex items-center justify-center shrink-0">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                  </svg>
-                </div>
-                <span className="text-xs font-semibold text-rose-900">Instagram</span>
-              </a>
-              <a
-                href={`https://wa.me/${SALON_WHATSAPP}`} target="_blank" rel="noreferrer"
-                className="flex items-center gap-2 px-3.5 py-2 bg-emerald-50 rounded-xl border border-emerald-100 active:scale-95 transition-transform"
-              >
-                <div className="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0">
-                  <MessageCircle className="w-3.5 h-3.5" />
-                </div>
-                <span className="text-xs font-semibold text-emerald-900">WhatsApp</span>
-              </a>
+                Reserve My Appointment <ArrowRight className="w-5 h-5" />
+              </Link>
+              {!isAuthenticated && (
+                <Link
+                  to="/register"
+                  className="flex-1 flex items-center justify-center px-6 py-4
+                             bg-white text-rose-600 border-2 border-rose-100 hover:bg-rose-50 hover:border-rose-200
+                             font-bold rounded-2xl active:scale-95 transition-all text-base"
+                >
+                  Create Free Account
+                </Link>
+              )}
+            </div>
+
+            {/* Trust Signals */}
+            <div className="flex items-center justify-center md:justify-start gap-4 pt-4 border-t border-gray-100">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-5 h-5 text-gray-400" />
+                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">100% Secure Data</span>
+              </div>
+              <div className="w-1.5 h-1.5 rounded-full bg-gray-200" />
+              <div className="flex items-center gap-2">
+                <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
+                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">5-Star Rated</span>
+              </div>
             </div>
           </div>
 
@@ -276,6 +273,78 @@ export default function Home() {
             {quickLinks.map((link) => (
               <QuickLink key={link.label} {...link} />
             ))}
+          </div>
+        </section>
+
+        {/* ════════════════════════════════════════════════════
+            WHY USE OUR APP (CRO Benefit Cards)
+        ════════════════════════════════════════════════════ */}
+        <section className="py-6 home-reveal home-reveal-visible">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-display font-black text-gray-900 mb-3">Why Book on the App?</h2>
+            <p className="text-gray-500 text-sm max-w-md mx-auto font-medium">Skip the wait and unlock premium benefits.</p>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {[
+              { icon: Clock, title: "Book 24/7", desc: "Schedule your visit anytime, even at midnight.", color: "text-blue-500", bg: "bg-blue-50" },
+              { icon: Smartphone, title: "Zero Wait Time", desc: "Skip the lobby. Instant confirmation.", color: "text-rose-500", bg: "bg-rose-50" },
+              { icon: Scissors, title: "Choose Stylist", desc: "Pick your preferred expert.", color: "text-purple-500", bg: "bg-purple-50" },
+              { icon: Wallet, title: "Digital Wallet", desc: "Earn loyalty points on every visit.", color: "text-amber-500", bg: "bg-amber-50" },
+              { icon: CalendarCheck2, title: "1-Tap Reschedule", desc: "Change plans with zero hassle.", color: "text-emerald-500", bg: "bg-emerald-50" },
+              { icon: Star, title: "App-Only Offers", desc: "Unlock exclusive VIP discounts.", color: "text-pink-500", bg: "bg-pink-50" },
+            ].map((benefit, i) => (
+              <div key={i} className="bg-white rounded-3xl p-5 border border-gray-100 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-shadow group">
+                <div className={`w-12 h-12 rounded-2xl ${benefit.bg} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                  <benefit.icon className={`w-6 h-6 ${benefit.color}`} />
+                </div>
+                <h3 className="font-bold text-gray-900 mb-1.5">{benefit.title}</h3>
+                <p className="text-xs text-gray-500 leading-relaxed font-medium">{benefit.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ════════════════════════════════════════════════════
+            HOW IT WORKS (4-Step Timeline)
+        ════════════════════════════════════════════════════ */}
+        <section className="py-8 bg-gradient-to-b from-transparent via-rose-50/50 to-transparent rounded-[3rem] px-4 md:px-8 home-reveal home-reveal-visible mb-6">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-display font-black text-gray-900 mb-3">How It Works</h2>
+            <p className="text-gray-500 text-sm max-w-md mx-auto font-medium">Your beauty journey in 4 simple steps.</p>
+          </div>
+
+          <div className="max-w-2xl mx-auto space-y-6 relative">
+            {/* Vertical Line */}
+            <div className="absolute top-4 bottom-4 left-[27px] w-1 bg-gradient-to-b from-rose-200 to-purple-200 rounded-full" />
+            
+            {[
+              { num: 1, title: "Create Free Account", desc: "Takes 15 seconds. No credit card required.", icon: Smartphone },
+              { num: 2, title: "Choose Service & Stylist", desc: "Browse our premium catalog and select your favorite expert.", icon: Scissors },
+              { num: 3, title: "Pick Your Perfect Time", desc: "View real-time availability and lock in your slot instantly.", icon: CalendarCheck2 },
+              { num: 4, title: "Visit & Earn Rewards", desc: "Enjoy your service and accumulate loyalty points automatically!", icon: Gift },
+            ].map((step, idx) => (
+              <div key={idx} className="relative pl-16 flex items-start gap-4">
+                {/* Number Orb */}
+                <div className="absolute left-0 top-0 w-14 h-14 bg-white rounded-2xl border-2 border-rose-100 shadow-md flex items-center justify-center text-rose-500 font-black text-xl z-10">
+                  {step.num}
+                </div>
+                
+                <div className="bg-white rounded-3xl p-5 md:p-6 border border-gray-100 shadow-sm flex-1">
+                  <div className="flex items-center gap-3 mb-2">
+                    <step.icon className="w-5 h-5 text-gray-400" />
+                    <h3 className="text-lg font-bold text-gray-900">{step.title}</h3>
+                  </div>
+                  <p className="text-sm text-gray-500 font-medium">{step.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-10 flex justify-center">
+             <Link to={isAuthenticated ? "/book" : "/register"} className="px-8 py-4 bg-gray-900 text-white font-bold rounded-2xl shadow-xl hover:-translate-y-1 transition-transform flex items-center gap-2">
+               Start Your Journey <ArrowRight className="w-5 h-5" />
+             </Link>
           </div>
         </section>
 

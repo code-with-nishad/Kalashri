@@ -110,7 +110,7 @@ export default function PublicLayout() {
                   to="/register"
                   className="px-5 py-2 btn-primary text-sm font-medium rounded-xl transition-all hover:shadow-[var(--shadow-glow-rose)]"
                 >
-                  Book Now
+                  Reserve Appointment
                 </Link>
               </>
             )}
@@ -164,7 +164,7 @@ export default function PublicLayout() {
                   ) : (
                     <>
                       <Link to="/login" className="flex-1 text-center py-2.5 border border-[var(--color-border)] text-[var(--color-text-secondary)] text-sm font-medium rounded-xl">Login</Link>
-                      <Link to="/register" className="flex-1 text-center py-2.5 btn-primary text-sm font-medium rounded-xl">Book Now</Link>
+                      <Link to="/register" className="flex-1 text-center py-2.5 btn-primary text-sm font-medium rounded-xl">Reserve Appointment</Link>
                     </>
                   )}
                 </div>

@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Sparkles, Eye, EyeOff, User, Mail, Lock, Phone } from "lucide-react";
+import { Sparkles, Eye, EyeOff, User, Mail, Lock, Phone, CheckCircle, ShieldCheck } from "lucide-react";
 import { GoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
 import { useRegister, useGoogleLogin } from "../../hooks/useAuth";
@@ -175,8 +175,14 @@ export default function Register() {
               <button type="submit" disabled={isPending}
                 className="w-full py-4 bg-gradient-to-r from-[var(--color-rose-500)] to-[var(--color-rose-600)] hover:from-[var(--color-rose-400)] hover:to-[var(--color-rose-500)] text-white font-bold rounded-2xl transition-all shadow-[0_10px_20px_rgba(244,63,94,0.2)] hover:shadow-[0_15px_30px_rgba(244,63,94,0.4)] hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-4"
               >
-                {isPending ? <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : "Create Account ✨"}
+                {isPending ? <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : "Create My Free Account ✨"}
               </button>
+
+              <div className="flex justify-center mt-3 gap-3 text-[11px] text-gray-500 font-medium">
+                <span className="flex items-center gap-1"><CheckCircle className="w-3.5 h-3.5 text-emerald-500" /> Free Registration</span>
+                <span className="flex items-center gap-1"><CheckCircle className="w-3.5 h-3.5 text-emerald-500" /> No Card Needed</span>
+                <span className="flex items-center gap-1"><ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> 100% Secure</span>
+              </div>
 
               <div className="flex items-center gap-3 my-5">
                 <div className="flex-1 h-px bg-gray-200" />
