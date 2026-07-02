@@ -22,10 +22,11 @@ exports.register = asyncHandler(async (req, res) => {
 
 exports.login = asyncHandler(async (req, res) => {
 
-    const { email, password } = req.body;
+    const { email, phone, password } = req.body;
+    const identifier = email || phone;
 
     const user = await authService.loginUser(
-        email,
+        identifier,
         password
     );
 

@@ -23,6 +23,9 @@ const glowFeedRoutes = require("./src/routes/glowFeedRoutes");
 const reviewRoutes = require("./src/routes/reviewRoutes");
 const visitorRoutes = require("./src/routes/visitorRoutes");
 const leaderboardRoutes = require("./src/routes/leaderboardRoutes");
+const fashionOrderRoutes = require("./src/routes/fashionOrderRoutes");
+const insuranceLeadRoutes = require("./src/routes/insuranceLeadRoutes");
+const measurementRoutes = require("./src/routes/measurementRoutes");
 
 dotenv.config();
 
@@ -90,11 +93,14 @@ app.use("/api/feed", glowFeedRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/visitors", visitorRoutes);
 app.use("/api/leaderboard", leaderboardRoutes);
+app.use("/api/fashion-orders", fashionOrderRoutes);
+app.use("/api/insurance-leads", insuranceLeadRoutes);
+app.use("/api/measurements", measurementRoutes);
 
 app.get("/", (req, res) => {
     res.status(200).json({
         success: true,
-        message: "Gayatri Beauty Studio API Running 🚀",
+        message: "Kalashri Super App API Running 🚀",
     });
 });
 

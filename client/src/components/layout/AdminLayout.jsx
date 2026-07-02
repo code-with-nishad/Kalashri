@@ -30,7 +30,9 @@ const navGroups = [  {
     items: [
       { icon: Users, label: "Customers", to: "/admin/customers" },
       { icon: Calendar, label: "Appointments", to: "/admin/appointments" },
-      { icon: ShoppingCart, label: "Orders", to: "/admin/orders" },
+      { icon: ShoppingCart, label: "Beauty Orders", to: "/admin/orders" },
+      { icon: Package, label: "Fashion Orders", to: "/admin/fashion-orders" },
+      { icon: ShieldAlert, label: "Insurance Leads", to: "/admin/insurance-leads" },
       { icon: Wrench, label: "Services", to: "/admin/services" },
     ],
   },
@@ -90,8 +92,8 @@ export default function AdminLayout() {
           <div className="w-6 h-6 rounded bg-rose-500 flex items-center justify-center">
             <Sparkles className="w-3.5 h-3.5 text-white" />
           </div>
-          <span className="font-display font-black text-rose-600 tracking-tight text-lg leading-none">
-            Gayatri
+          <span className="font-display font-black text-gray-900 tracking-tight text-lg leading-none">
+            Kalashri
           </span>
         </div>
 

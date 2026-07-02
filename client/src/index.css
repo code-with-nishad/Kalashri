@@ -4,7 +4,14 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Playfair Display", ui-serif, Georgia, serif;
 
-  /* Brand Colors - Gayatri Beauty Studio (Baby Pink focused) */
+  /* Brand Colors - Kalashri Super App (Premium Luxury) */
+  --color-primary-dark: #2b0a2f; /* Deep Purple */
+  --color-primary: #3d0c34;
+  --color-accent: #a11d51; /* Magenta/Pink */
+  --color-accent-light: #d62261;
+  --color-gold: #d4af37; /* Metallic Gold */
+  --color-gold-light: #f3e5ab;
+  
   --color-rose-50: #fff0f5;
   --color-rose-100: #ffe4e1;
   --color-rose-200: #ffc0cb;
@@ -15,6 +22,14 @@
   --color-rose-700: #c21e56;
   --color-rose-800: #900020;
   --color-rose-900: #800020;
+
+  /* Category specific colors */
+  --color-fashion-primary: #D4AF37; /* Metallic Gold */
+  --color-beauty-primary: #FF1493;  /* Deep Pink */
+  --color-insurance-primary: #1E3A8A; /* Trust Blue */
+
+  --color-luxury-dark: #121212;
+  --color-luxury-light: #F9F9F9;
 
   --color-gold-50: #fffbeb;
   --color-gold-100: #fef3c7;
@@ -73,12 +88,24 @@ html {
 }
 
 body {
-  background-color: var(--color-surface);
+  background-color: #f3f4f6; /* Gray background outside the mobile frame */
   color: var(--color-text-primary);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overscroll-behavior-y: none; /* Prevent iOS elastic bounce */
+}
+
+/* Mobile Frame Wrapper */
+.mobile-frame {
+  max-width: 440px;
+  margin: 0 auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--color-surface);
+  position: relative;
+  box-shadow: 0 0 40px rgba(0,0,0,0.1);
+  overflow-x: hidden;
 }
 
 /* iOS Safe Area Padding */

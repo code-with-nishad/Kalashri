@@ -180,3 +180,19 @@ export const visitorService = {
   getVisitorDetails: (id) => api.get(`/visitors/${id}`),
   getRegistrationFunnel: () => api.get("/visitors/funnel/registration"),
 };
+
+export const fashionOrderService = {
+  create: (data) => api.post("/fashion-orders", data),
+  getAll: () => api.get("/fashion-orders"),
+  getById: (id) => api.get(`/fashion-orders/${id}`),
+  update: (id, data) => api.put(`/fashion-orders/${id}`, data),
+  delete: (id) => api.delete(`/fashion-orders/${id}`),
+};
+
+export const measurementService = {
+  create: (data) => api.post("/measurements", data),
+  getAll: () => api.get("/measurements"),
+  getByCustomer: (customerId) => api.get(`/measurements/customer/${customerId}`),
+  update: (id, data) => api.put(`/measurements/${id}`, data),
+  delete: (id) => api.delete(`/measurements/${id}`),
+};

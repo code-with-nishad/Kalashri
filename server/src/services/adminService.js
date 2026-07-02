@@ -4,6 +4,7 @@ const Service = require("../models/Service");
 const Reward = require("../models/Reward");
 const RewardRedemption = require("../models/RewardRedemption");
 const LoyaltyTransaction = require("../models/LoyaltyTransaction");
+const FashionOrder = require("../models/FashionOrder");
 const AppError = require("../utils/AppError");
 const {
     registerAdminSchema,
@@ -119,6 +120,39 @@ const getDashboardStats = async () => {
         yearlyRevenue: 0,
         todayAppointments: 0,
     };
+
+    // FashionOrder Revenue
+    const fashionRevenueAggregation = await FashionOrder.aggregate([
+        { $match: { isDelivered: true } },
+        {
+            $group: {
+                _id: null,
+                totalRevenue: { $sum: "$totalAmount" },
+                todayRevenue: {
+                    $sum: { $cond: [{ $gte: ["$createdAt", today] }, "$totalAmount", 0] },
+                },
+                monthlyRevenue: {
+                    $sum: { $cond: [{ $gte: ["$createdAt", startOfMonth] }, "$totalAmount", 0] },
+                },
+                yearlyRevenue: {
+                    $sum: { $cond: [{ $gte: ["$createdAt", startOfYear] }, "$totalAmount", 0] },
+                },
+            },
+        },
+    ]);
+
+    const fashionRevenue = fashionRevenueAggregation[0] || {
+        totalRevenue: 0,
+        todayRevenue: 0,
+        monthlyRevenue: 0,
+        yearlyRevenue: 0,
+    };
+
+    // Combine them
+    revenueData.totalRevenue += fashionRevenue.totalRevenue;
+    revenueData.todayRevenue += fashionRevenue.todayRevenue;
+    revenueData.monthlyRevenue += fashionRevenue.monthlyRevenue;
+    revenueData.yearlyRevenue += fashionRevenue.yearlyRevenue;
 
     const averageAppointmentValue = completedAppointments > 0 ? revenueData.totalRevenue / completedAppointments : 0;
 
@@ -408,6 +442,25 @@ const getDashboardWidgets = async () => {
     ]);
 
     const revenueData = revenueAggregation[0] || { todayRevenue: 0, monthlyRevenue: 0 };
+
+    const fashionRevenueAggregation = await FashionOrder.aggregate([
+        { $match: { isDelivered: true } },
+        {
+            $group: {
+                _id: null,
+                todayRevenue: {
+                    $sum: { $cond: [{ $gte: ["$createdAt", today] }, "$totalAmount", 0] },
+                },
+                monthlyRevenue: {
+                    $sum: { $cond: [{ $gte: ["$createdAt", startOfMonth] }, "$totalAmount", 0] },
+                },
+            },
+        },
+    ]);
+
+    const fashionRevenue = fashionRevenueAggregation[0] || { todayRevenue: 0, monthlyRevenue: 0 };
+    revenueData.todayRevenue += fashionRevenue.todayRevenue;
+    revenueData.monthlyRevenue += fashionRevenue.monthlyRevenue;
 
     // Popular Services
     const popularServices = await Appointment.aggregate([

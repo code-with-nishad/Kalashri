@@ -1,14 +1,7 @@
 importScripts("https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js");
 importScripts("https://www.gstatic.com/firebasejs/10.9.0/firebase-messaging-compat.js");
 
-const firebaseConfig = {
-    "apiKey": "AIzaSyB9fOj3Aqfjj3KijM6CVYV7PPqNw8No0dw",
-    "authDomain": "salon-management-554d6.firebaseapp.com",
-    "projectId": "salon-management-554d6",
-    "storageBucket": "salon-management-554d6.firebasestorage.app",
-    "messagingSenderId": "710416836437",
-    "appId": "1:710416836437:web:25e28f9a73c7d9153571dc"
-};
+const firebaseConfig = {};
 
 if (firebaseConfig.apiKey) {
     firebase.initializeApp(firebaseConfig);

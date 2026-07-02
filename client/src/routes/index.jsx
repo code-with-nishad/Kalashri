@@ -4,12 +4,21 @@ import { ProtectedRoute, AdminRoute, PublicOnlyRoute } from "./ProtectedRoute";
 import GlobalError from "../components/ui/GlobalError";
 
 // Layouts
-const PublicLayout = lazy(() => import("../components/layout/PublicLayout"));
-const CustomerLayout = lazy(() => import("../components/layout/CustomerLayout"));
+const MobileLayout = lazy(() => import("../components/layout/MobileLayout"));
 const AdminLayout = lazy(() => import("../components/layout/AdminLayout"));
 
 // Public Pages
 const Home = lazy(() => import("../pages/public/Home"));
+const Splash = lazy(() => import("../pages/public/Splash"));
+const Onboarding = lazy(() => import("../pages/public/Onboarding"));
+const CategoryScreen = lazy(() => import("../pages/public/CategoryScreen"));
+const Fashion = lazy(() => import("../pages/public/Fashion"));
+const NauvariSarees = lazy(() => import("../pages/public/NauvariSarees"));
+const BlouseStitching = lazy(() => import("../pages/public/BlouseStitching"));
+const Dresses = lazy(() => import("../pages/public/Dresses"));
+const AariWork = lazy(() => import("../pages/public/AariWork"));
+const Beauty = lazy(() => import("../pages/public/Beauty"));
+const BeautyServiceDetails = lazy(() => import("../pages/public/BeautyServiceDetails"));
 const Services = lazy(() => import("../pages/public/Services"));
 const Gallery = lazy(() => import("../pages/public/Gallery"));
 const Awards = lazy(() => import("../pages/public/Awards"));
@@ -33,6 +42,8 @@ const CustomerProfile = lazy(() => import("../pages/customer/Profile"));
 const CustomerShop = lazy(() => import("../pages/customer/Shop"));
 const GlowFeedHome = lazy(() => import("../pages/customer/GlowFeedHome"));
 const AdminGlowModeration = lazy(() => import("../pages/admin/AdminGlowModeration"));
+const MyFashionOrders = lazy(() => import("../pages/customer/MyFashionOrders"));
+const MyMeasurements = lazy(() => import("../pages/customer/MyMeasurements"));
 
 // Admin Pages
 const AdminDashboard = lazy(() => import("../pages/admin/Dashboard"));
@@ -51,6 +62,10 @@ const AdminSettings = lazy(() => import("../pages/admin/Settings"));
 const AdminOrders = lazy(() => import("../pages/admin/Orders"));
 const AdminVisitors = lazy(() => import("../pages/admin/Visitors"));
 const AdminVisitorDetails = lazy(() => import("../pages/admin/VisitorDetails"));
+const AdminFashionOrders = lazy(() => import("../pages/admin/FashionOrders"));
+const AdminFashionOrderDetails = lazy(() => import("../pages/admin/FashionOrderDetails"));
+const AdminInsuranceLeads = lazy(() => import("../pages/admin/InsuranceLeads"));
+const AdminMeasurements = lazy(() => import("../pages/admin/Measurements"));
 
 // Loading fallback
 const PageLoader = () => (
@@ -62,10 +77,18 @@ const PageLoader = () => (
 const router = createBrowserRouter([
   // Public Routes
   {
-    element: <Suspense fallback={<PageLoader />}><PublicLayout /></Suspense>,
+    element: <Suspense fallback={<PageLoader />}><MobileLayout /></Suspense>,
     errorElement: <GlobalError />,
     children: [
       { path: "/", element: <Suspense fallback={<PageLoader />}><Home /></Suspense> },
+      { path: "/categories", element: <Suspense fallback={<PageLoader />}><CategoryScreen /></Suspense> },
+      { path: "/fashion", element: <Suspense fallback={<PageLoader />}><Fashion /></Suspense> },
+      { path: "/fashion/nauvari", element: <Suspense fallback={<PageLoader />}><NauvariSarees /></Suspense> },
+      { path: "/fashion/blouse", element: <Suspense fallback={<PageLoader />}><BlouseStitching /></Suspense> },
+      { path: "/fashion/dresses", element: <Suspense fallback={<PageLoader />}><Dresses /></Suspense> },
+      { path: "/fashion/aari", element: <Suspense fallback={<PageLoader />}><AariWork /></Suspense> },
+      { path: "/beauty", element: <Suspense fallback={<PageLoader />}><Beauty /></Suspense> },
+      { path: "/beauty/details", element: <Suspense fallback={<PageLoader />}><BeautyServiceDetails /></Suspense> },
       { path: "/services", element: <Suspense fallback={<PageLoader />}><Services /></Suspense> },
       { path: "/products", element: <Suspense fallback={<PageLoader />}><Products /></Suspense> },
       { path: "/gallery", element: <Suspense fallback={<PageLoader />}><Gallery /></Suspense> },
@@ -79,6 +102,8 @@ const router = createBrowserRouter([
     element: <Suspense fallback={<PageLoader />}><PublicOnlyRoute /></Suspense>,
     errorElement: <GlobalError />,
     children: [
+      { path: "/splash", element: <Suspense fallback={<PageLoader />}><Splash /></Suspense> },
+      { path: "/onboarding", element: <Suspense fallback={<PageLoader />}><Onboarding /></Suspense> },
       { path: "/login", element: <Suspense fallback={<PageLoader />}><Login /></Suspense> },
       { path: "/register", element: <Suspense fallback={<PageLoader />}><Register /></Suspense> },
     ],
@@ -89,20 +114,21 @@ const router = createBrowserRouter([
     errorElement: <GlobalError />,
     children: [
       {
-        element: <Suspense fallback={<PageLoader />}><CustomerLayout /></Suspense>,
+        element: <Suspense fallback={<PageLoader />}><MobileLayout /></Suspense>,
         children: [
-          { path: "/dashboard", element: <Suspense fallback={<PageLoader />}><CustomerDashboard /></Suspense> },
+          { path: "/dashboard", element: <Navigate to="/" replace /> },
           { path: "/book", element: <Suspense fallback={<PageLoader />}><BookAppointment /></Suspense> },
           { path: "/appointments", element: <Suspense fallback={<PageLoader />}><MyAppointments /></Suspense> },
           { path: "/appointments/:id", element: <Suspense fallback={<PageLoader />}><AppointmentDetails /></Suspense> },
-          { path: "/rewards", element: <Suspense fallback={<PageLoader />}><RewardsPage /></Suspense> },
+          { path: "/offers", element: <Suspense fallback={<PageLoader />}><RewardsPage /></Suspense> }, // Mapping Offers to Rewards for now
           { path: "/redemptions", element: <Suspense fallback={<PageLoader />}><RedeemHistory /></Suspense> },
           { path: "/leaderboard", element: <Suspense fallback={<PageLoader />}><Leaderboard /></Suspense> },
           { path: "/notifications", element: <Suspense fallback={<PageLoader />}><NotificationsPage /></Suspense> },
           { path: "/profile", element: <Suspense fallback={<PageLoader />}><CustomerProfile /></Suspense> },
-          { path: "/products", element: <Suspense fallback={<PageLoader />}><CustomerShop /></Suspense> },
           { path: "/feed", element: <Suspense fallback={<PageLoader />}><GlowFeedHome /></Suspense> },
           { path: "/cart", element: <Navigate to="/products" replace /> },
+          { path: "/my-fashion-orders", element: <Suspense fallback={<PageLoader />}><MyFashionOrders /></Suspense> },
+          { path: "/my-measurements", element: <Suspense fallback={<PageLoader />}><MyMeasurements /></Suspense> },
         ],
       },
     ],
@@ -132,6 +158,10 @@ const router = createBrowserRouter([
           { path: "/admin/moderation", element: <Suspense fallback={<PageLoader />}><AdminGlowModeration /></Suspense> },
           { path: "/admin/visitors", element: <Suspense fallback={<PageLoader />}><AdminVisitors /></Suspense> },
           { path: "/admin/visitors/:id", element: <Suspense fallback={<PageLoader />}><AdminVisitorDetails /></Suspense> },
+          { path: "/admin/fashion-orders", element: <Suspense fallback={<PageLoader />}><AdminFashionOrders /></Suspense> },
+          { path: "/admin/fashion-orders/:id", element: <Suspense fallback={<PageLoader />}><AdminFashionOrderDetails /></Suspense> },
+          { path: "/admin/insurance-leads", element: <Suspense fallback={<PageLoader />}><AdminInsuranceLeads /></Suspense> },
+          { path: "/admin/measurements", element: <Suspense fallback={<PageLoader />}><AdminMeasurements /></Suspense> },
         ],
       },
     ],

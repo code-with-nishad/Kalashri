@@ -1,292 +1,366 @@
-import { useQuery } from "@tanstack/react-query";
+import React from "react";
 import { Link } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
-import {
-  Sparkles, Calendar, Star, Gift,
-  ArrowRight, Video,
-  Clock, ShieldCheck, CheckCircle, Smartphone
-} from "lucide-react";
-import { useAuthStore } from "../../store/authStore";
-import { serviceService, inventoryService } from "../../services";
-import { QUERY_KEYS } from "../../constants/queryKeys";
-import ServicesSection from "../../components/home/ServicesSection";
-import FeaturedProductsSection from "../../components/home/FeaturedProductsSection";
-import AIConsultant from "../../components/ai/AIConsultant";
-import LandingChampionBoard from "../../components/home/LandingChampionBoard";
-
-/* ─── Custom hook: fire once when element enters viewport ─── */
-function useScrollReveal(threshold = 0.12) {
-  const ref = useRef(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
-      { threshold }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [threshold]);
-  return [ref, visible];
-}
-
-/* ─── Floating badge that sits on the hero image ─── */
-const HeroBadge = ({ children, className = "", delay = 0 }) => (
-  <div
-    className={`absolute z-20 bg-white/90 backdrop-blur-md rounded-2xl shadow-lg border border-white/60 px-3 py-2 animate-float ${className}`}
-    style={{ animationDelay: `${delay}s` }}
-  >
-    {children}
-  </div>
-);
+import { Menu, Calendar as CalendarIcon, Phone, MessageCircle, MapPin, Check, Star } from "lucide-react";
 
 export default function Home() {
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const user = useAuthStore((s) => s.user);
-
-  /* mount flag drives hero entrance animation */
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => { const t = setTimeout(() => setMounted(true), 80); return () => clearTimeout(t); }, []);
-
-  const [feedRef, feedVis] = useScrollReveal();
-  const [testimRef, testimVis] = useScrollReveal();
-
-  const bookLink = isAuthenticated
-    ? (user?.role === "admin" ? "/admin" : "/customer")
-    : "/register";
-
-  const { data: servicesData } = useQuery({ queryKey: QUERY_KEYS.SERVICES, queryFn: serviceService.getAll });
-  const { data: inventoryData } = useQuery({ queryKey: QUERY_KEYS.INVENTORY, queryFn: inventoryService.getProducts });
-
   return (
-    <div className="min-h-screen bg-white pb-20 relative overflow-x-hidden max-w-md mx-auto shadow-2xl md:max-w-6xl md:shadow-none">
+    <div className="flex flex-col min-h-screen bg-[var(--color-surface)] font-sans">
+      
+      {/* Floating Action Menu (Right Side) */}
+      <div className="fixed right-0 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 p-2">
+        <a href="tel:+919876543210" className="bg-[#241a18]/90 hover:bg-[#3d2b28] border border-[#d4af37]/30 text-[#d4af37] p-3 rounded-l-xl flex flex-col items-center justify-center gap-1 transition-all backdrop-blur-sm group">
+          <Phone className="w-5 h-5 group-hover:scale-110 transition-transform" />
+          <span className="text-[10px] uppercase tracking-wider font-semibold">Call Us</span>
+        </a>
+        <a href="https://wa.me/919876543210" target="_blank" rel="noreferrer" className="bg-[#241a18]/90 hover:bg-[#3d2b28] border border-[#d4af37]/30 text-[#d4af37] p-3 rounded-l-xl flex flex-col items-center justify-center gap-1 transition-all backdrop-blur-sm group">
+          <MessageCircle className="w-5 h-5 group-hover:scale-110 transition-transform" />
+          <span className="text-[10px] uppercase tracking-wider font-semibold">WhatsApp</span>
+        </a>
+        <a href="#" className="bg-[#241a18]/90 hover:bg-[#3d2b28] border border-[#d4af37]/30 text-[#d4af37] p-3 rounded-l-xl flex flex-col items-center justify-center gap-1 transition-all backdrop-blur-sm group">
+          <MapPin className="w-5 h-5 group-hover:scale-110 transition-transform" />
+          <span className="text-[10px] uppercase tracking-wider font-semibold">Directions</span>
+        </a>
+      </div>
 
-      <main className="px-4 space-y-8 pt-2">
-
-        {/* ════════════════════════════════════════════════════
-            HERO
-        ════════════════════════════════════════════════════ */}
-        <section
-          className={`flex flex-row items-center gap-3 md:gap-8 
-                      home-hero-enter ${mounted ? "home-hero-visible" : ""}`}
-        >
-
-          {/* ── Hero text ── */}
-          <div className="flex-1 space-y-3 text-left order-1 py-4">
-            <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-rose-50 border border-rose-100 text-rose-600 text-[8px] sm:text-[10px] font-bold shadow-sm">
-              <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-rose-500 animate-pulse" />
-              Gayatri Beauty Studio
-            </div>
-
-            <h1 className="text-xl sm:text-3xl md:text-5xl lg:text-6xl font-display font-black text-gray-900 tracking-tight leading-[1.1]">
-              Your Beauty. <br/>
-              Our Expertise. <br/>
-              <span className="text-rose-500">Timeless You.</span>
-            </h1>
-
-            <p className="text-gray-600 text-[9px] sm:text-xs md:text-base max-w-[160px] sm:max-w-lg font-medium leading-tight">
-              Book your favorite salon services in just a few taps. Earn Glow Points & unlock perks.
-            </p>
-
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-2 w-full pt-2">
-              <Link
-                to={bookLink}
-                className="inline-flex items-center justify-center px-3 py-2 sm:px-4 sm:py-2.5
-                           bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-lg sm:rounded-xl
-                           shadow-md active:scale-95 transition-transform text-[9px] sm:text-xs"
-              >
-                Book Appointment
-              </Link>
-            </div>
-          </div>
-
-          {/* ── Hero image ── */}
-          <div className="flex-1 relative w-full max-w-[150px] sm:max-w-[220px] md:max-w-lg mx-auto order-2 mt-2 md:mt-0">
-            {/* Background Pink Circle Blob */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] aspect-square rounded-full bg-gradient-to-tr from-pink-100 to-rose-50 blur-xl" aria-hidden />
-
-            {/* image frame */}
-            <div className="relative z-10 flex justify-center">
-              <img src="/hero-girl.png" alt="Gayatri Beauty Studio" className="w-[140px] sm:w-[220px] h-auto drop-shadow-xl mix-blend-multiply" style={{ objectFit: 'contain' }} />
-            </div>
-
-            {/* rating badge */}
-            <HeroBadge className="-left-4 top-1/4 scale-[0.6] origin-left" delay={0}>
-              <div className="flex flex-col items-center gap-0.5">
-                <div className="flex items-center gap-1 text-sm font-black text-gray-900">
-                  <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                  4.9/5
-                </div>
-                <div className="text-[9px] font-bold text-amber-500">2.8k+ Reviews</div>
-              </div>
-            </HeroBadge>
-
-            {/* Hygienic badge */}
-            <HeroBadge className="-right-6 top-4 scale-[0.6] origin-right" delay={1.2}>
-               <div className="flex items-center gap-2">
-                 <div className="w-8 h-8 rounded-full bg-rose-50 flex items-center justify-center text-rose-500">
-                    <ShieldCheck className="w-4 h-4" />
-                 </div>
-                 <div className="flex flex-col">
-                    <span className="text-[10px] font-bold text-gray-900">Hygienic & Safe</span>
-                    <span className="text-[8px] text-gray-500">Your safety is our priority</span>
-                 </div>
-               </div>
-            </HeroBadge>
-
-            {/* New Here badge */}
-            <HeroBadge className="-right-4 bottom-4 scale-[0.6] origin-right" delay={0.5}>
-               <div className="flex items-center gap-2">
-                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center text-white">
-                    <Gift className="w-5 h-5" />
-                 </div>
-                 <div className="flex flex-col">
-                    <span className="text-[11px] font-bold text-gray-900">New Here?</span>
-                    <span className="text-[8px] text-gray-500 max-w-[100px] leading-tight">Create an account and get 50 Glow Points!</span>
-                 </div>
-               </div>
-            </HeroBadge>
-          </div>
-        </section>
-
-        {/* ════════════════════════════════════════════════════
-            CHAMPION BOARD
-        ════════════════════════════════════════════════════ */}
-        <section className="pt-6">
-           <LandingChampionBoard />
-        </section>
-
-        {/* ════════════════════════════════════════════════════
-            SERVICES
-        ════════════════════════════════════════════════════ */}
-        <div id="services">
-          <ServicesSection
-            services={servicesData?.data || []}
-            bookLink={bookLink}
-            isAuthenticated={isAuthenticated}
+      {/* Hero Section */}
+      <div className="relative w-full min-h-[90vh] bg-[#1a1110] overflow-hidden flex flex-col">
+        {/* Background Image Setup */}
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=2000&auto=format&fit=crop" 
+            alt="Kalashri Bride" 
+            className="w-full h-full object-cover object-center opacity-60"
           />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#1a1110] via-[#1a1110]/80 to-transparent"></div>
         </div>
 
-        {/* ════════════════════════════════════════════════════
-            GLOWFEED BANNER (Replaces Refer & Earn)
-        ════════════════════════════════════════════════════ */}
-        <section
-          ref={feedRef}
-          className={`home-reveal ${feedVis ? "home-reveal-visible" : ""}`}
-        >
-          <div className="relative rounded-3xl bg-gradient-to-r from-pink-50 to-rose-100 p-6 flex flex-col md:flex-row items-center justify-between overflow-hidden shadow-sm border border-rose-100">
-             <div className="relative z-10 flex-1 text-center md:text-left space-y-2 mb-6 md:mb-0">
-               <h3 className="text-xl font-display font-black text-rose-600">Join the GlowFeed!</h3>
-               <p className="text-xs text-gray-600 max-w-[200px] mx-auto md:mx-0 leading-relaxed font-medium">
-                 Discover trends, share your looks, and connect with our beauty community.
-               </p>
-               <Link
-                 to="/feed"
-                 className="inline-flex items-center justify-center gap-2 px-5 py-2.5 mt-2
-                            bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold rounded-full
-                            shadow-md active:scale-95 transition-transform"
-               >
-                 Explore GlowFeed <ArrowRight className="w-3.5 h-3.5" />
-               </Link>
-             </div>
-             
-             {/* Illustration Side */}
-             <div className="relative z-10 w-40 h-32 flex-shrink-0">
-                <div className="absolute inset-0 flex items-center justify-center">
-                   <div className="w-24 h-24 bg-rose-200/50 rounded-full animate-pulse" />
-                   <Video className="w-16 h-16 text-rose-500 absolute drop-shadow-xl" />
-                   <Star className="w-6 h-6 text-yellow-400 fill-yellow-400 absolute -top-2 right-2 animate-bounce" />
-                   <Sparkles className="w-5 h-5 text-purple-400 absolute bottom-0 left-2 animate-bounce" style={{ animationDelay: '0.5s' }} />
-                </div>
-             </div>
+        {/* Top Navbar */}
+        <nav className="relative z-20 flex items-center justify-between px-8 py-6 w-full max-w-7xl mx-auto">
+          {/* Logo */}
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-full border border-[#d4af37] flex items-center justify-center">
+              <span className="font-display text-[#d4af37] text-2xl font-bold">K</span>
+            </div>
+            <div>
+              <h1 className="font-display text-[#d4af37] text-xl font-bold tracking-widest uppercase">Kalashri</h1>
+              <p className="text-white/60 text-[10px] tracking-widest uppercase">Fashion & Beauty Studio</p>
+            </div>
           </div>
-        </section>
 
-        {/* ════════════════════════════════════════════════════
-            FEATURES GRID
-        ════════════════════════════════════════════════════ */}
-        <section className="py-4">
-           <div className="grid grid-cols-3 gap-y-6 gap-x-2">
-             {[
-               { icon: Calendar, title: "Easy & Fast\nBooking", color: "text-rose-500" },
-               { icon: Sparkles, title: "Verified\nBeauticians", color: "text-rose-500" },
-               { icon: Gift, title: "Premium\nProducts", color: "text-rose-500" },
-               { icon: ShieldCheck, title: "Hygienic\nEnvironment", color: "text-rose-500" },
-               { icon: Clock, title: "24/7 Customer\nSupport", color: "text-rose-500" },
-               { icon: CheckCircle, title: "Secure\nPayments", color: "text-rose-500" },
-             ].map((feat, i) => (
-               <div key={i} className="flex flex-col items-center text-center gap-2">
-                  <feat.icon className={`w-6 h-6 ${feat.color}`} />
-                  <span className="text-[10px] font-bold text-gray-800 whitespace-pre-line leading-snug">{feat.title}</span>
-               </div>
-             ))}
-           </div>
-        </section>
+          {/* Desktop Links */}
+          <div className="hidden lg:flex items-center gap-8 text-sm font-medium text-white/80">
+            <Link to="/" className="text-[#d4af37] border-b-2 border-[#d4af37] pb-1">Home</Link>
+            <Link to="/fashion" className="hover:text-[#d4af37] transition-colors">Fashion</Link>
+            <Link to="/beauty" className="hover:text-[#d4af37] transition-colors">Beauty Parlour</Link>
+            <Link to="/gallery" className="hover:text-[#d4af37] transition-colors">Gallery</Link>
+            <Link to="/offers" className="hover:text-[#d4af37] transition-colors">Offers</Link>
+            <Link to="/about" className="hover:text-[#d4af37] transition-colors">About Us</Link>
+            <Link to="/contact" className="hover:text-[#d4af37] transition-colors">Contact</Link>
+          </div>
 
-        {/* ════════════════════════════════════════════════════
-            TESTIMONIALS
-        ════════════════════════════════════════════════════ */}
-        <section ref={testimRef} className={`home-reveal ${testimVis ? "home-reveal-visible" : ""} py-4`}>
-           <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-display font-bold text-gray-900">What Our Clients Say</h2>
-              <span className="text-[10px] font-bold text-rose-500 flex items-center">View All Reviews <ArrowRight className="w-3 h-3 ml-0.5" /></span>
-           </div>
-           
-           <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-4 px-4 scrollbar-hide">
-              {[
-                { name: "Priya Sharma", text: "Absolutely love the services! The staff is so professional and the results are always amazing.", stars: 5 },
-                { name: "Sneha Patil", text: "The best salon experience I've ever had. Highly recommend Gayatri Beauty Studio!", stars: 5 },
-                { name: "Anjali Deshmukh", text: "Great ambiance, excellent service and super friendly staff. Will definitely come again!", stars: 5 }
-              ].map((rev, i) => (
-                <div key={i} className="snap-center w-64 shrink-0 bg-white border border-rose-100 rounded-2xl p-4 shadow-sm flex flex-col justify-between">
-                   <div>
-                     <div className="text-rose-400 font-serif text-3xl leading-none h-4">"</div>
-                     <p className="text-xs text-gray-600 font-medium leading-relaxed mt-2">{rev.text}</p>
-                   </div>
-                   <div className="mt-4 flex items-center gap-3">
-                     <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
-                       <img src={`https://api.dicebear.com/7.x/notionists/svg?seed=${rev.name}`} alt={rev.name} className="w-full h-full" />
-                     </div>
-                     <div>
-                       <div className="text-[11px] font-bold text-gray-900">{rev.name}</div>
-                       <div className="flex gap-0.5">
-                         {[...Array(rev.stars)].map((_, j) => <Star key={j} className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />)}
-                       </div>
-                     </div>
-                   </div>
+          {/* Nav Actions */}
+          <div className="flex items-center gap-4">
+            <Link to="/book" className="hidden md:flex items-center gap-2 border border-[#d4af37] text-[#d4af37] px-6 py-2.5 rounded hover:bg-[#d4af37] hover:text-black transition-all font-semibold text-sm">
+              Book Appointment
+            </Link>
+            <button className="lg:hidden text-white hover:text-[#d4af37]">
+              <Menu className="w-8 h-8" />
+            </button>
+          </div>
+        </nav>
+
+        {/* Hero Content */}
+        <div className="relative z-10 flex-1 flex flex-col justify-center px-8 max-w-7xl mx-auto w-full">
+          <div className="max-w-2xl">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="h-[1px] w-8 bg-[#d4af37]"></div>
+              <span className="text-[#d4af37] uppercase tracking-[0.2em] text-xs font-bold">Welcome to Kalashri</span>
+              <div className="h-[1px] w-8 bg-[#d4af37]"></div>
+            </div>
+            
+            <h2 className="font-display text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+              Where Tradition <br/>
+              <span className="text-[#d4af37]">Meets Elegance</span>
+            </h2>
+            
+            <p className="text-white/80 text-lg mb-10 max-w-lg leading-relaxed">
+              From timeless ethnic wear to stunning makeovers, we bring out the best in you.
+            </p>
+            
+            <div className="flex flex-wrap items-center gap-4">
+              <Link to="/services" className="bg-[#d4af37] text-black px-8 py-3.5 rounded font-bold hover:bg-[#ebd576] transition-colors flex items-center gap-2">
+                Explore Services <span className="text-xl">→</span>
+              </Link>
+              <Link to="/book" className="bg-transparent border border-white/30 text-white px-8 py-3.5 rounded font-bold hover:border-[#d4af37] hover:text-[#d4af37] transition-colors flex items-center gap-2">
+                Book Appointment <CalendarIcon className="w-5 h-5" />
+              </Link>
+            </div>
+
+            <div className="mt-16 flex flex-wrap items-center gap-8 text-white/80 text-sm font-medium">
+              <div className="flex items-center gap-3">
+                <span className="w-10 h-10 rounded-full border border-[#d4af37] flex items-center justify-center text-[#d4af37] text-xl">♔</span>
+                <span>Premium Quality<br/>Materials</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="w-10 h-10 rounded-full border border-[#d4af37] flex items-center justify-center text-[#d4af37]">
+                  <Users className="w-5 h-5" />
+                </span>
+                <span>Expert<br/>Professionals</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="w-10 h-10 rounded-full border border-[#d4af37] flex items-center justify-center text-[#d4af37]">
+                  <Check className="w-5 h-5" />
+                </span>
+                <span>100% Customer<br/>Satisfaction</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Services Section */}
+      <div className="bg-[#faf7f2] py-20 px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <div className="h-[1px] w-12 bg-[#d4af37]"></div>
+              <span className="text-[#d4af37] uppercase tracking-[0.2em] text-xs font-bold">Services We Offer</span>
+              <div className="h-[1px] w-12 bg-[#d4af37]"></div>
+            </div>
+            <h2 className="font-display text-4xl text-gray-900 font-bold">Complete Solutions for Your Style & Beauty</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Fashion Card */}
+            <div className="relative rounded-2xl overflow-hidden group bg-[#3d0c34] text-white min-h-[400px] flex">
+              <div className="absolute right-0 top-0 bottom-0 w-1/2 z-0">
+                <img src="https://images.unsplash.com/photo-1610030469983-98e550d615ef?q=80&w=800&auto=format&fit=crop" alt="Fashion" className="w-full h-full object-cover object-left opacity-90 transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#3d0c34] via-[#3d0c34]/80 to-transparent"></div>
+              </div>
+              
+              <div className="relative z-10 p-10 flex flex-col justify-center w-full md:w-[65%]">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-lg">
+                    <span className="text-[#3d0c34] text-2xl">👗</span>
+                  </div>
+                  <h3 className="font-display text-3xl font-bold text-[#d4af37]">Fashion &<br/>Tailoring</h3>
                 </div>
-              ))}
-           </div>
-        </section>
+                
+                <p className="text-white/80 mb-8 text-sm leading-relaxed pr-4">
+                  Custom stitching, designer wear, aari work & traditional outfits crafted with perfection.
+                </p>
+                
+                <ul className="space-y-3 mb-10 text-sm">
+                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#d4af37]" /> Nauvari Saree Stitching</li>
+                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#d4af37]" /> Blouse Stitching</li>
+                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#d4af37]" /> Custom Dresses</li>
+                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#d4af37]" /> Aari Work & Embroidery</li>
+                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#d4af37]" /> Alterations & More</li>
+                </ul>
 
-        {/* ════════════════════════════════════════════════════
-            CTA FOOTER
-        ════════════════════════════════════════════════════ */}
-        <section className="mt-6 mb-8 relative rounded-3xl overflow-hidden bg-rose-50 p-6 flex flex-col items-center text-center shadow-inner">
-           {/* Decorative corner flowers/blobs */}
-           <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-pink-200/50 rounded-full blur-xl" />
-           <div className="absolute -top-10 -right-10 w-32 h-32 bg-rose-200/50 rounded-full blur-xl" />
-           
-           <h2 className="text-2xl font-display font-black text-gray-900 mb-2 relative z-10">Ready to Glow?</h2>
-           <p className="text-xs text-gray-600 max-w-[250px] mb-6 font-medium relative z-10">
-             Book your appointment now and experience the magic of beauty & care at Gayatri Beauty Studio.
-           </p>
-           
-           <Link
-             to={bookLink}
-             className="relative z-10 px-6 py-3 bg-rose-500 text-white font-bold rounded-full shadow-lg hover:bg-rose-600 transition-colors flex items-center gap-2 text-sm"
-           >
-             Book Appointment Now <ArrowRight className="w-4 h-4" />
-           </Link>
-           <p className="text-[9px] text-gray-400 font-semibold mt-3 relative z-10 flex items-center gap-1"><Clock className="w-3 h-3 text-rose-400" /> Takes Less Than 30 Seconds!</p>
-        </section>
+                <Link to="/fashion" className="bg-[#f3e5ab] text-[#3d0c34] px-6 py-3 rounded font-bold w-max hover:bg-white transition-colors">
+                  Explore Fashion →
+                </Link>
+              </div>
+            </div>
 
-      </main>
+            {/* Beauty Card */}
+            <div className="relative rounded-2xl overflow-hidden group bg-[#1a1a1a] text-white min-h-[400px] flex">
+              <div className="absolute right-0 top-0 bottom-0 w-1/2 z-0">
+                <img src="https://images.unsplash.com/photo-1516975080661-460d3fcb6215?q=80&w=800&auto=format&fit=crop" alt="Beauty" className="w-full h-full object-cover object-left opacity-80 transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#1a1a1a] via-[#1a1a1a]/90 to-transparent"></div>
+              </div>
+              
+              <div className="relative z-10 p-10 flex flex-col justify-center w-full md:w-[65%]">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-lg">
+                    <span className="text-[#1a1a1a] text-2xl">🪷</span>
+                  </div>
+                  <h3 className="font-display text-3xl font-bold text-[#d4af37]">Beauty<br/>Parlour</h3>
+                </div>
+                
+                <p className="text-white/80 mb-8 text-sm leading-relaxed pr-4">
+                  Pamper yourself with our premium beauty & salon services.
+                </p>
+                
+                <ul className="space-y-3 mb-10 text-sm">
+                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#d4af37]" /> Bridal Makeup</li>
+                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#d4af37]" /> Hair Styling</li>
+                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#d4af37]" /> Skin & Hair Care</li>
+                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#d4af37]" /> Mehendi</li>
+                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#d4af37]" /> Packages & More</li>
+                </ul>
 
-      {/* Floating AI chat */}
-      <AIConsultant />
+                <Link to="/beauty" className="bg-[#f3e5ab] text-[#1a1a1a] px-6 py-3 rounded font-bold w-max hover:bg-white transition-colors">
+                  Explore Beauty →
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Stats Section */}
+      <div className="border-y border-gray-200 bg-white py-12 px-8">
+        <div className="max-w-7xl mx-auto flex flex-wrap justify-center md:justify-between items-center gap-8 divide-x-0 md:divide-x divide-gray-200">
+          <div className="flex items-center gap-4 px-8 w-full md:w-auto justify-center">
+            <Users className="w-12 h-12 text-[#d4af37]" strokeWidth={1} />
+            <div>
+              <p className="text-3xl font-display font-bold text-gray-900">5000+</p>
+              <p className="text-sm text-gray-500 font-medium">Happy Customers</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4 px-8 w-full md:w-auto justify-center">
+            <Star className="w-12 h-12 text-[#d4af37]" strokeWidth={1} />
+            <div>
+              <p className="text-3xl font-display font-bold text-gray-900">50+</p>
+              <p className="text-sm text-gray-500 font-medium">Expert Professionals</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4 px-8 w-full md:w-auto justify-center">
+            <span className="w-12 h-12 flex items-center justify-center border-2 border-[#d4af37] rounded-full text-[#d4af37] text-xl">🎖</span>
+            <div>
+              <p className="text-3xl font-display font-bold text-gray-900">100%</p>
+              <p className="text-sm text-gray-500 font-medium">Quality Service</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4 px-8 w-full md:w-auto justify-center">
+            <span className="w-12 h-12 flex items-center justify-center border-2 border-[#d4af37] rounded-full text-[#d4af37] text-xl">☺</span>
+            <div>
+              <p className="text-3xl font-display font-bold text-gray-900">4.9/5</p>
+              <p className="text-sm text-gray-500 font-medium">Customer Rating</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Featured Collections */}
+      <div className="bg-[#faf7f2] py-20 px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <div className="h-[1px] w-12 bg-[#d4af37]"></div>
+              <span className="text-[#d4af37] uppercase tracking-[0.2em] text-xs font-bold">Our Featured Collections</span>
+              <div className="h-[1px] w-12 bg-[#d4af37]"></div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-10">
+            {[
+              { title: "Nauvari Sarees", img: "https://images.unsplash.com/photo-1583391733958-d25e07fac044?w=400&fit=crop" },
+              { title: "Designer Blouses", img: "https://images.unsplash.com/photo-1610030469983-98e550d615ef?w=400&fit=crop" },
+              { title: "Custom Dresses", img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400&fit=crop" },
+              { title: "Aari Work", img: "https://plus.unsplash.com/premium_photo-1682089872205-dbbb4af4bf52?w=400&fit=crop" },
+              { title: "Bridal Makeup", img: "https://images.unsplash.com/photo-1516975080661-460d3fcb6215?w=400&fit=crop" },
+              { title: "Hair Styling", img: "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=400&fit=crop" }
+            ].map((col, i) => (
+              <div key={i} className="relative aspect-[3/4] rounded-xl overflow-hidden group cursor-pointer">
+                <img src={col.img} alt={col.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-4">
+                  <span className="text-white font-bold text-sm text-center w-full drop-shadow-md">{col.title}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <Link to="/gallery" className="inline-flex items-center gap-2 bg-[#3d0c34] text-white px-8 py-3 rounded font-bold hover:bg-black transition-colors">
+              <span className="text-lg">❖</span> View All Gallery <span className="text-lg">❖</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Testimonials */}
+      <div className="bg-[#2a0e24] py-20 px-8 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: "radial-gradient(#d4af37 1px, transparent 1px)", backgroundSize: "40px 40px" }}></div>
+        
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="text-center mb-16">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <div className="h-[1px] w-12 bg-[#d4af37]"></div>
+              <span className="text-[#d4af37] uppercase tracking-[0.2em] text-xs font-bold">What Our Clients Say</span>
+              <div className="h-[1px] w-12 bg-[#d4af37]"></div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { text: "Kalashri made my bridal look absolutely perfect! The makeup, hairstyle and outfit everything was beyond my expectations.", name: "Priyanka S." },
+              { text: "The stitching quality is amazing. They understand exactly what we want. Highly recommended!", name: "Snehal M." },
+              { text: "Very professional service and staff. I always love their work and the way they treat customers.", name: "Anjali K." }
+            ].map((review, i) => (
+              <div key={i} className="bg-[#381631] border border-white/10 rounded-2xl p-8 relative">
+                <span className="text-5xl text-[#d4af37] opacity-20 font-display absolute top-4 left-6">"</span>
+                <p className="text-white/80 text-sm leading-relaxed relative z-10 mb-8 min-h-[80px]">
+                  {review.text}
+                </p>
+                <div className="flex items-center justify-between border-t border-white/10 pt-4 mt-auto">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-gray-500 overflow-hidden">
+                      <img src={`https://i.pravatar.cc/100?img=${i+10}`} alt={review.name} />
+                    </div>
+                    <span className="text-white font-medium text-sm">{review.name}</span>
+                  </div>
+                  <div className="flex gap-1">
+                    {[1,2,3,4,5].map(star => <Star key={star} className="w-3.5 h-3.5 fill-[#d4af37] text-[#d4af37]" />)}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex justify-center gap-2 mt-10">
+            <div className="w-3 h-3 rounded-full bg-[#d4af37]"></div>
+            <div className="w-3 h-3 rounded-full bg-white/20"></div>
+            <div className="w-3 h-3 rounded-full bg-white/20"></div>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer Banner */}
+      <div className="bg-[#111] text-white py-12 px-8 border-t border-white/10">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
+          
+          <div className="flex items-center gap-6 flex-1 bg-white/5 p-6 rounded-2xl border border-white/10">
+            <div className="text-5xl">🎁</div>
+            <div>
+              <h3 className="text-xl font-display font-bold text-[#d4af37] mb-1">Special Offers Just For You!</h3>
+              <p className="text-sm text-white/60 mb-4 max-w-sm">Grab the best deals on fashion & beauty services. Limited time only!</p>
+              <Link to="/offers" className="bg-[#f3e5ab] text-black px-6 py-2 rounded font-bold text-sm hover:bg-white inline-block">View Offers →</Link>
+            </div>
+          </div>
+
+          <div className="flex-1 text-center">
+            <h2 className="text-3xl font-display font-bold mb-4">Ready to Experience <span className="text-[#d4af37]">the Best?</span></h2>
+            <p className="text-white/60 text-sm mb-6 max-w-sm mx-auto">Book your appointment now and let us bring out the most beautiful you!</p>
+            <Link to="/book" className="bg-[#d4af37] text-black px-8 py-3 rounded font-bold hover:bg-[#ebd576] transition-colors inline-block">
+              Book Appointment Now
+            </Link>
+          </div>
+
+          <div className="flex-1 space-y-4 text-sm text-white/70 bg-white/5 p-6 rounded-2xl border border-white/10">
+            <div className="flex gap-3">
+              <MapPin className="w-5 h-5 text-[#d4af37] shrink-0" />
+              <p>123, Kalashri Plaza, Main Road,<br/>Your City, Maharashtra - 411001</p>
+            </div>
+            <div className="flex gap-3">
+              <Phone className="w-5 h-5 text-[#d4af37] shrink-0" />
+              <p>+91 98765 43210</p>
+            </div>
+            <div className="flex gap-3">
+              <MessageCircle className="w-5 h-5 text-[#d4af37] shrink-0" />
+              <p>info@kalashristudio.com</p>
+            </div>
+            <div className="flex gap-3">
+              <CalendarIcon className="w-5 h-5 text-[#d4af37] shrink-0" />
+              <p>Mon - Sun: 9:00 AM - 8:00 PM</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
     </div>
   );
 }

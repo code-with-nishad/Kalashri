@@ -50,8 +50,10 @@ const registerUser = async (userData) => {
     return user;
 };
 
-const loginUser = async (email, password) => {
-    const user = await User.findOne({ email }).select("+password");
+const loginUser = async (identifier, password) => {
+    const user = await User.findOne({
+        $or: [{ email: identifier }, { phone: identifier }]
+    }).select("+password");
 
     if (!user) {
         throw new AppError("Invalid Credentials", 401);

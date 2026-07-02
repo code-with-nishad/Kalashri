@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { TrendingUp, Users, Calendar, DollarSign, Package, Gift, Activity, Star, Scissors, ShoppingBag, Send, Tag, Image, BarChart2, Plus, Phone } from "lucide-react";
+import { TrendingUp, Users, Calendar, DollarSign, Package, Gift, Activity, Star, Scissors, ShoppingBag, Send, Tag, Image, BarChart2, Plus, Phone, ShieldAlert } from "lucide-react";
 import { adminService, activityService, appointmentService } from "../../services";
 import { QUERY_KEYS } from "../../constants/queryKeys";
 import { formatCurrency, timeAgo } from "../../utils";
@@ -23,16 +23,14 @@ export default function AdminDashboard() {
 
   // Quick actions array mapped to real routes
   const quickActions = [
-    { icon: Calendar, label: "New Appointment", color: "text-rose-500", bg: "bg-rose-50", to: "/admin/appointments" },
-    { icon: Users, label: "Add Customer", color: "text-rose-500", bg: "bg-rose-50", to: "/admin/customers" },
-    { icon: Scissors, label: "Add Service", color: "text-rose-500", bg: "bg-rose-50", to: "/admin/services" },
-    { icon: Package, label: "Add Product", color: "text-rose-500", bg: "bg-rose-50", to: "/admin/inventory" },
-    { icon: ShoppingBag, label: "Orders", color: "text-rose-500", bg: "bg-rose-50", to: "/admin/orders" },
-    { icon: Gift, label: "Rewards", color: "text-rose-500", bg: "bg-rose-50", to: "/admin/rewards" },
-    { icon: Send, label: "Send Notification", color: "text-rose-500", bg: "bg-rose-50", onClick: () => setIsBroadcastModalOpen(true) },
-    { icon: Tag, label: "Offers", color: "text-rose-500", bg: "bg-rose-50", to: "/admin/cms" },
-    { icon: Image, label: "Gallery", color: "text-rose-500", bg: "bg-rose-50", to: "/admin/cms" },
-    { icon: BarChart2, label: "Reports", color: "text-rose-500", bg: "bg-rose-50", to: "/admin/analytics" },
+    { icon: Calendar, label: "New Appointment", color: "text-pink-500", bg: "bg-pink-50", to: "/admin/appointments" },
+    { icon: Package, label: "Fashion Orders", color: "text-amber-500", bg: "bg-amber-50", to: "/admin/fashion-orders" },
+    { icon: ShieldAlert, label: "Insurance Leads", color: "text-blue-500", bg: "bg-blue-50", to: "/admin/insurance-leads" },
+    { icon: Scissors, label: "Measurements", color: "text-purple-500", bg: "bg-purple-50", to: "/admin/measurements" },
+    { icon: Users, label: "Add Customer", color: "text-indigo-500", bg: "bg-indigo-50", to: "/admin/customers" },
+    { icon: ShoppingBag, label: "Beauty Orders", color: "text-pink-500", bg: "bg-pink-50", to: "/admin/orders" },
+    { icon: Send, label: "Notification", color: "text-gray-700", bg: "bg-gray-100", onClick: () => setIsBroadcastModalOpen(true) },
+    { icon: BarChart2, label: "Reports", color: "text-emerald-500", bg: "bg-emerald-50", to: "/admin/analytics" },
   ];
 
   if (isLoading) {
@@ -49,7 +47,7 @@ export default function AdminDashboard() {
              Good Morning, {user?.firstName} 👋
            </h2>
            <p className="text-[10px] text-gray-600 mt-1 max-w-[140px]">
-             Here's what's happening with your studio today.
+             Here's what's happening across your businesses today.
            </p>
          </div>
          {/* Decorative Image */}
@@ -82,7 +80,7 @@ export default function AdminDashboard() {
             <div className="w-8 h-8 rounded-full bg-orange-50 flex items-center justify-center text-orange-500 mb-2">
                <Calendar className="w-4 h-4" />
             </div>
-            <p className="text-[10px] font-bold text-gray-500">Appointments</p>
+            <p className="text-[10px] font-bold text-gray-500">Beauty Appointments</p>
             <h3 className="text-lg font-black text-gray-900 leading-tight my-0.5">{stats?.totalAppointments || 0}</h3>
             <p className="text-[9px] font-bold text-emerald-500">↗ 8.2% <span className="text-gray-400 font-medium">vs yesterday</span></p>
          </div>

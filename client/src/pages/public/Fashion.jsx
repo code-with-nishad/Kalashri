@@ -1,0 +1,51 @@
+import React from "react";
+import MobileHeader from "../../components/layout/MobileHeader";
+import { Link } from "react-router-dom";
+import { Scissors, Shirt, Sparkles, UserCheck } from "lucide-react";
+
+const services = [
+  { name: "Nauvari Saree Stitching", icon: "🥻", to: "/fashion/nauvari" },
+  { name: "Blouse Stitching", icon: "👚", to: "/fashion/blouse" },
+  { name: "Dresses", icon: "👗", to: "/fashion/dresses" },
+  { name: "Aari Work", icon: "✨", to: "/fashion/aari" },
+  { name: "Mens Wear", icon: "👔", to: "/fashion/mens" },
+  { name: "Fabric & More", icon: "🧵", to: "/fashion/fabric" },
+];
+
+export default function FashionHome() {
+  return (
+    <div className="min-h-screen bg-[var(--color-surface)] pb-20">
+      <MobileHeader title="Fashion" showBack showSearch />
+
+      {/* Hero */}
+      <div className="relative">
+        <img 
+          src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&auto=format&fit=crop" 
+          alt="Fashion Hero" 
+          className="w-full h-64 object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-primary-dark)]/90 to-transparent flex flex-col justify-center px-6">
+          <h2 className="text-3xl font-display font-bold text-white mb-2 leading-tight">
+            Customized<br/>Just For You
+          </h2>
+          <p className="text-[var(--color-gold)] text-xs uppercase tracking-widest font-medium">
+            Premium Stitching<br/>Perfect Fit
+          </p>
+        </div>
+      </div>
+
+      {/* Services */}
+      <div className="px-6 py-8">
+        <h3 className="text-lg font-bold text-[var(--color-primary-dark)] font-display mb-4">Our Services</h3>
+        <div className="grid grid-cols-2 gap-4">
+          {services.map((svc, i) => (
+            <Link key={i} to={svc.to} className="bg-white border border-[var(--color-border)] rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm hover:shadow-md transition-shadow">
+              <span className="text-3xl mb-3">{svc.icon}</span>
+              <span className="text-xs font-semibold text-gray-800">{svc.name}</span>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}

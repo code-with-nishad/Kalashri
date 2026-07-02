@@ -7,6 +7,11 @@ const appointmentSchema = new mongoose.Schema(
             ref: "User",
             required: true,
         },
+        appointmentCategory: {
+            type: String,
+            enum: ["Beauty", "Fashion", "Insurance"],
+            default: "Beauty",
+        },
         services: [
             {
                 service: {

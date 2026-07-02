@@ -182,6 +182,13 @@ export default function Appointments() {
                             {a.customer?.firstName} {a.customer?.lastName}
                           </span>
                         </div>
+                        <div className="flex items-center gap-1.5 pt-1">
+                          {a.appointmentCategory === "Fashion" ? (
+                            <span className="text-[9px] bg-purple-500/10 text-purple-400 px-2 py-0.5 rounded font-bold uppercase tracking-wider border border-purple-500/20">Fashion</span>
+                          ) : (
+                            <span className="text-[9px] bg-pink-500/10 text-pink-400 px-2 py-0.5 rounded font-bold uppercase tracking-wider border border-pink-500/20">Beauty</span>
+                          )}
+                        </div>
                         <p className="text-xs text-[var(--color-text-muted)] truncate">
                           {a.services?.map((s) => (s.isCustom ? `${s.serviceName} (Custom)` : s.serviceName)).join(", ")}
                         </p>
@@ -257,9 +264,16 @@ export default function Appointments() {
                           {getInitials(a.customer?.firstName, a.customer?.lastName)}
                         </div>
                         <div>
-                          <p className="font-medium text-[var(--color-text-primary)]">
-                            {a.customer?.firstName} {a.customer?.lastName}
-                          </p>
+                          <div className="flex items-center gap-2">
+                            <p className="font-medium text-[var(--color-text-primary)]">
+                              {a.customer?.firstName} {a.customer?.lastName}
+                            </p>
+                            {a.appointmentCategory === "Fashion" ? (
+                              <span className="text-[9px] bg-purple-500/10 text-purple-400 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider border border-purple-500/20">Fashion</span>
+                            ) : (
+                              <span className="text-[9px] bg-pink-500/10 text-pink-400 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider border border-pink-500/20">Beauty</span>
+                            )}
+                          </div>
                           <p className="text-xs text-[var(--color-text-muted)]">{a.customer?.phone}</p>
                         </div>
                       </div>

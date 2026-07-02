@@ -1,436 +1,280 @@
-import { useState, useEffect } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { CheckCircle, Sparkles, Clock, Check, ChevronRight, Calendar as CalIcon, CreditCard, Upload, Plus, X } from "lucide-react";
-import { serviceService, appointmentService, uploadService } from "../../services";
-import { QUERY_KEYS } from "../../constants/queryKeys";
-import { isPriceSet, glowPointsFromAmount } from "../../utils";
+import React, { useState, useMemo } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import MobileHeader from "../../components/layout/MobileHeader";
+import { Check, ChevronDown, Calendar as CalendarIcon, Clock, Sparkles, Scissors } from "lucide-react";
+import { serviceService, appointmentService } from "../../services";
+import { format, addDays } from "date-fns";
 import { toast } from "sonner";
-
-const STEPS = ["Select Services", "Schedule & Notes", "Payment", "Confirm"];
-const TIME_SLOTS = ["09:00 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "01:00 PM", "02:00 PM", "02:30 PM", "03:00 PM", "04:00 PM", "05:00 PM", "05:30 PM", "06:00 PM"];
+import { useAuthStore } from "../../store/authStore";
 
 export default function BookAppointment() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const serviceIdParam = searchParams.get("service");
+  const user = useAuthStore(s => s.user);
   
-  const [step, setStep] = useState(0);
-  const [selectedServices, setSelectedServices] = useState([]);
-  const [customServices, setCustomServices] = useState([]);
-  const [customServiceInput, setCustomServiceInput] = useState("");
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
+  const [step, setStep] = useState(1);
+  const [category, setCategory] = useState("Beauty");
+  const [selectedServiceId, setSelectedServiceId] = useState("");
+  const [date, setDate] = useState(format(addDays(new Date(), 1), 'yyyy-MM-dd'));
+  const [time, setTime] = useState("10:00 AM");
   const [notes, setNotes] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("Cash");
-  const [transactionId, setTransactionId] = useState("");
-  const [paymentScreenshot, setPaymentScreenshot] = useState("");
-  const [isUploading, setIsUploading] = useState(false);
-  const [booked, setBooked] = useState(null);
 
-  const queryClient = useQueryClient();
+  const steps = ["Business", "Service", "Date & Time", "Confirm"];
 
-  const playNotificationSound = () => {
-    const audio = new Audio("https://cdn.pixabay.com/download/audio/2021/08/04/audio_0625c1539c.mp3?filename=success-1-6297.mp3");
-    audio.play().catch(e => console.log("Audio play failed:", e));
-  };
-
-  const { data } = useQuery({ queryKey: QUERY_KEYS.SERVICES, queryFn: serviceService.getAll });
-  const services = data?.data || [];
-
-  useEffect(() => {
-    if (services.length > 0 && selectedServices.length === 0) {
-      const serviceParam = searchParams.get("service") || searchParams.get("services");
-      if (serviceParam) {
-        const ids = serviceParam.split(",");
-        const matched = services.filter(s => ids.includes(s._id));
-        if (matched.length > 0) {
-          setSelectedServices(matched);
-        }
-      }
-    }
-  }, [services, searchParams]);
-
-  const { mutate: book, isPending } = useMutation({
-    mutationFn: appointmentService.book,
-    onSuccess: (res) => {
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MY_APPOINTMENTS });
-      setBooked(res.data);
-      setStep(STEPS.length);
-      toast.success("Appointment requested! ✨");
-      playNotificationSound();
-    },
-    onError: (err) => toast.error(err.message),
+  const { data: servicesData, isLoading } = useQuery({
+    queryKey: ["SERVICES"],
+    queryFn: serviceService.getAll
   });
 
-  const toggleService = (svc) => {
-    setSelectedServices(prev =>
-      prev.find(s => s._id === svc._id)
-        ? prev.filter(s => s._id !== svc._id)
-        : [...prev, svc]
-    );
-  };
+  const allServices = servicesData?.data || [];
+  
+  const filteredServices = useMemo(() => {
+    if(category === "Beauty") {
+      return allServices.filter(s => s.category !== "Fashion" && s.category !== "Stitching");
+    } else {
+      return allServices.filter(s => s.category === "Fashion" || s.category === "Stitching");
+    }
+  }, [allServices, category]);
 
-  const addCustomService = () => {
-    const trimmed = customServiceInput.trim();
-    if (trimmed.length < 2) {
-      toast.error("Please describe your service request (at least 2 characters)");
+  const selectedService = allServices.find(s => s._id === selectedServiceId);
+
+  const createAppointment = useMutation({
+    mutationFn: appointmentService.book,
+    onSuccess: () => {
+      toast.success("Appointment booked successfully!");
+      navigate("/appointments");
+    },
+    onError: (err) => {
+      toast.error(err.response?.data?.message || "Failed to book appointment");
+    }
+  });
+
+  const handleNext = () => {
+    if (step === 2 && !selectedServiceId) {
+      toast.error("Please select a service");
       return;
     }
-    if (customServices.some((s) => s.toLowerCase() === trimmed.toLowerCase())) {
-      toast.error("This custom service is already added");
-      return;
-    }
-    setCustomServices((prev) => [...prev, trimmed]);
-    setCustomServiceInput("");
-  };
-
-  const removeCustomService = (index) => {
-    setCustomServices((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const totalSelectedCount = selectedServices.length + customServices.length;
-
-  const totalDuration = selectedServices.reduce((sum, s) => sum + s.duration, 0);
-
-  const canNext = [
-    totalSelectedCount > 0,
-    !!date && !!time,
-    paymentMethod === "Cash" || (paymentMethod === "Manual UPI" && transactionId.trim().length > 3),
-    true,
-  ];
-
-  const handleImageUpload = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setIsUploading(true);
-    try {
-      const res = await uploadService.uploadImage(file);
-      setPaymentScreenshot(res.data.url);
-      toast.success("Screenshot uploaded");
-    } catch (err) {
-      toast.error("Failed to upload screenshot");
-    } finally {
-      setIsUploading(false);
+    if (step < 4) {
+      setStep(step + 1);
+    } else {
+      handleConfirm();
     }
   };
 
-  const handleBook = () => {
-    book({
-      serviceIds: selectedServices.map(s => s._id),
-      customServices,
+  const handleConfirm = () => {
+    if(!selectedService) return;
+    
+    const payload = {
+      appointmentCategory: category,
+      services: [{
+        service: selectedService._id,
+        serviceName: selectedService.name,
+        price: selectedService.price || 0,
+        duration: selectedService.duration || 30,
+        isCustom: false
+      }],
       appointmentDate: date,
       appointmentTime: time,
-      notes,
-      paymentMethod,
-      transactionId: paymentMethod === "Manual UPI" ? transactionId : undefined,
-      paymentScreenshot: paymentMethod === "Manual UPI" ? paymentScreenshot : undefined,
-    });
+      totalAmount: selectedService.price || 0,
+      totalDuration: selectedService.duration || 30,
+      notes: notes,
+      status: "Pending"
+    };
+
+    createAppointment.mutate(payload);
   };
 
-  if (step === STEPS.length && booked) {
-    return (
-      <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="max-w-md mx-auto text-center py-12 space-y-6">
-        <div className="w-20 h-20 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto">
-          <CheckCircle className="w-10 h-10 text-emerald-400" />
-        </div>
-        <div>
-          <h2 className="font-display text-3xl font-bold text-[var(--color-text-primary)]">Booking Requested!</h2>
-          <p className="text-[var(--color-text-muted)] mt-2">We'll confirm your appointment shortly</p>
-        </div>
-        <div className="rounded-2xl bg-[var(--color-surface-card)] border border-[var(--color-border)] p-5 text-left space-y-3">
-          <p className="text-sm text-[var(--color-text-muted)]">Services: <span className="text-[var(--color-text-primary)]">{booked.services?.map(s => s.serviceName).join(", ")}</span></p>
-          <p className="text-sm text-[var(--color-text-muted)]">Date: <span className="text-[var(--color-text-primary)]">{booked.appointmentDate}</span></p>
-          <p className="text-sm text-[var(--color-text-muted)]">Time: <span className="text-[var(--color-text-primary)]">{booked.appointmentTime}</span></p>
-          <p className="text-sm text-[var(--color-text-muted)]">Status: <span className="text-yellow-400 font-medium">Pending confirmation</span></p>
-          <p className="text-xs text-[var(--color-text-muted)]">Pricing will be confirmed by the salon after your request is accepted.</p>
-          {isPriceSet(booked.totalAmount) && (
-            <div className="flex items-center gap-1.5 text-yellow-400 text-sm font-medium">
-              <Sparkles className="w-4 h-4" /> You'll earn {glowPointsFromAmount(booked.totalAmount)} Glow Points on completion
-            </div>
-          )}
-        </div>
-        <button onClick={() => navigate("/appointments")} className="w-full py-3.5 -white font-semibold rounded-xl transition-all">
-          View My Appointments
-        </button>
-      </motion.div>
-    );
-  }
+  const availableTimes = [
+    "10:00 AM", "11:00 AM", "12:00 PM", "01:00 PM", "02:00 PM", 
+    "03:00 PM", "04:00 PM", "05:00 PM", "06:00 PM", "07:00 PM"
+  ];
 
   return (
-    <div className="max-w-2xl mx-auto space-y-8">
-      <div>
-        <h1 className="font-display text-2xl font-bold text-[var(--color-text-primary)]">Book Appointment</h1>
-        <p className="text-[var(--color-text-muted)] text-sm mt-1">Fill in the details below to request your appointment</p>
+    <div className="min-h-screen bg-[var(--color-surface)] flex flex-col pb-24">
+      <MobileHeader title="Book Appointment" showBack className="bg-[var(--color-primary-dark)]" />
+      
+      {/* Stepper */}
+      <div className="bg-[var(--color-primary-dark)] px-6 pt-4 pb-12 relative -mt-1">
+        <div className="flex justify-between relative z-10">
+          {steps.map((s, i) => (
+            <div key={i} className="flex flex-col items-center gap-2">
+              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] ${i + 1 < step ? "bg-[var(--color-accent)] text-white" : i + 1 === step ? "bg-white text-[var(--color-primary-dark)]" : "bg-white/20 text-white"}`}>
+                {i + 1 < step ? <Check className="w-3 h-3" /> : i + 1}
+              </div>
+              <span className={`text-[10px] ${i + 1 <= step ? "text-white font-medium" : "text-white/50"}`}>{s}</span>
+            </div>
+          ))}
+          {/* Connecting Line */}
+          <div className="absolute top-3 left-[10%] right-[10%] h-0.5 bg-white/20 -z-10" />
+          <div 
+            className="absolute top-3 left-[10%] h-0.5 bg-[var(--color-accent)] -z-10 transition-all duration-300"
+            style={{ width: `${((step - 1) / (steps.length - 1)) * 80}%` }}
+          />
+        </div>
       </div>
 
-      {/* Step Indicators */}
-      <div className="flex items-center gap-1">
-        {STEPS.map((s, i) => (
-          <div key={s} className="flex items-center gap-1 flex-1">
-            <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 transition-all ${i < step ? "bg-emerald-500 text-[var(--color-text-primary)]" : i === step ? "-white" : "bg-[var(--color-surface-3)] text-[var(--color-text-muted)]"}`}>
-              {i < step ? <Check className="w-3.5 h-3.5" /> : i + 1}
+      {/* Form Area */}
+      <div className="bg-white rounded-t-3xl -mt-6 p-6 flex-1 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] relative z-20">
+        
+        {step === 1 && (
+          <div className="space-y-4 animate-fade-in">
+            <h2 className="text-xl font-bold text-gray-900 mb-6">What are you looking for today?</h2>
+            
+            <div 
+              onClick={() => { setCategory("Beauty"); setStep(2); setSelectedServiceId(""); }}
+              className={`p-6 rounded-2xl border-2 cursor-pointer transition-all ${category === "Beauty" ? "border-[var(--color-primary)] bg-[var(--color-primary)]/5" : "border-gray-100 hover:border-gray-200"}`}
+            >
+              <div className="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center mb-4">
+                <Sparkles className="w-6 h-6 text-pink-500" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900">Beauty Salon</h3>
+              <p className="text-sm text-gray-500 mt-1">Bridal makeup, hair styling, facials, and beauty treatments.</p>
             </div>
-            {i < STEPS.length - 1 && <div className={`h-0.5 flex-1 transition-all ${i < step ? "bg-emerald-500" : "bg-[var(--color-border)]"}`} />}
+
+            <div 
+              onClick={() => { setCategory("Fashion"); setStep(2); setSelectedServiceId(""); }}
+              className={`p-6 rounded-2xl border-2 cursor-pointer transition-all ${category === "Fashion" ? "border-[var(--color-primary)] bg-[var(--color-primary)]/5" : "border-gray-100 hover:border-gray-200"}`}
+            >
+              <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
+                <Scissors className="w-6 h-6 text-purple-500" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900">Fashion Studio</h3>
+              <p className="text-sm text-gray-500 mt-1">Stitching consultations, Nauvari sarees, and custom dress fittings.</p>
+            </div>
           </div>
-        ))}
-      </div>
-
-      <AnimatePresence mode="wait">
-        {/* Step 0: Select Services */}
-        {step === 0 && (
-          <motion.div key="step0" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-            <h2 className="font-semibold text-[var(--color-text-primary)] mb-4">Select Services</h2>
-
-            <div className="mb-5 p-4 rounded-xl border border-dashed border-[var(--color-rose-500)]/40 bg-[var(--color-rose-500)]/5 space-y-3">
-              <div>
-                <p className="text-sm font-medium text-[var(--color-text-primary)]">Can't find your service?</p>
-                <p className="text-xs text-[var(--color-text-muted)] mt-0.5">Request a custom service and we'll confirm availability & pricing.</p>
-              </div>
-              <div className="flex gap-2">
-                <input
-                  value={customServiceInput}
-                  onChange={(e) => setCustomServiceInput(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addCustomService())}
-                  placeholder="e.g. Balayage highlights, keratin treatment..."
-                  className="flex-1 px-3 py-2.5 rounded-xl bg-[var(--color-surface-card)] border border-[var(--color-border)] text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-rose-500)]"
-                />
-                <button
-                  type="button"
-                  onClick={addCustomService}
-                  className="px-4 py-2.5 bg-[var(--color-rose-500)] hover:bg-[var(--color-rose-600)] text-white text-sm font-medium rounded-xl transition-colors flex items-center gap-1.5"
-                >
-                  <Plus className="w-4 h-4" /> Add
-                </button>
-              </div>
-              {customServices.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {customServices.map((request, index) => (
-                    <span
-                      key={`${request}-${index}`}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--color-surface-card)] border border-[var(--color-rose-500)]/30 text-xs text-[var(--color-text-primary)]"
-                    >
-                      {request}
-                      <button type="button" onClick={() => removeCustomService(index)} className="text-[var(--color-text-muted)] hover:text-red-500">
-                        <X className="w-3 h-3" />
-                      </button>
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {services.map(svc => {
-                const sel = selectedServices.find(s => s._id === svc._id);
-                return (
-                  <motion.button 
-                    whileHover={{ scale: 1.02, y: -2 }}
-                    key={svc._id} 
-                    onClick={() => toggleService(svc)}
-                    className={`flex items-start gap-3 p-4 rounded-xl border text-left transition-all ${sel ? "border-[var(--color-rose-500)]/60 bg-[var(--color-rose-500)]/5" : "border-[var(--color-border)] bg-[var(--color-surface-card)] hover:border-[var(--color-rose-500)]/30"}`}
-                  >
-                    <div className={`w-5 h-5 rounded-md border flex-shrink-0 mt-0.5 flex items-center justify-center transition-all ${sel ? "bg-[var(--color-rose-600)] border-transparent" : "border-[var(--color-border)]"}`}>
-                      {sel && <Check className="w-3 h-3 text-white" />}
-                    </div>
-                    <div>
-                      <p className="font-medium text-[var(--color-text-primary)] text-sm">{svc.name}</p>
-                      <div className="flex items-center gap-3 mt-1">
-                        <span className="text-xs text-[var(--color-text-muted)] flex items-center gap-0.5"><Clock className="w-3 h-3" />{svc.duration}min</span>
-                      </div>
-                    </div>
-                  </motion.button>
-                );
-              })}
-            </div>
-            {(selectedServices.length > 0 || customServices.length > 0) && (
-              <div className="mt-4 p-4 rounded-xl bg-[var(--color-surface-card)] border border-[var(--color-border)]">
-                <p className="text-sm text-[var(--color-text-muted)]">
-                  {totalSelectedCount} service{totalSelectedCount > 1 ? "s" : ""} · {totalDuration} min
-                  {customServices.length > 0 && " (+ custom requests)"}
-                </p>
-                <p className="text-xs text-[var(--color-text-muted)] mt-2">
-                  Final pricing will be confirmed by the salon after your request is accepted.
-                </p>
-              </div>
-            )}
-          </motion.div>
         )}
 
-        {/* Step 1: Schedule & Notes (Combined) */}
-        {step === 1 && (
-          <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8">
+        {step === 2 && (
+          <div className="space-y-6 animate-fade-in">
+            <h2 className="text-xl font-bold text-gray-900 mb-2">Select a Service</h2>
+            <p className="text-sm text-gray-500 mb-6">Showing {category} services</p>
+            
+            {isLoading ? (
+              <div className="text-center py-8 text-gray-500">Loading services...</div>
+            ) : filteredServices.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-gray-500 mb-4">No specific {category.toLowerCase()} services found in the catalog.</p>
+                <div 
+                  onClick={() => setSelectedServiceId("custom")}
+                  className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${selectedServiceId === "custom" ? "border-[var(--color-primary)] bg-[var(--color-primary)]/5" : "border-gray-100"}`}
+                >
+                  <h3 className="font-bold text-gray-900">General Consultation</h3>
+                  <p className="text-sm text-gray-500">Book an open appointment to discuss your needs.</p>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {filteredServices.map(svc => (
+                  <div 
+                    key={svc._id}
+                    onClick={() => setSelectedServiceId(svc._id)}
+                    className={`p-4 rounded-xl border-2 cursor-pointer transition-all flex items-center justify-between ${selectedServiceId === svc._id ? "border-[var(--color-primary)] bg-[var(--color-primary)]/5" : "border-gray-100 hover:border-gray-200"}`}
+                  >
+                    <div>
+                      <h3 className="font-bold text-gray-900">{svc.name}</h3>
+                      <p className="text-sm text-gray-500">{svc.duration} mins</p>
+                    </div>
+                    <div className="text-[var(--color-primary)] font-bold">
+                      ₹{svc.price}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {step === 3 && (
+          <div className="space-y-6 animate-fade-in">
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Choose Date & Time</h2>
+            
             <div>
-              <h2 className="font-semibold text-[var(--color-text-primary)] mb-4">Choose Date</h2>
-              <input
-                type="date"
-                value={date}
-                min={new Date().toISOString().split("T")[0]}
-                onChange={e => setDate(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface-3)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-rose-500)] focus:ring-1 focus:ring-[var(--color-rose-500)]/30 transition-all"
-              />
+              <label className="block text-xs text-gray-500 font-medium mb-2 uppercase tracking-wider">Date</label>
+              <div className="relative">
+                <input 
+                  type="date" 
+                  value={date} 
+                  onChange={(e) => setDate(e.target.value)}
+                  min={format(new Date(), 'yyyy-MM-dd')}
+                  className="w-full border-2 border-gray-100 rounded-xl px-4 py-3 text-gray-900 font-semibold focus:outline-none focus:border-[var(--color-primary)] bg-transparent"
+                />
+              </div>
             </div>
 
             <div>
-              <h2 className="font-semibold text-[var(--color-text-primary)] mb-4">Choose Time</h2>
-              <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                {TIME_SLOTS.map(slot => (
-                  <button key={slot} onClick={() => setTime(slot)}
-                    className={`py-2.5 rounded-xl text-sm font-medium transition-all border ${time === slot ? "-white" : "border-[var(--color-border)] text-[var(--color-text-secondary)] hover:border-[var(--color-rose-500)]/40"}`}
+              <label className="block text-xs text-gray-500 font-medium mb-3 uppercase tracking-wider">Available Slots</label>
+              <div className="grid grid-cols-3 gap-3">
+                {availableTimes.map(t => (
+                  <button
+                    key={t}
+                    onClick={() => setTime(t)}
+                    className={`py-2 px-1 rounded-xl text-sm font-semibold border-2 transition-colors ${time === t ? "border-[var(--color-primary)] bg-[var(--color-primary)] text-white" : "border-gray-100 text-gray-600 hover:border-gray-200"}`}
                   >
-                    {slot}
+                    {t}
                   </button>
                 ))}
               </div>
             </div>
 
             <div>
-              <h2 className="font-semibold text-[var(--color-text-primary)] mb-4">Special Instructions <span className="text-[var(--color-text-muted)] font-normal text-sm">(Optional)</span></h2>
-              <textarea
+              <label className="block text-xs text-gray-500 font-medium mb-2 uppercase tracking-wider">Any specific requests?</label>
+              <textarea 
                 value={notes}
-                onChange={e => setNotes(e.target.value)}
-                rows={3}
-                placeholder="Any specific requirements or notes for your appointment..."
-                className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface-3)] border border-[var(--color-border)] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-rose-500)] focus:ring-1 focus:ring-[var(--color-rose-500)]/30 transition-all resize-none"
+                onChange={(e) => setNotes(e.target.value)}
+                placeholder="E.g. I need a trial, or I'm bringing reference photos..."
+                className="w-full border-2 border-gray-100 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-[var(--color-primary)] bg-transparent min-h-[100px] text-sm"
               />
             </div>
-          </motion.div>
+          </div>
         )}
 
-        {/* Step 2: Payment */}
-        {step === 2 && (
-          <motion.div key="step4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-            <h2 className="font-semibold text-[var(--color-text-primary)] mb-4">Choose Payment Method</h2>
-            <div className="grid grid-cols-2 gap-3 mb-6">
-              {["Cash", "Manual UPI"].map(method => (
-                <button key={method} onClick={() => setPaymentMethod(method)}
-                  className={`p-4 rounded-xl border text-left transition-all flex flex-col gap-2 ${paymentMethod === method ? "border-[var(--color-rose-500)] bg-[var(--color-rose-500)]/5" : "border-[var(--color-border)] bg-[var(--color-surface-card)] hover:border-[var(--color-rose-500)]/30"}`}
-                >
-                  <CreditCard className={`w-6 h-6 ${paymentMethod === method ? "text-[var(--color-rose-500)]" : "text-[var(--color-text-muted)]"}`} />
-                  <span className="font-medium text-[var(--color-text-primary)] text-sm">{method}</span>
-                </button>
-              ))}
+        {step === 4 && (
+          <div className="space-y-6 animate-fade-in">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+              <Check className="w-8 h-8 text-green-500" />
             </div>
-
-            {paymentMethod === "Manual UPI" && (
-              <div className="space-y-4 rounded-2xl bg-[var(--color-surface-card)] border border-[var(--color-border)] p-5">
-                <div className="text-center space-y-2 mb-4">
-                  <p className="text-sm font-semibold text-[var(--color-text-primary)]">Pay to Gayatri Beauty Studio</p>
-                  <p className="text-xs text-[var(--color-text-muted)]">UPI ID: gayatribeautystudio@upi</p>
-                  <div className="w-48 h-48 mx-auto bg-white p-2 rounded-xl border border-[var(--color-border)]">
-                    {/* Placeholder QR Code - user can replace later */}
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=gayatribeautystudio@upi&pn=Gayatri%20Beauty%20Studio" alt="UPI QR" className="w-full h-full object-contain rounded-lg" />
-                  </div>
-                  <p className="text-sm text-[var(--color-text-muted)] pt-2">Amount will be confirmed by the salon after your booking is accepted.</p>
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1.5">UTR / Transaction ID *</label>
-                  <input
-                    value={transactionId}
-                    onChange={e => setTransactionId(e.target.value)}
-                    placeholder="Enter 12-digit UTR number"
-                    className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface-3)] border border-[var(--color-border)] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-rose-500)] transition-all"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1.5">Payment Screenshot (Optional)</label>
-                  <div className="relative">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      className="hidden"
-                      id="screenshot-upload"
-                      disabled={isUploading}
-                    />
-                    <label
-                      htmlFor="screenshot-upload"
-                      className="w-full px-4 py-3 rounded-xl border border-dashed border-[var(--color-border)] text-[var(--color-text-secondary)] flex items-center justify-center gap-2 cursor-pointer hover:border-[var(--color-rose-500)]/50 transition-colors"
-                    >
-                      {isUploading ? (
-                        <span className="w-4 h-4 border-2 border-[var(--color-rose-500)]/30 border-t-[var(--color-rose-500)] rounded-full animate-spin" />
-                      ) : (
-                        <Upload className="w-4 h-4" />
-                      )}
-                      {paymentScreenshot ? "Screenshot Uploaded" : "Upload Screenshot"}
-                    </label>
-                  </div>
-                </div>
+            <h2 className="text-2xl font-bold text-gray-900 text-center">Ready to Confirm</h2>
+            
+            <div className="bg-gray-50 rounded-2xl p-5 space-y-4">
+              <div className="flex justify-between items-center border-b border-gray-200 pb-4">
+                <span className="text-sm text-gray-500">Business</span>
+                <span className="font-bold text-gray-900">{category}</span>
               </div>
-            )}
-          </motion.div>
-        )}
-
-        {/* Step 3: Confirm */}
-        {step === 3 && (
-          <motion.div key="step4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-            <h2 className="font-semibold text-[var(--color-text-primary)] mb-4">Review & Confirm</h2>
-            <div className="rounded-2xl bg-[var(--color-surface-card)] border border-[var(--color-border)] p-5 space-y-4">
-              <div>
-                <p className="text-xs text-[var(--color-text-muted)] mb-2">Services</p>
-                {selectedServices.map(s => (
-                  <div key={s._id} className="flex justify-between py-1.5 text-sm">
-                    <span className="text-[var(--color-text-primary)]">{s.name}</span>
-                  </div>
-                ))}
-                {customServices.map((request, index) => (
-                  <div key={`custom-${index}`} className="flex justify-between py-1.5 text-sm">
-                    <span className="text-[var(--color-text-primary)]">{request} <span className="text-[var(--color-text-muted)]">(Custom)</span></span>
-                  </div>
-                ))}
+              <div className="flex justify-between items-center border-b border-gray-200 pb-4">
+                <span className="text-sm text-gray-500">Service</span>
+                <span className="font-bold text-gray-900">{selectedService?.name || "General Consultation"}</span>
               </div>
-              <div className="border-t border-[var(--color-border)] pt-3 space-y-2 text-sm">
-                <div className="flex justify-between"><span className="text-[var(--color-text-muted)]">Date</span><span className="text-[var(--color-text-primary)]">{date}</span></div>
-                <div className="flex justify-between"><span className="text-[var(--color-text-muted)]">Time</span><span className="text-[var(--color-text-primary)]">{time}</span></div>
-                <div className="flex justify-between"><span className="text-[var(--color-text-muted)]">Duration</span><span className="text-[var(--color-text-primary)]">{totalDuration} min</span></div>
-                {notes && <div className="flex justify-between"><span className="text-[var(--color-text-muted)]">Notes</span><span className="text-[var(--color-text-primary)] text-right max-w-xs">{notes}</span></div>}
+              <div className="flex justify-between items-center border-b border-gray-200 pb-4">
+                <span className="text-sm text-gray-500">Date</span>
+                <span className="font-bold text-gray-900">{format(new Date(date), 'MMM dd, yyyy')}</span>
               </div>
-              <div className="border-t border-[var(--color-border)] pt-3 text-sm">
-                <p className="text-[var(--color-text-muted)]">Pricing will be confirmed by the salon after acceptance.</p>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-500">Time</span>
+                <span className="font-bold text-[var(--color-primary)]">{time}</span>
               </div>
-              <div className="border-t border-[var(--color-border)] pt-3 text-sm flex justify-between">
-                <span className="text-[var(--color-text-muted)]">Payment Method</span>
-                <span className="text-[var(--color-text-primary)] font-medium">{paymentMethod}</span>
-              </div>
-              {paymentMethod === "Manual UPI" && (
-                <div className="text-sm flex justify-between">
-                  <span className="text-[var(--color-text-muted)]">Transaction ID</span>
-                  <span className="text-[var(--color-text-primary)]">{transactionId}</span>
-                </div>
-              )}
             </div>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
 
-      {/* Navigation */}
-      <div className="flex gap-3">
-        {step > 0 && (
-          <button onClick={() => setStep(s => s - 1)} className="flex-1 py-3 border border-[var(--color-border)] text-[var(--color-text-secondary)] rounded-xl hover:border-[var(--color-rose-500)]/30 hover:text-[var(--color-text-primary)] transition-all">
+      </div>
+
+      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white max-w-md mx-auto z-50 flex gap-3">
+        {step > 1 && (
+          <button 
+            onClick={() => setStep(step - 1)}
+            disabled={createAppointment.isPending}
+            className="w-1/3 py-4 bg-gray-100 text-gray-600 rounded-xl font-bold text-sm hover:bg-gray-200 transition-colors"
+          >
             Back
           </button>
         )}
-        {step < STEPS.length - 1 ? (
-          <button
-            onClick={() => setStep(s => s + 1)}
-            disabled={!canNext[step]}
-            className="flex-1 py-3 -white font-medium rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-          >
-            Continue <ChevronRight className="w-4 h-4" />
-          </button>
-        ) : (
-          <button
-            onClick={handleBook}
-            disabled={isPending}
-            className="flex-1 py-3 -white font-semibold rounded-xl transition-all hover:shadow-[var(--shadow-glow-rose)] disabled:opacity-50 flex items-center justify-center gap-2"
-          >
-            {isPending ? <span className="w-5 h-5 border-2 border-[var(--color-rose-500)]/30 border-t-white rounded-full animate-spin" /> : "Confirm Booking ✨"}
-          </button>
-        )}
+        <button 
+          onClick={handleNext}
+          disabled={createAppointment.isPending}
+          className="flex-1 py-4 bg-[var(--color-accent)] text-white rounded-xl font-bold text-sm hover:bg-[var(--color-accent-light)] transition-colors shadow-lg shadow-[var(--color-accent)]/30 flex items-center justify-center gap-2"
+        >
+          {createAppointment.isPending ? "Processing..." : step === 4 ? "Confirm Booking" : "Next Step"}
+        </button>
       </div>
     </div>
   );

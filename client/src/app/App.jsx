@@ -141,7 +141,7 @@ export default function App() {
   // If server is ready or hasn't timed out yet, render the app silently loading
   // The app won't hang visually if it's less than PING_TIMEOUT
   return (
-    <div className={!serverReady ? "opacity-0" : "opacity-100 transition-opacity duration-700 ease-in-out"}>
+    <div className={`mobile-frame ${!serverReady ? "opacity-0" : "opacity-100 transition-opacity duration-700 ease-in-out"}`}>
       <QueryClientProvider client={queryClient}>
         {serverReady && <AppRouter />}
         <Toaster

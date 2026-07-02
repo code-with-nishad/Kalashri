@@ -10,7 +10,12 @@ const reviewSchema = new mongoose.Schema(
         appointment: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Appointment",
-            required: true,
+            required: false,
+        },
+        fashionOrder: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "FashionOrder",
+            required: false,
         },
         rating: {
             type: Number,
@@ -33,8 +38,9 @@ const reviewSchema = new mongoose.Schema(
     }
 );
 
-// Ensure one review per appointment
-reviewSchema.index({ appointment: 1 }, { unique: true });
+// Ensure one review per appointment or fashion order
+reviewSchema.index({ appointment: 1 }, { unique: true, sparse: true });
+reviewSchema.index({ fashionOrder: 1 }, { unique: true, sparse: true });
 
 const Review = mongoose.model("Review", reviewSchema);
 module.exports = Review;
