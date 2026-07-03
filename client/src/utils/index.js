@@ -6,10 +6,10 @@ export function cn(...inputs) {
 }
 
 export const formatCurrency = (amount) =>
-  `₹${Number(amount || 0).toLocaleString("en-IN")}`;
+  `Rs. ${Number(amount || 0).toLocaleString("en-IN")}`;
 
 export const formatDate = (date) => {
-  if (!date) return "—";
+  if (!date) return "--";
   return new Date(date).toLocaleDateString("en-IN", {
     day: "numeric",
     month: "short",
@@ -17,7 +17,7 @@ export const formatDate = (date) => {
   });
 };
 
-export const formatTime = (time) => time || "—";
+export const formatTime = (time) => time || "--";
 
 export const timeAgo = (date) => {
   const seconds = Math.floor((new Date() - new Date(date)) / 1000);
@@ -31,45 +31,16 @@ export const timeAgo = (date) => {
   return formatDate(date);
 };
 
-export const getMembershipColor = (membership) => {
-  const colors = {
-    Bronze: "#cd7f32",
-    Silver: "#a8a9ad",
-    Gold: "#fbbf24",
-    Platinum: "#e5e4e2",
-  };
-  return colors[membership] || colors.Bronze;
-};
-
-export const getMembershipGradient = (membership) => {
-  const gradients = {
-    Bronze: "from-amber-700 to-amber-900",
-    Silver: "from-slate-400 to-slate-600",
-    Gold: "from-yellow-400 to-yellow-600",
-    Platinum: "from-slate-200 to-slate-400",
-  };
-  return gradients[membership] || gradients.Bronze;
-};
-
 export const getInitials = (firstName, lastName) =>
   `${(firstName || "?")[0]}${(lastName || "")[0] || ""}`.toUpperCase();
 
 export const truncate = (str, n = 80) =>
   str && str.length > n ? `${str.slice(0, n)}...` : str;
 
-export const glowPointsFromAmount = (amount) =>
-  Math.floor((amount || 0) / 100);
-
 export const isPriceSet = (amount) => typeof amount === "number" && amount > 0;
 
 export const formatPriceOrTbd = (amount) =>
   isPriceSet(amount) ? formatCurrency(amount) : "Price on request";
-
-/** Prefer imageUrl (Cloudinary) over legacy image field */
-export const getProductImage = (product) => {
-  if (!product) return null;
-  return product.imageUrl || product.image || product.gallery?.[0] || null;
-};
 
 export const formatDuration = (seconds) => {
   if (!seconds) return "0s";

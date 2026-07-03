@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNotifications } from "../hooks/useNotifications";
 import NotificationCard from "../components/ui/NotificationCard";
 import { Bell, CheckAll, Settings, ArrowLeft } from "lucide-react";
@@ -13,7 +13,6 @@ const Notifications = () => {
         markAllAsRead, 
         permissionStatus, 
         requestPermission,
-        fetchNotifications
     } = useNotifications();
     
     const navigate = useNavigate();
@@ -70,7 +69,7 @@ const Notifications = () => {
                     >
                         <div>
                             <h3 className="text-lg font-semibold text-blue-100">Never miss an update</h3>
-                            <p className="text-sm text-blue-200 mt-1">Get instant alerts for your appointments, rewards, and exclusive offers.</p>
+                            <p className="text-sm text-blue-200 mt-1">Get instant alerts for your appointments, service updates, and exclusive offers.</p>
                         </div>
                         <button 
                             onClick={requestPermission}

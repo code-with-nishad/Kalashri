@@ -49,22 +49,6 @@ const userSchema = new mongoose.Schema(
             default: "customer",
         },
 
-        glowPoints: {
-            type: Number,
-            default: 0,
-        },
-
-        lifetimeGlowPoints: {
-            type: Number,
-            default: 0,
-        },
-
-        membership: {
-            type: String,
-            enum: ["Bronze", "Silver", "Gold", "Diamond"],
-            default: "Bronze",
-        },
-
         avatar: {
             type: String,
             default: "",
@@ -82,26 +66,6 @@ const userSchema = new mongoose.Schema(
         adminNotes: {
             type: String,
             default: "",
-        },
-
-        isHiddenFromLeaderboard: {
-            type: Boolean,
-            default: false,
-        },
-
-        isFeaturedOnLeaderboard: {
-            type: Boolean,
-            default: false,
-        },
-
-        monthlyGlowPoints: {
-            type: Number,
-            default: 0,
-        },
-
-        isCurrentChampion: {
-            type: Boolean,
-            default: false,
         },
 
         isVerified: {
@@ -140,18 +104,6 @@ userSchema.methods.generateToken = function () {
             expiresIn: process.env.JWT_EXPIRE,
         }
     );
-};
-
-userSchema.methods.updateMembership = function () {
-    if (this.lifetimeGlowPoints >= 2000) {
-        this.membership = "Diamond";
-    } else if (this.lifetimeGlowPoints >= 1000) {
-        this.membership = "Gold";
-    } else if (this.lifetimeGlowPoints >= 500) {
-        this.membership = "Silver";
-    } else {
-        this.membership = "Bronze";
-    }
 };
 
 module.exports = mongoose.model("User", userSchema);

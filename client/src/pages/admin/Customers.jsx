@@ -5,14 +5,12 @@ import { Search, Eye, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { adminService } from "../../services";
 import { QUERY_KEYS } from "../../constants/queryKeys";
-import { formatDate, formatCurrency, getMembershipColor, getInitials } from "../../utils";
-import { Badge } from "../../components/ui/Badge";
+import { formatDate, getInitials } from "../../utils";
 import { SkeletonTable } from "../../components/ui/Skeleton";
 
 export default function Customers() {
   const [search, setSearch] = useState("");
-  const [membership, setMembership] = useState("");
-  const { data, isLoading } = useQuery({ queryKey: QUERY_KEYS.CUSTOMERS, queryFn: () => adminService.getCustomers({ search, membership }) });
+  const { data, isLoading } = useQuery({ queryKey: QUERY_KEYS.CUSTOMERS, queryFn: () => adminService.getCustomers({ search }) });
   const customers = data?.data?.customers || [];
 
   return (
@@ -32,12 +30,6 @@ export default function Customers() {
             className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[var(--color-surface-card)] border border-[var(--color-border)] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-rose-500)] transition-all text-sm"
           />
         </div>
-        <select value={membership} onChange={e => setMembership(e.target.value)}
-          className="px-4 py-2.5 rounded-xl bg-[var(--color-surface-card)] border border-[var(--color-border)] text-[var(--color-text-secondary)] focus:outline-none focus:border-[var(--color-rose-500)] transition-all text-sm"
-        >
-          <option value="">All Memberships</option>
-          {["Bronze", "Silver", "Gold", "Platinum"].map(m => <option key={m} value={m}>{m}</option>)}
-        </select>
       </div>
 
       {/* Table */}
@@ -45,7 +37,7 @@ export default function Customers() {
         <div className="rounded-2xl overflow-hidden border border-[var(--color-border)] overflow-x-auto">
           <table className="w-full">
             <thead className="bg-[var(--color-surface-2)]">
-              <tr>{["Customer", "Email", "Phone", "Points", "Membership", "Joined", ""].map(h => (
+              <tr>{["Customer", "Email", "Phone", "Joined", ""].map(h => (
                 <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider">{h}</th>
               ))}</tr>
             </thead>
@@ -64,12 +56,6 @@ export default function Customers() {
                   </td>
                   <td className="px-4 py-3.5 text-sm text-[var(--color-text-muted)]">{c.email}</td>
                   <td className="px-4 py-3.5 text-sm text-[var(--color-text-muted)]">{c.phone || "—"}</td>
-                  <td className="px-4 py-3.5 text-sm font-semibold text-yellow-400">{c.glowPoints || 0}</td>
-                  <td className="px-4 py-3.5">
-                    <span className="text-xs font-semibold px-2 py-1 rounded-full" style={{ color: getMembershipColor(c.membership), background: getMembershipColor(c.membership) + "15" }}>
-                      {c.membership}
-                    </span>
-                  </td>
                   <td className="px-4 py-3.5 text-sm text-[var(--color-text-muted)]">{formatDate(c.createdAt)}</td>
                   <td className="px-4 py-3.5">
                     <Link to={`/admin/customers/${c._id}`} className="flex items-center gap-1.5 text-xs text-[var(--color-rose-400)] hover:underline">

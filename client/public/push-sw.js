@@ -14,7 +14,7 @@ self.addEventListener('push', function(event) {
     icon: data.icon || "/favicon.png",
     badge: "/favicon.png",
     data: {
-      url: data.url || "/dashboard"
+      url: data.url || "/"
     }
   };
 
@@ -26,7 +26,7 @@ self.addEventListener('push', function(event) {
 self.addEventListener('notificationclick', function(event) {
   event.notification.close();
 
-  const targetUrl = event.notification.data?.url || "/dashboard";
+  const targetUrl = event.notification.data?.url || "/";
 
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(clientList) {

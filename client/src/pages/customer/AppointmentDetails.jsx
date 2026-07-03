@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, Calendar, Clock, Sparkles, CheckCircle, XCircle, AlertCircle } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, CheckCircle, XCircle, AlertCircle } from "lucide-react";
 import { appointmentService } from "../../services";
 import { QUERY_KEYS } from "../../constants/queryKeys";
-import { formatDate, formatPriceOrTbd, glowPointsFromAmount, isPriceSet } from "../../utils";
+import { formatDate, formatPriceOrTbd, isPriceSet } from "../../utils";
 import { Badge } from "../../components/ui/Badge";
 import { Skeleton } from "../../components/ui/Skeleton";
 
@@ -44,7 +44,7 @@ export default function AppointmentDetails() {
       >
         {isConfirmed && <><CheckCircle className="w-12 h-12 text-emerald-400 mx-auto mb-3" /><h2 className="font-display text-2xl font-bold text-emerald-400">Appointment Confirmed!</h2><p className="text-[var(--color-text-muted)] mt-1">See you on {formatDate(appointment.appointmentDate)} at {appointment.appointmentTime}</p></>}
         {isCancelled && <><XCircle className="w-12 h-12 text-red-400 mx-auto mb-3" /><h2 className="font-display text-2xl font-bold text-red-400">Appointment Rejected</h2>{appointment.suggestedTimeFrame && <p className="text-yellow-400 mt-2 text-sm">💡 Suggested time: {appointment.suggestedTimeFrame}</p>}<Link to="/book" className="mt-4 inline-block px-6 py-2.5 -white rounded-xl text-sm font-medium">Reschedule</Link></>}
-        {isCompleted && isPriceSet(appointment.totalAmount) && <><CheckCircle className="w-12 h-12 text-blue-400 mx-auto mb-3" /><h2 className="font-display text-2xl font-bold text-blue-400">Visit Complete!</h2><div className="flex items-center justify-center gap-2 mt-2 text-yellow-400 font-semibold"><Sparkles className="w-4 h-4" />+{glowPointsFromAmount(appointment.totalAmount)} Glow Points Earned</div></>}
+        {isCompleted && isPriceSet(appointment.totalAmount) && <><CheckCircle className="w-12 h-12 text-blue-400 mx-auto mb-3" /><h2 className="font-display text-2xl font-bold text-blue-400">Visit Complete!</h2><p className="text-[var(--color-text-muted)] mt-1">Thank you for visiting us.</p></>}
         {isCompleted && !isPriceSet(appointment.totalAmount) && <><CheckCircle className="w-12 h-12 text-blue-400 mx-auto mb-3" /><h2 className="font-display text-2xl font-bold text-blue-400">Visit Complete!</h2></>}
         {isPending && <><AlertCircle className="w-12 h-12 text-yellow-400 mx-auto mb-3" /><h2 className="font-display text-2xl font-bold text-yellow-400">Pending Approval</h2><p className="text-[var(--color-text-muted)] mt-1">Your request is being reviewed</p></>}
       </motion.div>

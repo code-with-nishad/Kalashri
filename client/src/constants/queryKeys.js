@@ -5,11 +5,8 @@ export const QUERY_KEYS = {
   // Public CMS
   SETTINGS: ["cms", "settings"],
   GALLERY: ["cms", "gallery"],
-  CERTIFICATES: ["cms", "certificates"],
-  ACHIEVEMENTS: ["cms", "achievements"],
   OFFERS: ["cms", "offers"],
   FAQS: ["cms", "faqs"],
-  AWARDS: ["cms", "awards"],
   TESTIMONIALS: ["cms", "testimonials"],
 
   // Services
@@ -25,22 +22,8 @@ export const QUERY_KEYS = {
   PUBLIC_REVIEWS: ["reviews", "public"],
   MY_REVIEWS: ["reviews", "my"],
 
-  // Rewards
-  REWARDS: ["rewards"],
-  MY_REDEMPTIONS: ["rewards", "redemptions", "my"],
-  ALL_REDEMPTIONS: ["rewards", "redemptions", "all"],
-
   // Notifications
   NOTIFICATIONS: ["notifications"],
-
-  // Leaderboard
-  LEADERBOARD: ["leaderboard"],
-
-  // Journey
-  MY_JOURNEY: ["journey", "me"],
-
-  // Products
-  PRODUCTS: ["products"],
 
   // Admin
   DASHBOARD_STATS: ["admin", "dashboard"],
@@ -48,11 +31,8 @@ export const QUERY_KEYS = {
   ANALYTICS: ["admin", "analytics"],
   CUSTOMERS: ["admin", "customers"],
   CUSTOMER: (id) => ["admin", "customers", id],
-  ACTIVITIES: ["admin", "activities"],
-  INVENTORY: ["admin", "inventory"],
-  PRODUCT_HISTORY: (id) => ["admin", "inventory", id, "history"],
 
-  // Admin CMS management (all items)
+  // Admin CMS management
   ADMIN_GALLERY: ["admin", "cms", "gallery"],
   ADMIN_TESTIMONIALS: ["admin", "cms", "testimonials"],
 };

@@ -1,11 +1,9 @@
 const Appointment = require("../models/Appointment");
 const Service = require("../models/Service");
-const LoyaltyTransaction = require("../models/LoyaltyTransaction");
 const User = require("../models/User");
 const AppError = require("../utils/AppError");
 const notificationService = require("./notificationService");
 const emailService = require("../utils/emailService");
-const journeyService = require("./journeyService");
 const { createAppointmentSchema, updateAppointmentStatusSchema } = require("../validations/appointmentValidation");
 
 const bookAppointment = async (userId, appointmentData) => {
@@ -137,9 +135,6 @@ const updateAppointmentStatus = async (appointmentId, updateData) => {
     const previousStatus = appointment.status;
     const previousPaymentStatus = appointment.paymentStatus;
 
-    // Prevent re-awarding points if it's already completed
-    const wasAlreadyCompleted = appointment.status === "Completed";
-
     // Update fields
     if (status) appointment.status = status;
     if (paymentStatus) {
@@ -226,40 +221,6 @@ const updateAppointmentStatus = async (appointmentId, updateData) => {
     } else if (appointment.status === "Confirmed" && paymentStatus === "Paid" && previousPaymentStatus === "Verification Pending") {
         // Just send payment verified notification if status was already confirmed somehow
         notificationService.sendToUser(appointment.customer._id, "Payment Verified", "Payment Verified ✅", "Your manual UPI payment has been successfully verified. Your appointment is confirmed.", { route: `/appointments/${appointment._id}` }).catch(console.error);
-    }
-
-    // Loyalty Engine logic: Automatically award points when status changes to Completed for the first time
-    if (status === "Completed" && !wasAlreadyCompleted) {
-        const points = Math.floor(appointment.totalAmount / 100);
-
-        if (points > 0) {
-            // Create Loyalty Transaction
-            await LoyaltyTransaction.create({
-                user: appointment.customer,
-                appointment: appointment._id,
-                points,
-                type: "Earned",
-                reason: "Appointment Completed",
-            });
-
-            // Update user points and membership
-            const user = await User.findById(appointment.customer);
-            if (user) {
-                user.glowPoints += points;
-                user.lifetimeGlowPoints += points;
-                user.monthlyGlowPoints = (user.monthlyGlowPoints || 0) + points;
-                if (typeof user.updateMembership === "function") {
-                    user.updateMembership();
-                }
-                await user.save();
-            }
-        }
-
-        try {
-            await journeyService.processAppointmentCompletion(appointment.customer._id, appointment);
-        } catch (err) {
-            console.error("Beauty journey update failed:", err);
-        }
     }
 
     return appointment;

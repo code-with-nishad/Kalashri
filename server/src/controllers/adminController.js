@@ -29,29 +29,9 @@ const updateCustomerNotes = asyncHandler(async (req, res) => {
     sendResponse(res, 200, true, "Customer notes updated successfully", customer);
 });
 
-const manageGlowPoints = asyncHandler(async (req, res) => {
-    const customer = await adminService.manageGlowPoints(req.params.id, req.body);
-    sendResponse(res, 200, true, "Glow points updated successfully", customer);
-});
-
 const getAnalytics = asyncHandler(async (req, res) => {
     const analytics = await adminService.getAnalytics();
     sendResponse(res, 200, true, "Analytics retrieved successfully", analytics);
-});
-
-const getLeaderboard = asyncHandler(async (req, res) => {
-    const leaderboard = await adminService.getLeaderboard();
-    sendResponse(res, 200, true, "Leaderboard retrieved successfully", leaderboard);
-});
-
-const manageLeaderboardVisibility = asyncHandler(async (req, res) => {
-    const customer = await adminService.manageLeaderboardVisibility(req.params.id, req.body);
-    sendResponse(res, 200, true, "Leaderboard settings updated successfully", customer);
-});
-
-const resetMonthlyLeaderboard = asyncHandler(async (req, res) => {
-    const result = await adminService.resetMonthlyLeaderboard();
-    sendResponse(res, 200, true, result.message, null);
 });
 
 const getDashboardWidgets = asyncHandler(async (req, res) => {
@@ -65,10 +45,6 @@ module.exports = {
     getCustomers,
     getCustomerDetails,
     updateCustomerNotes,
-    manageGlowPoints,
     getAnalytics,
-    getLeaderboard,
-    manageLeaderboardVisibility,
-    resetMonthlyLeaderboard,
     getDashboardWidgets,
 };

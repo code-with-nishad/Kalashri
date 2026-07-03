@@ -104,11 +104,10 @@ const startScheduler = () => {
             console.error("Error in unread reminder scheduler:", error);
         }
     });
-    // Smart Re-booking Reminders (Runs every day at 10:00 AM)
+    // Re-booking Reminders (Runs every day at 10:00 AM)
     cron.schedule("0 10 * * *", async () => {
         try {
             const Appointment = require("../models/Appointment");
-            const aiRecommendationService = require("../services/aiRecommendationService");
             
             // Find completed appointments from exactly 28 days ago
             const twentyEightDaysAgoStart = new Date();
@@ -142,32 +141,20 @@ const startScheduler = () => {
                     continue; // Skip, they are already booked
                 }
 
-                // AI Re-booking generation
-                const customerName = appt.customer.firstName || "Queen";
+                const customerName = appt.customer.firstName || "there";
                 const pastServiceName = appt.services?.[0]?.serviceName || "treatment";
-                
-                // Get day of week
-                const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-                const dayOfWeek = days[appt.appointmentDate.getDay()];
-                const timeStr = appt.appointmentTime;
-
-                const message = await aiRecommendationService.generateRebookingMessage(
-                    customerName,
-                    pastServiceName,
-                    dayOfWeek,
-                    timeStr
-                );
+                const message = `Hi ${customerName}, it has been a while since your ${pastServiceName}. Book your next appointment whenever you are ready.`;
 
                 await notificationService.sendToUser(
                     customerId,
                     "Rebooking",
-                    "Time for your glow-up ✨",
+                    "Time for your next appointment",
                     message,
                     { route: "/book" }
                 );
             }
         } catch (error) {
-            console.error("Error in smart re-booking scheduler:", error);
+            console.error("Error in re-booking scheduler:", error);
         }
     });
 };

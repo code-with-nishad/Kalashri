@@ -1,9 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { Check, X, CreditCard, Image as ImageIcon, Sparkles } from "lucide-react";
+import { Check, X, CreditCard, Image as ImageIcon } from "lucide-react";
 import { appointmentService } from "../../services";
 import { QUERY_KEYS } from "../../constants/queryKeys";
-import { formatDate, formatCurrency, formatPriceOrTbd, getInitials, glowPointsFromAmount, isPriceSet } from "../../utils";
+import { formatDate, formatCurrency, formatPriceOrTbd, getInitials, isPriceSet } from "../../utils";
 import { Badge } from "../../components/ui/Badge";
 import { Modal } from "../../components/ui/Modal";
 import { toast } from "sonner";
@@ -63,7 +63,7 @@ export default function Appointments() {
     mutationFn: ({ id, data }) => appointmentService.updateStatus(id, data),
     onSuccess: (_, variables) => {
       if (variables.data?.status === "Completed") {
-        toast.success("Appointment completed! Glow points awarded.");
+        toast.success("Appointment completed!");
       } else {
         toast.success("Appointment updated!");
       }
@@ -136,7 +136,7 @@ export default function Appointments() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="font-display text-2xl font-bold text-[var(--color-text-primary)]">Appointment Management</h1>
-          <p className="text-[var(--color-text-muted)] text-sm mt-1">Manage bookings, set prices, and award glow points on completion</p>
+          <p className="text-[var(--color-text-muted)] text-sm mt-1">Manage bookings, set prices, and update appointment status</p>
         </div>
         <div className="flex bg-[var(--color-surface-2)] p-1 rounded-xl border border-[var(--color-border)] self-start">
           <button
@@ -374,9 +374,8 @@ export default function Appointments() {
               <>
                 <ServicePriceEditor servicePrices={servicePrices} setServicePrices={setServicePrices} />
                 {actionType === "Completed" && priceTotal > 0 && (
-                  <p className="flex items-center gap-1.5 text-sm text-yellow-400 font-medium">
-                    <Sparkles className="w-4 h-4" />
-                    Customer will earn {glowPointsFromAmount(priceTotal)} Glow Points
+                  <p className="text-sm text-emerald-400 font-medium">
+                    Final amount: {formatCurrency(priceTotal)}
                   </p>
                 )}
                 {actionType === "Completed" && priceTotal <= 0 && (

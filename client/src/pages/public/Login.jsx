@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useLogin, useGoogleLogin as useKalashriGoogleLogin } from "../../hooks/useAuth";
-import { Lock, Mail } from "lucide-react";
+import { Lock, Mail, Phone } from "lucide-react";
 import { useGoogleLogin } from "@react-oauth/google";
 
 export default function Login() {
@@ -27,7 +27,7 @@ export default function Login() {
           <span className="text-3xl font-display text-[var(--color-primary-dark)]">K</span>
         </div>
         <h1 className="text-3xl font-display font-semibold text-[var(--color-primary-dark)] tracking-wider">KALASHRI</h1>
-        <p className="text-[10px] uppercase tracking-widest text-gray-500 mt-1">Fashion • Beauty • Insurance</p>
+        <p className="text-[10px] uppercase tracking-widest text-gray-500 mt-1">Fashion • Beauty</p>
       </div>
 
       <div className="text-center mb-10">
@@ -38,12 +38,12 @@ export default function Login() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-            <Mail className="h-5 w-5 text-gray-400" />
+            <Phone className="h-5 w-5 text-gray-400" />
           </div>
           <input
-            type="email"
+            type="text"
             required
-            placeholder="Enter Email Address"
+            placeholder="Enter Mobile Number"
             className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--color-accent)] focus:border-transparent outline-none transition-all"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -92,6 +92,12 @@ export default function Login() {
             className="w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors"
           >
             <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-5 h-5" alt="Google" />
+          </button>
+          <button 
+            type="button"
+            className="w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors"
+          >
+            <img src="https://www.svgrepo.com/show/452133/whatsapp.svg" className="w-5 h-5" alt="WhatsApp" />
           </button>
         </div>
       </div>

@@ -4,30 +4,28 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Playfair Display", ui-serif, Georgia, serif;
 
-  /* Brand Colors - Kalashri Super App (Premium Luxury) */
-  --color-primary-dark: #2b0a2f; /* Deep Purple */
-  --color-primary: #3d0c34;
-  --color-accent: #a11d51; /* Magenta/Pink */
-  --color-accent-light: #d62261;
-  --color-gold: #d4af37; /* Metallic Gold */
+  /* Brand Colors - Kalashri Super App (Premium Luxury Dark Theme) */
+  --color-primary-dark: #1a1110; /* Deep Dark Espresso/Black */
+  --color-primary: #241a18;
+  --color-accent: #d4af37; /* Metallic Gold */
+  --color-accent-light: #f3e5ab;
+  --color-gold: #d4af37; 
   --color-gold-light: #f3e5ab;
   
-  --color-rose-50: #fff0f5;
-  --color-rose-100: #ffe4e1;
-  --color-rose-200: #ffc0cb;
-  --color-rose-300: #ffb6c1;
-  --color-rose-400: #ff69b4;
-  --color-rose-500: #ff1493;
-  --color-rose-600: #e75480;
-  --color-rose-700: #c21e56;
-  --color-rose-800: #900020;
-  --color-rose-900: #800020;
+  --color-rose-50: #241a18;
+  --color-rose-100: #3d2b28;
+  --color-rose-200: #4a3632;
+  --color-rose-300: #5c433e;
+  --color-rose-400: #d4af37;
+  --color-rose-500: #c5a030;
+  --color-rose-600: #b79229;
+  --color-rose-700: #97761f;
+  --color-rose-800: #745b17;
+  --color-rose-900: #5e4811;
 
   /* Category specific colors */
   --color-fashion-primary: #D4AF37; /* Metallic Gold */
   --color-beauty-primary: #FF1493;  /* Deep Pink */
-  --color-insurance-primary: #1E3A8A; /* Trust Blue */
-
   --color-luxury-dark: #121212;
   --color-luxury-light: #F9F9F9;
 
@@ -45,20 +43,20 @@
   --color-blush: #fff0f5;
   --color-champagne: #f7e7ce;
 
-  /* Backgrounds - Light Mode */
-  --color-surface: #ffffff;
-  --color-surface-2: #fffafa;
-  --color-surface-3: #ffe4e1;
-  --color-surface-card: #ffffff;
+  /* Backgrounds - Dark Mode */
+  --color-surface: #1a1110;
+  --color-surface-2: #241a18;
+  --color-surface-3: #3d2b28;
+  --color-surface-card: #241a18;
 
-  /* Text - Light Mode */
-  --color-text-primary: #1f2937;
-  --color-text-secondary: #4b5563;
-  --color-text-muted: #6b7280;
+  /* Text - Dark Mode */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.8);
+  --color-text-muted: rgba(255, 255, 255, 0.6);
 
-  /* Borders - Light Mode */
-  --color-border: #fbcfe8;
-  --color-border-subtle: #fce7f3;
+  /* Borders - Dark Mode */
+  --color-border: rgba(212, 175, 55, 0.3);
+  --color-border-subtle: rgba(255, 255, 255, 0.1);
 
   /* Gradients */
   --color-gradient-rose: linear-gradient(135deg, #ffb6c1 0%, #ff69b4 50%, #ff1493 100%);
@@ -88,7 +86,7 @@ html {
 }
 
 body {
-  background-color: #f3f4f6; /* Gray background outside the mobile frame */
+  background-color: var(--color-surface); /* Dark background */
   color: var(--color-text-primary);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
@@ -346,29 +344,6 @@ body {
 }
 
 
-/* ── GlowFeed animated border ─────────────────────────────────── */
-.home-glowfeed-card {
-  border: 1.5px solid transparent;
-  background-clip: padding-box;
-  position: relative;
-}
-.home-glowfeed-card::before {
-  content: "";
-  position: absolute;
-  inset: -1.5px;
-  border-radius: 1.5rem;         /* matches rounded-3xl */
-  background: linear-gradient(135deg, #d8b4fe 0%, #f9a8d4 50%, #fbcfe8 100%);
-  opacity: 0.55;
-  z-index: 0;
-  animation: homeBorderPulse 3s ease-in-out infinite;
-}
-
-@keyframes homeBorderPulse {
-  0%, 100% { opacity: 0.40; }
-  50%       { opacity: 0.75; }
-}
-
-
 /* ── Mobile-specific touch polish ─────────────────────────────── */
 @media (max-width: 768px) {
   /* Remove iOS tap highlight flash — we use active:scale instead */
@@ -395,8 +370,7 @@ body {
 
   .home-blob-1,
   .home-blob-2,
-  .home-marquee,
-  .home-glowfeed-card::before {
+  .home-marquee {
     animation: none;
   }
 }

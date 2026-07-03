@@ -5,38 +5,24 @@ const gallerySchema = z.object({
     description: z.string().optional(),
     image: z.string().url("Must be a valid URL"),
     category: z.enum([
+        "Fashion",
+        "Beauty",
+        "Aari Work",
+        "Bridal",
+        "Traditional Wear",
+        "Before & After",
+        "Latest Work",
         "Facial",
         "Hair",
         "Hair Color",
         "Hair Spa",
         "Waxing",
         "Threading",
-        "Bridal",
-        "Nails",
         "Skin",
         "Other",
     ]),
     featured: z.boolean().optional(),
     isActive: z.boolean().optional(),
-});
-
-const certificateSchema = z.object({
-    title: z.string().min(1, "Title is required"),
-    organization: z.string().min(1, "Organization is required"),
-    issueDate: z.coerce.date(),
-    certificateImage: z.string().url("Must be a valid URL"),
-    description: z.string().optional(),
-    featured: z.boolean().optional(),
-    isActive: z.boolean().optional(),
-});
-
-const achievementSchema = z.object({
-    title: z.string().min(1, "Title is required"),
-    description: z.string().optional(),
-    year: z.number().int().min(1900).max(2100),
-    image: z.string().optional(),
-    category: z.enum(["Award", "Achievement", "Certificate", "Trophy", "Milestone", "Media"]),
-    featured: z.boolean().optional(),
 });
 
 const settingSchema = z.object({
@@ -102,19 +88,10 @@ const faqSchema = z.object({
     active: z.boolean().optional(),
 });
 
-const awardSchema = z.object({
-    title: z.string().min(1, "Title is required"),
-    description: z.string().optional(),
-    image: z.string().optional(),
-});
-
 module.exports = {
     gallerySchema,
-    certificateSchema,
-    achievementSchema,
     settingSchema,
     testimonialSchema,
     offerSchema,
     faqSchema,
-    awardSchema,
 };

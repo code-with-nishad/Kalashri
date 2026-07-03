@@ -1,15 +1,14 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Calendar, Crown, UserPlus } from "lucide-react";
+import { Sparkles, Calendar, UserPlus } from "lucide-react";
 
 // Mock data to simulate active users
 const NAMES = ["Priya", "Sneha", "Anjali", "Neha", "Riya", "Kavya", "Aarohi", "Meera", "Shruti", "Tara"];
 const ACTIONS = [
   { text: "just booked a Hair Spa", icon: Calendar, color: "text-blue-500", bg: "bg-blue-500/10" },
   { text: "just registered for the app", icon: UserPlus, color: "text-emerald-500", bg: "bg-emerald-500/10" },
-  { text: "just became a Gold Member", icon: Crown, color: "text-yellow-500", bg: "bg-yellow-500/10" },
   { text: "just booked a Bridal Makeup", icon: Sparkles, color: "text-purple-500", bg: "bg-purple-500/10" },
-  { text: "earned 50 Glow Points", icon: Sparkles, color: "text-[var(--color-rose-500)]", bg: "bg-[var(--color-rose-500)]/10" },
+  { text: "booked a fashion consultation", icon: Sparkles, color: "text-[var(--color-rose-500)]", bg: "bg-[var(--color-rose-500)]/10" },
 ];
 
 export default function SocialProofPopup() {

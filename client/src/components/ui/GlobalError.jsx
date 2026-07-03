@@ -10,7 +10,7 @@ export default function GlobalError() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[var(--color-surface)] p-6">
       <div className="max-w-md w-full text-center space-y-6 bg-[var(--color-surface-2)] p-8 rounded-3xl border border-[var(--color-border)] shadow-xl relative overflow-hidden">
-        {/* Glow Effects */}
+        {/* Soft background effects */}
         <div className="absolute -top-10 -right-10 w-32 h-32 bg-[var(--color-rose-500)]/20 rounded-full blur-2xl" />
         <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-purple-500/20 rounded-full blur-2xl" />
 

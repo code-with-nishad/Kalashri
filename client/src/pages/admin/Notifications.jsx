@@ -49,7 +49,6 @@ export default function AdminNotifications() {
                           className="w-full bg-[var(--color-surface-background)] border border-[var(--color-border)] rounded-xl px-4 py-2 text-sm text-[var(--color-text-primary)]"
                       >
                           <option value="all">All Customers</option>
-                          <option value="high_points">Customers with &gt; 100 Glow Points</option>
                           <option value="inactive">Inactive Customers (30 days)</option>
                       </select>
                   </div>

@@ -9,7 +9,7 @@ const appointmentSchema = new mongoose.Schema(
         },
         appointmentCategory: {
             type: String,
-            enum: ["Beauty", "Fashion", "Insurance"],
+            enum: ["Beauty", "Fashion"],
             default: "Beauty",
         },
         services: [

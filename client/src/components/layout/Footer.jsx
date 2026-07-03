@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Sparkles, Camera, Globe, Video, MessageCircle, Phone, Mail, MapPin } from "lucide-react";
+import { Sparkles, Camera, Globe, Video, MessageCircle, Phone, Mail } from "lucide-react";
 import { SALON_NAME, SALON_TAGLINE, SALON_WHATSAPP, SALON_INSTAGRAM, SALON_FACEBOOK } from "../../constants";
 
 export default function Footer() {
@@ -50,9 +50,7 @@ export default function Footer() {
             <ul className="space-y-2">
               {[
                 { to: "/services", label: "Services" },
-                { to: "/products", label: "Shop Products" },
                 { to: "/gallery", label: "Gallery" },
-                { to: "/awards", label: "Awards" },
                 { to: "/about", label: "About Us" },
                 { to: "/contact", label: "Contact" },
                 { to: "/register", label: "Book Appointment" },

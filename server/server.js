@@ -8,23 +8,14 @@ const connectDB = require("./src/config/db");
 const authRoutes = require("./src/routes/authRoutes");
 const serviceRoutes = require("./src/routes/serviceRoutes");
 const appointmentRoutes = require("./src/routes/appointmentRoutes");
-const rewardRoutes = require("./src/routes/rewardRoutes");
 const adminRoutes = require("./src/routes/adminRoutes");
 const cmsRoutes = require("./src/routes/cmsRoutes");
 const notificationRoutes = require("./src/routes/notificationRoutes");
 const activityRoutes = require("./src/routes/activityRoutes");
 const uploadRoutes = require("./src/routes/uploadRoutes");
 const paymentRoutes = require("./src/routes/paymentRoutes");
-const inventoryRoutes = require("./src/routes/inventoryRoutes");
-const aiRoutes = require("./src/routes/aiRoutes");
-const orderRoutes = require("./src/routes/orderRoutes");
-const journeyRoutes = require("./src/routes/journeyRoutes");
-const glowFeedRoutes = require("./src/routes/glowFeedRoutes");
 const reviewRoutes = require("./src/routes/reviewRoutes");
-const visitorRoutes = require("./src/routes/visitorRoutes");
-const leaderboardRoutes = require("./src/routes/leaderboardRoutes");
 const fashionOrderRoutes = require("./src/routes/fashionOrderRoutes");
-const insuranceLeadRoutes = require("./src/routes/insuranceLeadRoutes");
 const measurementRoutes = require("./src/routes/measurementRoutes");
 
 dotenv.config();
@@ -79,22 +70,13 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/appointments", appointmentRoutes);
-app.use("/api/rewards", rewardRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/cms", cmsRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/activities", activityRoutes);
 app.use("/api/upload", uploadRoutes);
-app.use("/api/inventory", inventoryRoutes);
-app.use("/api/ai", aiRoutes);
-app.use("/api/orders", orderRoutes);
-app.use("/api/journey", journeyRoutes);
-app.use("/api/feed", glowFeedRoutes);
 app.use("/api/reviews", reviewRoutes);
-app.use("/api/visitors", visitorRoutes);
-app.use("/api/leaderboard", leaderboardRoutes);
 app.use("/api/fashion-orders", fashionOrderRoutes);
-app.use("/api/insurance-leads", insuranceLeadRoutes);
 app.use("/api/measurements", measurementRoutes);
 
 app.get("/", (req, res) => {
@@ -108,9 +90,7 @@ const PORT = process.env.PORT || 5000;
 app.use(errorMiddleware);
 
 const { startScheduler } = require("./src/scripts/reminderScheduler");
-const { startMonthlyScheduler } = require("./src/scripts/monthlyResetScheduler");
 startScheduler();
-startMonthlyScheduler();
 
 app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);

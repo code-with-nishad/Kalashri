@@ -1,13 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Menu, Calendar as CalendarIcon, Phone, MessageCircle, MapPin, Check, Star } from "lucide-react";
+import { Menu, Calendar as CalendarIcon, Phone, MessageCircle, MapPin, Check, Star, Users } from "lucide-react";
 
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-[var(--color-surface)] font-sans">
       
-      {/* Floating Action Menu (Right Side) */}
-      <div className="fixed right-0 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 p-2">
+      {/* Floating Action Menu (Right Side - Desktop Only) */}
+      <div className="hidden md:flex fixed right-0 top-1/2 -translate-y-1/2 z-50 flex-col gap-2 p-2">
         <a href="tel:+919876543210" className="bg-[#241a18]/90 hover:bg-[#3d2b28] border border-[#d4af37]/30 text-[#d4af37] p-3 rounded-l-xl flex flex-col items-center justify-center gap-1 transition-all backdrop-blur-sm group">
           <Phone className="w-5 h-5 group-hover:scale-110 transition-transform" />
           <span className="text-[10px] uppercase tracking-wider font-semibold">Call Us</span>
@@ -22,8 +22,71 @@ export default function Home() {
         </a>
       </div>
 
-      {/* Hero Section */}
-      <div className="relative w-full min-h-[90vh] bg-[#1a1110] overflow-hidden flex flex-col">
+      {/* MOBILE HOME LAYOUT (Screen 4) */}
+      <div className="md:hidden flex flex-col w-full min-h-screen px-4 pt-10 pb-20 bg-[var(--color-primary-dark)]">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-2">
+            <button className="text-white hover:text-[var(--color-gold)] p-1">
+              <span className="text-xl">←</span>
+            </button>
+            <h1 className="text-white font-display text-lg tracking-wide">Kalashri</h1>
+          </div>
+          <button className="text-[var(--color-gold)] relative p-2">
+            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
+            <span className="absolute top-2 right-2 w-2 h-2 bg-yellow-400 rounded-full"></span>
+          </button>
+        </div>
+        
+        <h2 className="text-white text-xl font-bold mt-4 mb-1">Good Morning, Priya 👋</h2>
+        <p className="text-white/60 text-xs mb-8">How can we help you today?</p>
+
+        {/* Cards */}
+        <div className="space-y-4">
+          <Link to="/fashion" className="block relative rounded-2xl overflow-hidden bg-gradient-to-r from-[#a11d51] to-[#d62261] p-5 shadow-lg min-h-[140px] flex items-center">
+             <div className="w-3/5 relative z-10">
+               <h3 className="text-white font-bold text-lg mb-1">Fashion</h3>
+               <p className="text-white/80 text-[10px] leading-tight">Stitching, Dresses<br/>& Aari Work</p>
+             </div>
+             <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=200&fit=crop" alt="Fashion" className="absolute right-0 top-0 bottom-0 h-full w-[45%] object-cover object-top mask-image-gradient-left" />
+          </Link>
+
+          <Link to="/beauty" className="block relative rounded-2xl overflow-hidden bg-gradient-to-r from-[#2b0a2f] to-[#4a1251] border border-white/5 p-5 shadow-lg min-h-[140px] flex items-center">
+             <div className="w-3/5 relative z-10">
+               <h3 className="text-white font-bold text-lg mb-1">Beauty Parlour</h3>
+               <p className="text-white/80 text-[10px] leading-tight">Makeup, Hair,<br/>Skin & More</p>
+             </div>
+             <img src="https://images.unsplash.com/photo-1516975080661-460d3fcb6215?w=200&fit=crop" alt="Beauty" className="absolute right-0 top-0 bottom-0 h-full w-[45%] object-cover mask-image-gradient-left" />
+          </Link>
+
+        </div>
+
+        {/* Why Choose Kalashri */}
+        <h3 className="text-white font-bold mt-8 mb-4">Why Choose Kalashri?</h3>
+        <div className="flex justify-between items-center mb-6 px-2">
+           <div className="flex flex-col items-center gap-2">
+              <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
+                 <span className="text-xl text-[var(--color-gold)]">💎</span>
+              </div>
+              <span className="text-[10px] text-white/70">Quality Service</span>
+           </div>
+           <div className="flex flex-col items-center gap-2">
+              <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
+                 <span className="text-xl text-[var(--color-gold)]">👥</span>
+              </div>
+              <span className="text-[10px] text-white/70">Expert Team</span>
+           </div>
+           <div className="flex flex-col items-center gap-2">
+              <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
+                 <span className="text-xl text-[var(--color-gold)]">🛡️</span>
+              </div>
+              <span className="text-[10px] text-white/70">Trusted Brand</span>
+           </div>
+        </div>
+      </div>
+
+      {/* Desktop Hero Section */}
+      <div className="hidden md:flex relative w-full min-h-[90vh] bg-[#1a1110] overflow-hidden flex-col">
         {/* Background Image Setup */}
         <div className="absolute inset-0 z-0">
           <img 

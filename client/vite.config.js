@@ -125,19 +125,19 @@ export default defineConfig({
           {
             name: "Book Appointment",
             short_name: "Book",
-            url: "/dashboard/book",
+            url: "/book",
             icons: [{ src: "icons/icon-192.png", sizes: "192x192" }],
           },
           {
             name: "My Appointments",
             short_name: "Appointments",
-            url: "/dashboard/appointments",
+            url: "/appointments",
             icons: [{ src: "icons/icon-192.png", sizes: "192x192" }],
           },
           {
-            name: "Rewards",
-            short_name: "Rewards",
-            url: "/dashboard/rewards",
+            name: "Offers",
+            short_name: "Offers",
+            url: "/offers",
             icons: [{ src: "icons/icon-192.png", sizes: "192x192" }],
           },
           {

@@ -1,14 +1,13 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Sparkles, Eye, EyeOff, User, Mail, Lock, Phone, CheckCircle, ShieldCheck } from "lucide-react";
+import { CheckCircle, Eye, EyeOff, Lock, Mail, Phone, ShieldCheck, Sparkles, User } from "lucide-react";
 import { GoogleLogin } from "@react-oauth/google";
-import { useState } from "react";
-import { useRegister, useGoogleLogin } from "../../hooks/useAuth";
 import { toast } from "sonner";
-import { SALON_NAME } from "../../constants";
+import { useGoogleLogin, useRegister } from "../../hooks/useAuth";
 
 const schema = z.object({
   firstName: z.string().min(1, "First name required"),
@@ -26,25 +25,23 @@ export default function Register() {
   const [showPass, setShowPass] = useState(false);
   const [showConfirmPass, setShowConfirmPass] = useState(false);
   const { mutate: register, isPending } = useRegister();
+  const { mutate: googleLoginMutation } = useGoogleLogin();
   const navigate = useNavigate();
-
-  // Get visitor ID from localStorage for linking
-  const visitorId = localStorage.getItem("visitor_id");
-
   const { register: reg, handleSubmit, formState: { errors } } = useForm({ resolver: zodResolver(schema) });
 
   const onSubmit = (data) => {
-    register({ ...data, visitorId }, { onSuccess: () => navigate("/login") });
+    register(data, { onSuccess: () => navigate("/login") });
   };
 
-  const { mutate: googleLoginMutation } = useGoogleLogin();
-
   const handleGoogleSuccess = (credentialResponse) => {
-    googleLoginMutation({ token: credentialResponse.credential, visitorId }, {
-      onSuccess: (res) => {
-        navigate(res?.data?.user?.role === "admin" || res?.data?.role === "admin" ? "/admin" : "/dashboard", { replace: true });
-      }
-    });
+    googleLoginMutation(
+      { token: credentialResponse.credential },
+      {
+        onSuccess: (res) => {
+          navigate(res?.data?.user?.role === "admin" || res?.data?.role === "admin" ? "/admin" : "/", { replace: true });
+        },
+      },
+    );
   };
 
   const fields = [
@@ -54,12 +51,17 @@ export default function Register() {
     { name: "phone", label: "Phone", icon: Phone, placeholder: "+91 98765 43210", type: "tel", col: 2 },
   ];
 
+  const benefits = [
+    "Easy appointment booking",
+    "Track stitching and beauty visits",
+    "Save measurements for repeat orders",
+    "Get updates and special offers",
+  ];
+
   return (
     <div className="min-h-screen relative flex items-center justify-center overflow-hidden bg-white">
-      {/* Heavenly Light Background */}
       <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-pink-100 via-white to-rose-50" />
 
-      {/* Floating Heavenly Sparkles & Orbs */}
       <motion.div className="absolute top-10 right-10 w-64 h-64 rounded-full bg-[var(--color-rose-300)]/30 blur-[100px] animate-float pointer-events-none z-0" />
       <motion.div className="absolute bottom-10 left-10 w-96 h-96 rounded-full bg-purple-200/40 blur-[120px] animate-float pointer-events-none z-0" style={{ animationDelay: "2s" }} />
 
@@ -69,7 +71,6 @@ export default function Register() {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="relative z-10 w-full max-w-[1200px] flex flex-col lg:flex-row items-center justify-center p-4 lg:p-0 gap-8 lg:gap-16"
       >
-        {/* Left Side: Dramatic Text */}
         <div className="hidden lg:flex flex-col flex-1 px-8 text-gray-900">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -80,45 +81,38 @@ export default function Register() {
               <Sparkles className="w-10 h-10 text-[var(--color-rose-500)]" />
             </div>
             <h1 className="font-display text-5xl xl:text-7xl font-black mb-6 leading-tight drop-shadow-sm">
-              Join the <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-rose-500)] to-purple-500">Glow Club.</span>
+              Book fashion <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-rose-500)] to-purple-500">and beauty visits.</span>
             </h1>
-            
+
             <div className="mt-8 space-y-4">
-              {[
-                { icon: "✨", text: "Earn 1 Glow Point per ₹100" },
-                { icon: "🎁", text: "Redeem points for free services" },
-                { icon: "🏆", text: "Compete on the Leaderboard" },
-                { icon: "📅", text: "Easy appointment booking" },
-              ].map((item, idx) => (
-                <motion.div 
-                  key={idx}
+              {benefits.map((text, idx) => (
+                <motion.div
+                  key={text}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.6 + (idx * 0.1) }}
                   className="flex items-center gap-4 bg-white/60 backdrop-blur-md border border-[var(--color-rose-100)] rounded-2xl px-5 py-3.5 shadow-sm w-max"
                 >
-                  <span className="text-2xl">{item.icon}</span>
-                  <span className="text-gray-700 font-bold tracking-wide">{item.text}</span>
+                  <CheckCircle className="w-5 h-5 text-emerald-500" />
+                  <span className="text-gray-700 font-bold tracking-wide">{text}</span>
                 </motion.div>
               ))}
             </div>
           </motion.div>
         </div>
 
-        {/* Right Side: Light Glass Form */}
         <div className="w-full max-w-lg bg-white/60 backdrop-blur-3xl border border-white/60 rounded-3xl md:rounded-[2.5rem] p-5 sm:p-8 shadow-[0_20px_60px_rgba(244,63,94,0.1),inset_0_0_20px_rgba(255,255,255,0.8)] relative overflow-hidden group">
-          {/* Subtle hover glow on card */}
           <div className="absolute inset-0 bg-gradient-to-bl from-[var(--color-rose-500)]/0 to-[var(--color-rose-500)]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-          
+
           <div className="relative z-10">
             <div className="mb-6 sm:mb-8 text-center">
               <h2 className="font-display text-3xl font-bold text-gray-900 mb-2">Create Account</h2>
-              <p className="text-gray-500 text-sm">Start your beauty journey today</p>
+              <p className="text-gray-500 text-sm">Start your Kalashri booking profile today</p>
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                {fields.filter(f => f.col === 1).map(({ name, label, icon: Icon, placeholder, type }) => (
+                {fields.filter((f) => f.col === 1).map(({ name, label, icon: Icon, placeholder, type }) => (
                   <div key={name}>
                     <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">{label}</label>
                     <div className="relative">
@@ -132,7 +126,7 @@ export default function Register() {
                 ))}
               </div>
 
-              {fields.filter(f => f.col === 2).map(({ name, label, icon: Icon, placeholder, type }) => (
+              {fields.filter((f) => f.col === 2).map(({ name, label, icon: Icon, placeholder, type }) => (
                 <div key={name}>
                   <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">{label}</label>
                   <div className="relative">
@@ -153,7 +147,7 @@ export default function Register() {
                     <input {...reg("password")} type={showPass ? "text" : "password"} placeholder="Min 6 chars"
                       className="w-full pl-11 pr-10 py-3.5 rounded-2xl bg-white/70 border border-[var(--color-rose-100)] text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-[var(--color-rose-400)] focus:bg-white focus:ring-2 focus:ring-[var(--color-rose-400)]/20 transition-all text-sm shadow-sm"
                     />
-                    <button type="button" onClick={() => setShowPass(v => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 transition-colors p-1">
+                    <button type="button" onClick={() => setShowPass((v) => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 transition-colors p-1">
                       {showPass ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                     </button>
                   </div>
@@ -167,7 +161,7 @@ export default function Register() {
                     <input {...reg("confirmPassword")} type={showConfirmPass ? "text" : "password"} placeholder="Confirm"
                       className="w-full pl-11 pr-10 py-3.5 rounded-2xl bg-white/70 border border-[var(--color-rose-100)] text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-[var(--color-rose-400)] focus:bg-white focus:ring-2 focus:ring-[var(--color-rose-400)]/20 transition-all text-sm shadow-sm"
                     />
-                    <button type="button" onClick={() => setShowConfirmPass(v => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 transition-colors p-1">
+                    <button type="button" onClick={() => setShowConfirmPass((v) => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 transition-colors p-1">
                       {showConfirmPass ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                     </button>
                   </div>
@@ -178,7 +172,7 @@ export default function Register() {
               <button type="submit" disabled={isPending}
                 className="w-full py-4 bg-gradient-to-r from-[var(--color-rose-500)] to-[var(--color-rose-600)] hover:from-[var(--color-rose-400)] hover:to-[var(--color-rose-500)] text-white font-bold rounded-2xl transition-all shadow-[0_10px_20px_rgba(244,63,94,0.2)] hover:shadow-[0_15px_30px_rgba(244,63,94,0.4)] hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-4"
               >
-                {isPending ? <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : "Create My Free Account ✨"}
+                {isPending ? <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : "Create My Free Account"}
               </button>
 
               <div className="flex justify-center mt-3 gap-3 text-[11px] text-gray-500 font-medium">

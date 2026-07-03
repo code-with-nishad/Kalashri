@@ -1,7 +1,6 @@
 import React from "react";
 import { formatDistanceToNow } from "date-fns";
-import { Bell, Calendar, Gift, Star, Clock, CheckCircle, XCircle } from "lucide-react";
-import { cn } from "../../../utils/cn"; // assuming they have a cn utility, or I can just use template literals if not
+import { Bell, Calendar, Clock, CheckCircle, Gift } from "lucide-react";
 
 // Fallback utility if cn is not available
 const clsx = (...classes) => classes.filter(Boolean).join(" ");
@@ -10,8 +9,6 @@ const getIconForType = (type) => {
     switch (type) {
         case "Appointment": return <Calendar className="w-5 h-5 text-blue-500" />;
         case "Payment Verified": return <CheckCircle className="w-5 h-5 text-green-500" />;
-        case "Reward":
-        case "Glow Points": return <Star className="w-5 h-5 text-yellow-500" />;
         case "Offer": return <Gift className="w-5 h-5 text-pink-500" />;
         case "System":
         default: return <Bell className="w-5 h-5 text-purple-500" />;

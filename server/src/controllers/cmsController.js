@@ -20,42 +20,6 @@ exports.deleteGallery = asyncHandler(async (req, res) => {
     sendResponse(res, 200, true, "Gallery item deleted successfully", null);
 });
 
-// --- CERTIFICATES ---
-exports.getCertificates = asyncHandler(async (req, res) => {
-    const data = await cmsService.getCertificates();
-    sendResponse(res, 200, true, "Certificates retrieved successfully", data);
-});
-exports.createCertificate = asyncHandler(async (req, res) => {
-    const data = await cmsService.createCertificate(req.body);
-    sendResponse(res, 201, true, "Certificate created successfully", data);
-});
-exports.updateCertificate = asyncHandler(async (req, res) => {
-    const data = await cmsService.updateCertificate(req.params.id, req.body);
-    sendResponse(res, 200, true, "Certificate updated successfully", data);
-});
-exports.deleteCertificate = asyncHandler(async (req, res) => {
-    await cmsService.deleteCertificate(req.params.id);
-    sendResponse(res, 200, true, "Certificate deleted successfully", null);
-});
-
-// --- ACHIEVEMENTS ---
-exports.getAchievements = asyncHandler(async (req, res) => {
-    const data = await cmsService.getAchievements();
-    sendResponse(res, 200, true, "Achievements retrieved successfully", data);
-});
-exports.createAchievement = asyncHandler(async (req, res) => {
-    const data = await cmsService.createAchievement(req.body);
-    sendResponse(res, 201, true, "Achievement created successfully", data);
-});
-exports.updateAchievement = asyncHandler(async (req, res) => {
-    const data = await cmsService.updateAchievement(req.params.id, req.body);
-    sendResponse(res, 200, true, "Achievement updated successfully", data);
-});
-exports.deleteAchievement = asyncHandler(async (req, res) => {
-    await cmsService.deleteAchievement(req.params.id);
-    sendResponse(res, 200, true, "Achievement deleted successfully", null);
-});
-
 // --- SETTINGS ---
 exports.getSettings = asyncHandler(async (req, res) => {
     const data = await cmsService.getSettings();
@@ -66,7 +30,7 @@ exports.updateSettings = asyncHandler(async (req, res) => {
     sendResponse(res, 200, true, "Settings updated successfully", data);
 });
 
-// --- TESTIMONIALS ---
+// --- TESTIMONIALS / REVIEWS ---
 exports.getTestimonials = asyncHandler(async (req, res) => {
     const data = await cmsService.getTestimonials();
     sendResponse(res, 200, true, "Testimonials retrieved successfully", data);
@@ -118,22 +82,4 @@ exports.updateFAQ = asyncHandler(async (req, res) => {
 exports.deleteFAQ = asyncHandler(async (req, res) => {
     await cmsService.deleteFAQ(req.params.id);
     sendResponse(res, 200, true, "FAQ deleted successfully", null);
-});
-
-// --- AWARDS ---
-exports.getAwards = asyncHandler(async (req, res) => {
-    const data = await cmsService.getAwards();
-    sendResponse(res, 200, true, "Awards retrieved successfully", data);
-});
-exports.createAward = asyncHandler(async (req, res) => {
-    const data = await cmsService.createAward(req.body);
-    sendResponse(res, 201, true, "Award created successfully", data);
-});
-exports.updateAward = asyncHandler(async (req, res) => {
-    const data = await cmsService.updateAward(req.params.id, req.body);
-    sendResponse(res, 200, true, "Award updated successfully", data);
-});
-exports.deleteAward = asyncHandler(async (req, res) => {
-    await cmsService.deleteAward(req.params.id);
-    sendResponse(res, 200, true, "Award deleted successfully", null);
 });

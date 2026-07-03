@@ -2,10 +2,10 @@ import { Link, useLocation } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  LayoutDashboard, Users, Calendar, Star, Package,
-  BarChart3, Trophy, Globe, Activity, Bell, Settings,
+  LayoutDashboard, Users, Calendar, Package,
+  BarChart3, Globe, Bell, Settings,
   Sparkles, ChevronLeft, ChevronRight, LogOut, Wrench,
-  ShoppingCart, Menu, X, ShieldAlert, Eye, Plus, Grid
+  Menu, X, Plus, Grid, Scissors
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "../../utils";
@@ -21,8 +21,6 @@ const navGroups = [  {
     items: [
       { icon: LayoutDashboard, label: "Dashboard", to: "/admin" },
       { icon: BarChart3, label: "Analytics", to: "/admin/analytics" },
-      { icon: Activity, label: "Activity Log", to: "/admin/activity" },
-      { icon: Eye, label: "Visitors", to: "/admin/visitors" },
     ],
   },
   {
@@ -30,26 +28,16 @@ const navGroups = [  {
     items: [
       { icon: Users, label: "Customers", to: "/admin/customers" },
       { icon: Calendar, label: "Appointments", to: "/admin/appointments" },
-      { icon: ShoppingCart, label: "Beauty Orders", to: "/admin/orders" },
       { icon: Package, label: "Fashion Orders", to: "/admin/fashion-orders" },
-      { icon: ShieldAlert, label: "Insurance Leads", to: "/admin/insurance-leads" },
+      { icon: Scissors, label: "Measurements", to: "/admin/measurements" },
       { icon: Wrench, label: "Services", to: "/admin/services" },
-    ],
-  },
-  {
-    label: "Loyalty",
-    items: [
-      { icon: Star, label: "Rewards", to: "/admin/rewards" },
-      { icon: Trophy, label: "Leaderboard", to: "/admin/leaderboard" },
     ],
   },
   {
     label: "Management",
     items: [
-      { icon: Package, label: "Inventory", to: "/admin/inventory" },
       { icon: Globe, label: "CMS", to: "/admin/cms" },
       { icon: Bell, label: "Notifications", to: "/admin/notifications" },
-      { icon: ShieldAlert, label: "Feed Moderation", to: "/admin/moderation" },
       { icon: Settings, label: "Settings", to: "/admin/settings" },
     ],
   },

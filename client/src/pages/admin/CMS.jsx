@@ -3,18 +3,16 @@ import { useState } from "react";
 import { cmsService, uploadService } from "../../services";
 import { QUERY_KEYS } from "../../constants/queryKeys";
 import { toast } from "sonner";
-import { Plus, Trash2, Save, Image, Tag, HelpCircle, Star, Award, Trophy, Settings as SettingsIcon, X } from "lucide-react";
+import { Plus, Trash2, Save, Image, Tag, HelpCircle, Star, Settings as SettingsIcon, X } from "lucide-react";
 import { cn } from "../../utils";
 import { useDropzone } from "react-dropzone";
 
 const SECTIONS = [
   { id: "settings", label: "Settings", icon: SettingsIcon },
   { id: "gallery", label: "Gallery", icon: Image },
-  { id: "awards", label: "Awards", icon: Award },
+  { id: "offers", label: "Offers", icon: Tag },
   { id: "faqs", label: "FAQs", icon: HelpCircle },
   { id: "testimonials", label: "Testimonials", icon: Star },
-  { id: "certificates", label: "Certificates", icon: Award },
-  { id: "achievements", label: "Achievements", icon: Trophy },
 ];
 
 function SettingsSection() {
@@ -262,12 +260,10 @@ export default function CMS() {
   const [section, setSection] = useState("settings");
 
   const sectionProps = {
-    gallery: { queryKey: QUERY_KEYS.GALLERY, fetchFn: cmsService.getGallery, createFn: cmsService.createGallery, deleteFn: cmsService.deleteGallery, title: "Gallery", imageField: "image", fields: [{ key: "title", label: "Title" }, { key: "category", label: "Category", type: "select", options: ["Facial", "Hair", "Hair Color", "Hair Spa", "Waxing", "Threading", "Bridal", "Nails", "Skin", "Other"] }, { key: "image", label: "Image", type: "dropzone" }] },
-    awards: { queryKey: QUERY_KEYS.AWARDS, fetchFn: cmsService.getAwards, createFn: cmsService.createAward, deleteFn: cmsService.deleteAward, title: "Awards", imageField: "image", fields: [{ key: "title", label: "Title" }, { key: "description", label: "Description", type: "textarea", required: false }, { key: "image", label: "Image", type: "file" }] },
+    gallery: { queryKey: QUERY_KEYS.GALLERY, fetchFn: cmsService.getGallery, createFn: cmsService.createGallery, deleteFn: cmsService.deleteGallery, title: "Gallery", imageField: "image", fields: [{ key: "title", label: "Title" }, { key: "category", label: "Category", type: "select", options: ["Fashion", "Beauty", "Aari Work", "Bridal", "Traditional Wear", "Before & After", "Latest Work", "Facial", "Hair", "Hair Color", "Hair Spa", "Waxing", "Threading", "Skin", "Other"] }, { key: "image", label: "Image", type: "dropzone" }] },
+    offers: { queryKey: QUERY_KEYS.OFFERS, fetchFn: cmsService.getOffers, createFn: cmsService.createOffer, deleteFn: cmsService.deleteOffer, title: "Offers", imageField: "bannerImage", fields: [{ key: "title", label: "Title" }, { key: "description", label: "Description", type: "textarea", required: false }, { key: "discountText", label: "Discount Text" }, { key: "startDate", label: "Start Date", type: "date" }, { key: "endDate", label: "End Date", type: "date" }, { key: "bannerImage", label: "Banner Image", type: "dropzone", required: false }] },
     faqs: { queryKey: QUERY_KEYS.FAQS, fetchFn: cmsService.getFAQs, createFn: cmsService.createFAQ, deleteFn: cmsService.deleteFAQ, title: "FAQs", fields: [{ key: "question", label: "Question" }, { key: "answer", label: "Answer", type: "textarea" }] },
     testimonials: { queryKey: QUERY_KEYS.TESTIMONIALS, fetchFn: cmsService.getTestimonials, createFn: cmsService.createTestimonial, deleteFn: cmsService.deleteTestimonial, title: "Testimonials", fields: [{ key: "customerName", label: "Customer Name" }, { key: "review", label: "Review", type: "textarea" }, { key: "rating", label: "Rating (1-5)", type: "number" }] },
-    certificates: { queryKey: QUERY_KEYS.CERTIFICATES, fetchFn: cmsService.getCertificates, createFn: cmsService.createCertificate, deleteFn: cmsService.deleteCertificate, title: "Certificates", imageField: "certificateImage", fields: [{ key: "title", label: "Title" }, { key: "organization", label: "Organization" }, { key: "issueDate", label: "Issue Date", type: "date" }, { key: "certificateImage", label: "Image", type: "file" }] },
-    achievements: { queryKey: QUERY_KEYS.ACHIEVEMENTS, fetchFn: cmsService.getAchievements, createFn: cmsService.createAchievement, deleteFn: cmsService.deleteAchievement, title: "Achievements", fields: [{ key: "title", label: "Title" }, { key: "description", label: "Description", type: "textarea" }, { key: "year", label: "Year", type: "number" }, { key: "category", label: "Category", type: "select", options: ["Award", "Achievement", "Certificate", "Trophy", "Milestone", "Media"] }] },
   };
 
   return (

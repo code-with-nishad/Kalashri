@@ -8,11 +8,7 @@ const {
     getCustomers,
     getCustomerDetails,
     updateCustomerNotes,
-    manageGlowPoints,
     getAnalytics,
-    getLeaderboard,
-    manageLeaderboardVisibility,
-    resetMonthlyLeaderboard,
     getDashboardWidgets,
 } = require("../controllers/adminController");
 
@@ -32,11 +28,5 @@ router.get("/analytics", getAnalytics);
 router.get("/customers", getCustomers);
 router.get("/customers/:id", getCustomerDetails);
 router.patch("/customers/:id/notes", updateCustomerNotes);
-router.patch("/customers/:id/glow-points", manageGlowPoints);
-
-// Leaderboard
-router.get("/leaderboard", getLeaderboard);
-router.patch("/customers/:id/leaderboard", manageLeaderboardVisibility);
-router.post("/leaderboard/reset", resetMonthlyLeaderboard);
 
 module.exports = router;

@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Bell, Check, CheckCheck, Trash2, Sparkles, Calendar, Gift, Tag } from "lucide-react";
+import { Bell, Check, CheckCheck, Trash2, Calendar, Tag } from "lucide-react";
 import { notificationService } from "../../services";
 import { QUERY_KEYS } from "../../constants/queryKeys";
 import { timeAgo } from "../../utils";
@@ -8,8 +8,6 @@ import { toast } from "sonner";
 
 const iconMap = {
   Appointment: Calendar,
-  Reward: Gift,
-  "Glow Points": Sparkles,
   Offer: Tag,
   Birthday: Bell,
   System: Bell,

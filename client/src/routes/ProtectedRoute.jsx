@@ -41,7 +41,7 @@ export function AdminRoute() {
       {isAuthenticated && user?.role === "admin" ? (
         <Outlet />
       ) : isAuthenticated ? (
-        <Navigate to="/dashboard" replace />
+        <Navigate to="/" replace />
       ) : (
         <Navigate to="/login" state={{ from: location }} replace />
       )}
@@ -54,7 +54,7 @@ export function PublicOnlyRoute() {
   const user = useAuthStore((s) => s.user);
   if (isAuthenticated) {
     return (
-      <Navigate to={user?.role === "admin" ? "/admin" : "/dashboard"} replace />
+      <Navigate to={user?.role === "admin" ? "/admin" : "/"} replace />
     );
   }
   return <Outlet />;

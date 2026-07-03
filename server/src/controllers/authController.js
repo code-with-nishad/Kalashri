@@ -5,7 +5,7 @@ const sendToken = require("../utils/sendToken");
 const sendResponse = require("../utils/sendResponse");
 
 const authService = require("../services/authService");
-const adminService = require("../services/adminService");
+const AppError = require("../utils/AppError");
 
 exports.register = asyncHandler(async (req, res) => {
 
@@ -40,10 +40,10 @@ exports.login = asyncHandler(async (req, res) => {
 });
 
 exports.googleLogin = asyncHandler(async (req, res) => {
-    const { token, visitorId } = req.body;
+    const { token } = req.body;
     if (!token) throw new AppError("Google token is required", 400);
 
-    const user = await authService.googleLogin(token, visitorId);
+    const user = await authService.googleLogin(token);
     
     sendToken(
         user,
@@ -95,7 +95,3 @@ exports.updateMe = asyncHandler(async (req, res) => {
     sendResponse(res, 200, true, "Profile updated successfully", updatedUser);
 });
 
-exports.getLeaderboard = asyncHandler(async (req, res) => {
-    const leaderboard = await adminService.getLeaderboard();
-    sendResponse(res, 200, true, "Leaderboard retrieved successfully", leaderboard);
-});

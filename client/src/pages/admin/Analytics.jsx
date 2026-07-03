@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { adminService } from "../../services";
 import { QUERY_KEYS } from "../../constants/queryKeys";
-import { formatCurrency, getInitials, getMembershipColor } from "../../utils";
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, LineChart, Line } from "recharts";
+import { formatCurrency, getInitials } from "../../utils";
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 
 const CHART_STYLE = { background: "#1e1930", border: "1px solid #2d2547", borderRadius: 12, color: "#f8f4ff" };
 
@@ -68,7 +68,7 @@ export default function Analytics() {
                 <div key={c._id} className="flex items-center gap-4 p-3 rounded-xl bg-[var(--color-surface-2)]">
                   <span className="w-7 text-center font-bold text-[var(--color-text-muted)] text-sm">#{i + 1}</span>
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--color-rose-600)] to-purple-700 flex items-center justify-center text-[var(--color-text-primary)] text-xs font-bold">{getInitials(c.firstName, c.lastName)}</div>
-                  <div className="flex-1"><p className="text-[var(--color-text-primary)] text-sm font-medium">{c.firstName} {c.lastName}</p><p className="text-xs" style={{ color: getMembershipColor(c.membership) }}>{c.membership}</p></div>
+                  <div className="flex-1"><p className="text-[var(--color-text-primary)] text-sm font-medium">{c.firstName} {c.lastName}</p><p className="text-xs text-[var(--color-text-muted)]">{c.appointmentsCount} appointments</p></div>
                   <p className="text-[var(--color-rose-400)] font-bold text-sm">{formatCurrency(c.totalRevenue)}</p>
                 </div>
               ))}

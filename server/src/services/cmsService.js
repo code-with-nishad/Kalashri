@@ -1,22 +1,15 @@
 const Gallery = require("../models/Gallery");
-const Certificate = require("../models/Certificate");
-const Achievement = require("../models/Achievement");
 const Setting = require("../models/Setting");
 const Testimonial = require("../models/Testimonial");
 const Offer = require("../models/Offer");
 const FAQ = require("../models/FAQ");
-const Award = require("../models/Award");
-const AppError = require("../utils/AppError");
 
 const {
     gallerySchema,
-    certificateSchema,
-    achievementSchema,
     settingSchema,
     testimonialSchema,
     offerSchema,
     faqSchema,
-    awardSchema,
 } = require("../validations/cmsValidation");
 
 // --- GALLERY ---
@@ -27,33 +20,9 @@ exports.createGallery = async (data) => {
 };
 exports.updateGallery = async (id, data) => {
     const validated = gallerySchema.partial().parse(data);
-    return Gallery.findByIdAndUpdate(id, validated, { returnDocument: 'after' });
+    return Gallery.findByIdAndUpdate(id, validated, { returnDocument: "after" });
 };
 exports.deleteGallery = async (id) => Gallery.findByIdAndDelete(id);
-
-// --- CERTIFICATES ---
-exports.getCertificates = async () => Certificate.find({ isActive: true }).sort("-issueDate");
-exports.createCertificate = async (data) => {
-    const validated = certificateSchema.parse(data);
-    return Certificate.create(validated);
-};
-exports.updateCertificate = async (id, data) => {
-    const validated = certificateSchema.partial().parse(data);
-    return Certificate.findByIdAndUpdate(id, validated, { returnDocument: 'after' });
-};
-exports.deleteCertificate = async (id) => Certificate.findByIdAndDelete(id);
-
-// --- ACHIEVEMENTS ---
-exports.getAchievements = async () => Achievement.find().sort("-year");
-exports.createAchievement = async (data) => {
-    const validated = achievementSchema.parse(data);
-    return Achievement.create(validated);
-};
-exports.updateAchievement = async (id, data) => {
-    const validated = achievementSchema.partial().parse(data);
-    return Achievement.findByIdAndUpdate(id, validated, { returnDocument: 'after' });
-};
-exports.deleteAchievement = async (id) => Achievement.findByIdAndDelete(id);
 
 // --- SETTINGS ---
 exports.getSettings = async () => {
@@ -69,18 +38,18 @@ exports.updateSettings = async (data) => {
     if (!setting) {
         return Setting.create(validated);
     }
-    return Setting.findByIdAndUpdate(setting._id, validated, { returnDocument: 'after' });
+    return Setting.findByIdAndUpdate(setting._id, validated, { returnDocument: "after" });
 };
 
-// --- TESTIMONIALS ---
+// --- TESTIMONIALS / REVIEWS ---
 exports.getTestimonials = async () => Testimonial.find({ approved: true }).sort("-createdAt");
 exports.createTestimonial = async (data) => {
     const validated = testimonialSchema.parse(data);
-    return Testimonial.create(validated); // Requires admin approval
+    return Testimonial.create(validated);
 };
 exports.updateTestimonial = async (id, data) => {
     const validated = testimonialSchema.partial().parse(data);
-    return Testimonial.findByIdAndUpdate(id, validated, { returnDocument: 'after' });
+    return Testimonial.findByIdAndUpdate(id, validated, { returnDocument: "after" });
 };
 exports.deleteTestimonial = async (id) => Testimonial.findByIdAndDelete(id);
 
@@ -92,7 +61,7 @@ exports.createOffer = async (data) => {
 };
 exports.updateOffer = async (id, data) => {
     const validated = offerSchema.partial().parse(data);
-    return Offer.findByIdAndUpdate(id, validated, { returnDocument: 'after' });
+    return Offer.findByIdAndUpdate(id, validated, { returnDocument: "after" });
 };
 exports.deleteOffer = async (id) => Offer.findByIdAndDelete(id);
 
@@ -104,18 +73,6 @@ exports.createFAQ = async (data) => {
 };
 exports.updateFAQ = async (id, data) => {
     const validated = faqSchema.partial().parse(data);
-    return FAQ.findByIdAndUpdate(id, validated, { returnDocument: 'after' });
+    return FAQ.findByIdAndUpdate(id, validated, { returnDocument: "after" });
 };
 exports.deleteFAQ = async (id) => FAQ.findByIdAndDelete(id);
-
-// --- AWARDS ---
-exports.getAwards = async () => Award.find().sort("-createdAt");
-exports.createAward = async (data) => {
-    const validated = awardSchema.parse(data);
-    return Award.create(validated);
-};
-exports.updateAward = async (id, data) => {
-    const validated = awardSchema.partial().parse(data);
-    return Award.findByIdAndUpdate(id, validated, { returnDocument: 'after' });
-};
-exports.deleteAward = async (id) => Award.findByIdAndDelete(id);

@@ -59,8 +59,6 @@ exports.broadcastNotification = asyncHandler(async (req, res) => {
     
     if (audience === "all") {
         users = await User.find({ role: "customer" });
-    } else if (audience === "high_points") {
-        users = await User.find({ role: "customer", glowPoints: { $gte: 100 } });
     } else if (audience === "inactive") {
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);

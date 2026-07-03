@@ -21,7 +21,7 @@ export default function MobileLayout() {
       </main>
 
       {/* Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] z-50">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-[var(--color-surface-2)] border-t border-[var(--color-border)] shadow-lg z-50">
         <div className="max-w-md mx-auto flex items-center justify-between px-6 h-16">
           {navItems.map((item) => {
             const isActive = location.pathname === item.to || (item.to !== "/" && location.pathname.startsWith(item.to));
@@ -32,10 +32,10 @@ export default function MobileLayout() {
                 to={item.to}
                 className={cn(
                   "flex flex-col items-center justify-center gap-1 w-16 h-full transition-colors",
-                  isActive ? "text-[var(--color-primary)]" : "text-gray-400 hover:text-gray-600"
+                  isActive ? "text-[var(--color-gold)]" : "text-white/40 hover:text-white/80"
                 )}
               >
-                <Icon className={cn("w-6 h-6", isActive && "fill-[var(--color-primary)]/20")} strokeWidth={isActive ? 2.5 : 2} />
+                <Icon className={cn("w-6 h-6", isActive && "text-[var(--color-gold)]")} strokeWidth={isActive ? 2.5 : 2} />
                 <span className="text-[10px] font-medium">{item.label}</span>
               </Link>
             );

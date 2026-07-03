@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -24,11 +24,11 @@ export default function Splash() {
           <span className="text-5xl font-display">K</span>
         </div>
         <h1 className="text-4xl font-display font-semibold tracking-widest mb-2">KALASHRI</h1>
-        <p className="text-sm font-medium tracking-[0.2em] uppercase text-white/80">Fashion • Beauty • Insurance</p>
-        
+        <p className="text-sm font-medium tracking-[0.2em] uppercase text-white/80">Fashion | Beauty | Aari Work</p>
+
         <div className="mt-20">
-          <p className="text-sm text-[var(--color-gold-light)]/70">Everything You Need,</p>
-          <p className="text-sm text-[var(--color-gold-light)]/70">All In One Place</p>
+          <p className="text-sm text-[var(--color-gold-light)]/70">Everything you need,</p>
+          <p className="text-sm text-[var(--color-gold-light)]/70">all in one place</p>
           <div className="flex justify-center gap-2 mt-6">
             <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-gold)] opacity-50" />
             <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-gold)]" />
