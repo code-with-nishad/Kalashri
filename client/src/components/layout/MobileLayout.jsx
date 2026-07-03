@@ -21,7 +21,7 @@ export default function MobileLayout() {
       </main>
 
       {/* Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-[var(--color-surface-2)] border-t border-[var(--color-border)] shadow-lg z-50">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-[#111111]/95 backdrop-blur-xl border-t border-[#2A2A2A] shadow-[0_-10px_30px_rgba(0,0,0,0.5)] z-50">
         <div className="max-w-md mx-auto flex items-center justify-between px-6 h-16">
           {navItems.map((item) => {
             const isActive = location.pathname === item.to || (item.to !== "/" && location.pathname.startsWith(item.to));

@@ -21,21 +21,31 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col pt-16 px-6">
-      <div className="flex flex-col items-center mb-10">
-        <div className="w-16 h-16 rounded-full border border-[var(--color-primary-dark)] flex items-center justify-center mb-4">
-          <span className="text-3xl font-display text-[var(--color-primary-dark)]">K</span>
+    <div className="min-h-screen relative flex flex-col pt-16 px-6 overflow-hidden">
+      {/* Background Image Setup */}
+      <div className="absolute inset-0 z-0">
+        <img 
+          src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=800&auto=format&fit=crop" 
+          alt="Login Background" 
+          className="w-full h-full object-cover object-center opacity-60"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1a1110]/90 via-[#1a1110]/80 to-[#1a1110]"></div>
+      </div>
+
+      <div className="relative z-10 flex flex-col items-center mb-10">
+        <div className="w-16 h-16 rounded-full border border-[#d4af37] flex items-center justify-center mb-4 bg-white/10 backdrop-blur-sm">
+          <span className="text-3xl font-display text-[#d4af37]">K</span>
         </div>
-        <h1 className="text-3xl font-display font-semibold text-[var(--color-primary-dark)] tracking-wider">KALASHRI</h1>
-        <p className="text-[10px] uppercase tracking-widest text-gray-500 mt-1">Fashion • Beauty</p>
+        <h1 className="text-3xl font-display font-semibold text-[#d4af37] tracking-wider">KALASHRI</h1>
+        <p className="text-[10px] uppercase tracking-widest text-white/60 mt-1">Fashion • Beauty</p>
       </div>
 
-      <div className="text-center mb-10">
-        <h2 className="text-xl font-bold text-gray-900">Welcome Back!</h2>
-        <p className="text-sm text-gray-500">Sign in to continue</p>
+      <div className="relative z-10 text-center mb-10">
+        <h2 className="text-xl font-bold text-white">Welcome Back!</h2>
+        <p className="text-sm text-white/60">Sign in to continue</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4 relative z-10">
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
             <Phone className="h-5 w-5 text-gray-400" />
@@ -44,7 +54,7 @@ export default function Login() {
             type="text"
             required
             placeholder="Enter Mobile Number"
-            className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--color-accent)] focus:border-transparent outline-none transition-all"
+            className="w-full pl-11 pr-4 py-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-[#d4af37] focus:border-transparent outline-none transition-all shadow-lg"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           />
@@ -58,14 +68,14 @@ export default function Login() {
             type="password"
             required
             placeholder="Enter Password"
-            className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--color-accent)] focus:border-transparent outline-none transition-all"
+            className="w-full pl-11 pr-4 py-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-[#d4af37] focus:border-transparent outline-none transition-all shadow-lg"
             value={formData.password}
             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
           />
         </div>
 
         <div className="flex justify-end">
-          <Link to="/forgot-password" className="text-xs text-gray-500 hover:text-[var(--color-accent)]">
+          <Link to="/forgot-password" className="text-xs text-[#d4af37] hover:text-white transition-colors">
             Forgot Password?
           </Link>
         </div>
@@ -73,38 +83,32 @@ export default function Login() {
         <button
           type="submit"
           disabled={isPending}
-          className="w-full py-4 bg-[var(--color-accent)] text-white rounded-full font-bold text-lg hover:bg-[var(--color-accent-light)] transition-colors shadow-lg shadow-pink-500/30"
+          className="w-full py-4 bg-[#d4af37] text-white rounded-full font-bold text-lg hover:bg-[#ebd576] transition-colors shadow-lg shadow-[#d4af37]/30"
         >
           {isPending ? "Signing in..." : "Login"}
         </button>
       </form>
 
-      <div className="mt-8 text-center">
-        <p className="text-xs text-gray-400 mb-4 relative">
-          <span className="bg-white px-2 relative z-10">or login with</span>
-          <span className="absolute top-1/2 left-1/4 right-1/4 h-px bg-gray-200 -z-0"></span>
+      <div className="mt-8 text-center relative z-10">
+        <p className="text-xs text-white/40 mb-4 relative">
+          <span className="px-2 relative z-10 text-white">or login with</span>
+          <span className="absolute top-1/2 left-1/4 right-1/4 h-px bg-white/20 -z-0"></span>
         </p>
 
         <div className="flex justify-center gap-4">
           <button 
             type="button"
             onClick={() => handleGoogleLogin()}
-            className="w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors"
+            className="w-12 h-12 rounded-full border border-white/20 bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors"
           >
-            <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-5 h-5" alt="Google" />
-          </button>
-          <button 
-            type="button"
-            className="w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors"
-          >
-            <img src="https://www.svgrepo.com/show/452133/whatsapp.svg" className="w-5 h-5" alt="WhatsApp" />
+            <span className="text-xl">G</span>
           </button>
         </div>
       </div>
 
-      <div className="mt-auto pb-8 text-center pt-8">
-        <p className="text-sm text-gray-500">
-          Don't have an account? <Link to="/register" className="text-[var(--color-accent)] font-semibold">Sign Up</Link>
+      <div className="mt-auto pb-8 text-center pt-8 relative z-10">
+        <p className="text-sm text-white/60">
+          Don't have an account? <Link to="/register" className="text-[#d4af37] font-semibold">Sign Up</Link>
         </p>
       </div>
     </div>
