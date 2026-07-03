@@ -1,0 +1,9 @@
+{
+  "name": "kalashri",
+  "private": true,
+  "scripts": {
+    "postinstall": "npm install --prefix server && npm install --prefix client",
+    "build": "npm --prefix client run build",
+    "start": "npm --prefix server run start"
+  }
+}
