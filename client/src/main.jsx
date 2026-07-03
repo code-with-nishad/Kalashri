@@ -44,7 +44,7 @@ window.addEventListener(
 );
 
 // Catch unhandled promise rejections (how dynamic import failures present in some browsers)
-window.addEventListener("unhandledrejection", (e) => {
+window.addEventListener("unhandledrejection", async (e) => {
   const reason = e.reason;
   const message = reason && typeof reason === "object" ? reason.message || "" : String(reason || "");
   if (
@@ -52,6 +52,21 @@ window.addEventListener("unhandledrejection", (e) => {
     message.includes("Failed to load module script") ||
     message.includes("Expected a JavaScript-or-Wasm module script")
   ) {
+    reloadPage();
+  }
+  
+  if (message.includes("bad-precaching-response")) {
+    console.warn("PWA precache mismatch detected. Clearing service workers and reloading...");
+    if ("serviceWorker" in navigator) {
+      try {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        for (let registration of registrations) {
+          await registration.unregister();
+        }
+      } catch (err) {
+        console.error("Failed to unregister service worker:", err);
+      }
+    }
     reloadPage();
   }
 });
