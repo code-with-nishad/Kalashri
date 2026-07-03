@@ -60,7 +60,7 @@ export default function InstallBanner() {
               </div>
               <div>
                 <h4 className="font-display font-black text-base text-[var(--color-text-primary)] flex items-center gap-1.5">
-                  Gayatri Beauty App
+                  Kalashri App
                 </h4>
                 <p className="text-xs text-[var(--color-text-muted)] mt-1 font-semibold">
                   Install for a faster, offline-friendly booking experience right from your home screen.
