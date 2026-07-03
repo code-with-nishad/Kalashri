@@ -16,6 +16,17 @@ const bookAppointment = async (userId, appointmentData) => {
 
     const { serviceIds, customServices, appointmentDate, appointmentTime, notes, paymentMethod, transactionId, paymentScreenshot } = validationResult.data;
 
+    // Check for Double Booking
+    const existingAppointment = await Appointment.findOne({
+        appointmentDate,
+        appointmentTime,
+        status: { $nin: ["Cancelled", "Rejected", "Payment Failed"] }
+    });
+
+    if (existingAppointment) {
+        throw new AppError(`The time slot ${appointmentTime} is already booked. Please choose another time.`, 400);
+    }
+
     const servicesSnapshot = [];
     let totalAmount = 0;
     let totalDuration = 0;
@@ -29,11 +40,12 @@ const bookAppointment = async (userId, appointmentData) => {
 
         services.forEach((service) => {
             totalDuration += service.duration;
+            totalAmount += service.price || 0;
 
             servicesSnapshot.push({
                 service: service._id,
                 serviceName: service.name,
-                price: 0,
+                price: service.price || 0,
                 duration: service.duration,
                 isCustom: false,
             });
@@ -233,9 +245,6 @@ const deleteAppointment = async (appointmentId) => {
         throw new AppError("Appointment not found", 404);
     }
 
-    // Soft delete logic (we'll implement it by setting status to Cancelled or just physical delete if required,
-    // prompt says: "Soft delete only if required". Let's use physical delete for now or status change)
-    // Actually, setting status to Cancelled is better.
     appointment.status = "Cancelled";
     await appointment.save();
 

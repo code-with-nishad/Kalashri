@@ -4,6 +4,9 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const errorMiddleware = require("./src/middleware/errorMiddleware");
 const connectDB = require("./src/config/db");
+const helmet = require("helmet");
+const mongoSanitize = require("express-mongo-sanitize");
+const rateLimit = require("express-rate-limit");
 
 const authRoutes = require("./src/routes/authRoutes");
 const serviceRoutes = require("./src/routes/serviceRoutes");
@@ -23,6 +26,16 @@ dotenv.config();
 const app = express();
 
 connectDB();
+
+// Security Middleware
+app.use(helmet());
+app.use(mongoSanitize());
+
+const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 50, // limit each IP to 50 requests per windowMs for auth routes
+    message: "Too many requests from this IP, please try again after 15 minutes",
+});
 
 const normalizeOrigin = (origin) => origin && origin.replace(/\/$/, "");
 
@@ -68,7 +81,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.use("/api/auth", authRoutes);
+app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/appointments", appointmentRoutes);
 app.use("/api/admin", adminRoutes);
