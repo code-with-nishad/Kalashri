@@ -71,7 +71,7 @@ export default function About() {
     <div className="bg-white text-gray-900 overflow-hidden">
       <section className="relative min-h-[88vh] flex items-center">
         <img
-          src={settings?.hero?.image || "/images/hero-1.jpg"}
+          src={settings?.hero?.image || "/images/bharti-hero.jpg"}
           alt={`${SALON_NAME} fashion and beauty studio`}
           className="absolute inset-0 w-full h-full object-cover"
         />
