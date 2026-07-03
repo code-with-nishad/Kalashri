@@ -23,104 +23,127 @@ export default function Home() {
       </div>
 
       {/* Mobile + Desktop Hero Section */}
-      <div className="relative w-full min-h-screen bg-[var(--color-surface-2)] overflow-hidden flex flex-col">
-        {/* Background Image Setup */}
-        <div className="absolute inset-0 z-0">
-          <img 
-            src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=2000&auto=format&fit=crop" 
-            alt="Kalashri Bride" 
-            className="w-full h-full object-cover object-center opacity-20"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-surface-2)] via-[var(--color-surface-2)]/90 to-transparent"></div>
-        </div>
-
+      <div className="relative w-full min-h-screen bg-[var(--color-surface-2)] flex flex-col pt-2 md:pt-4">
+        
         {/* Top Navbar */}
-        <nav className="relative z-20 flex flex-col md:flex-row items-start md:items-center justify-between px-4 sm:px-6 md:px-8 py-6 w-full max-w-7xl mx-auto gap-4">
+        <nav className="relative z-20 flex flex-col md:flex-row items-start md:items-center justify-between px-4 sm:px-6 md:px-8 py-4 w-full max-w-7xl mx-auto gap-4">
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-full border border-[#d4af37] flex items-center justify-center">
+            <div className="w-11 h-11 rounded-full border border-[#d4af37] flex items-center justify-center bg-white shadow-sm">
               <span className="font-display text-[#d4af37] text-xl font-bold">K</span>
             </div>
             <div>
               <h1 className="font-display text-[#d4af37] text-lg sm:text-xl font-bold tracking-widest uppercase">Kalashri</h1>
-              <p className="text-white/60 text-[10px] tracking-widest uppercase">Fashion & Beauty Studio</p>
+              <p className="text-gray-500 text-[10px] tracking-widest uppercase font-semibold">Fashion & Beauty Studio</p>
             </div>
           </div>
 
           {/* Primary Links */}
-          <div className="flex flex-wrap items-center gap-3 text-sm font-medium text-gray-700 w-full md:w-auto">
-            <Link to="/" className="text-[#d4af37] border-b-2 border-[#d4af37] pb-1">Home</Link>
-            <Link to="/fashion" className="hover:text-[#d4af37] transition-colors">Fashion</Link>
-            <Link to="/beauty" className="hover:text-[#d4af37] transition-colors">Beauty</Link>
-            <Link to="/gallery" className="hover:text-[#d4af37] transition-colors">Gallery</Link>
-            <Link to="/offers" className="hover:text-[#d4af37] transition-colors">Offers</Link>
-            <Link to="/about" className="hover:text-[#d4af37] transition-colors">About</Link>
+          <div className="flex flex-wrap items-center gap-4 text-sm font-medium text-gray-600 w-full md:w-auto overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
+            <Link to="/" className="text-[#d4af37] border-b-2 border-[#d4af37] pb-1 whitespace-nowrap">Home</Link>
+            <Link to="/fashion" className="hover:text-[#d4af37] transition-colors whitespace-nowrap">Fashion</Link>
+            <Link to="/beauty" className="hover:text-[#d4af37] transition-colors whitespace-nowrap">Beauty</Link>
+            <Link to="/gallery" className="hover:text-[#d4af37] transition-colors whitespace-nowrap">Gallery</Link>
+            <Link to="/offers" className="hover:text-[#d4af37] transition-colors whitespace-nowrap">Offers</Link>
+            <Link to="/about" className="hover:text-[#d4af37] transition-colors whitespace-nowrap">About</Link>
           </div>
 
           {/* Nav Actions */}
-          <div className="flex flex-wrap items-center gap-3">
-            <Link to="/book" className="inline-flex items-center gap-2 border border-[#d4af37] text-[#d4af37] px-4 py-2.5 rounded hover:bg-[#d4af37] hover:text-white transition-all font-semibold text-sm">
+          <div className="flex flex-wrap items-center gap-3 absolute top-4 right-4 md:relative md:top-0 md:right-0">
+            <Link to="/book" className="hidden sm:inline-flex items-center gap-2 bg-rose-50 border border-rose-200 text-[#d4af37] px-4 py-2.5 rounded-lg hover:bg-rose-100 transition-all font-bold text-sm shadow-sm">
               Book Appointment
             </Link>
-            <button className="lg:hidden text-gray-800 hover:text-[#d4af37]">
-              <Menu className="w-7 h-7" />
+            <button className="md:hidden text-gray-800 hover:text-[#d4af37] bg-gray-50 p-2 rounded-lg border border-gray-100">
+              <Menu className="w-6 h-6" />
             </button>
           </div>
         </nav>
 
-        {/* Hero Content */}
-        <div className="relative z-10 flex-1 flex flex-col justify-center px-4 sm:px-6 md:px-8 pb-10 max-w-7xl mx-auto w-full">
-          <div className="max-w-3xl md:max-w-2xl">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="h-[1px] w-8 bg-[#d4af37]"></div>
-              <span className="text-[#d4af37] uppercase tracking-[0.2em] text-xs font-bold">Welcome to Kalashri</span>
-              <div className="h-[1px] w-8 bg-[#d4af37]"></div>
-            </div>
-            
-            <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
-              Where Tradition <br/>
-              <span className="text-[#d4af37]">Meets Elegance</span>
-            </h2>
-            
-            <p className="text-gray-600 text-lg mb-10 max-w-lg leading-relaxed">
-              From timeless ethnic wear to stunning makeovers, we bring out the best in you.
-            </p>
-            
-            <div className="flex flex-wrap items-center gap-4">
-              <Link to="/services" className="bg-[#d4af37] text-white px-8 py-3.5 rounded font-bold hover:bg-[#ebd576] transition-colors flex items-center gap-2 shadow-lg shadow-[#d4af37]/30">
-                Explore Services <span className="text-xl">→</span>
-              </Link>
-              <Link to="/book" className="bg-transparent border border-gray-300 text-gray-700 px-8 py-3.5 rounded font-bold hover:border-[#d4af37] hover:text-[#d4af37] transition-colors flex items-center gap-2">
-                Book Appointment <CalendarIcon className="w-5 h-5" />
-              </Link>
-            </div>
+        {/* Hero Content Grid */}
+        <div className="relative z-10 flex-1 flex flex-col lg:flex-row max-w-7xl mx-auto w-full gap-8 lg:gap-12 pb-12 lg:pb-0">
+          
+          {/* Text Content - Left Side */}
+          <div className="flex-1 flex flex-col justify-center px-4 sm:px-6 md:px-8 py-8 lg:py-0 order-2 lg:order-1">
+            <div className="max-w-2xl lg:max-w-xl xl:max-w-2xl">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="h-[2px] w-8 bg-[#d4af37]"></div>
+                <span className="text-[#d4af37] uppercase tracking-[0.2em] text-xs font-bold">Welcome to Kalashri</span>
+              </div>
+              
+              <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 mb-6 leading-[1.15]">
+                Where Tradition <br/>
+                <span className="text-[#d4af37]">Meets Elegance</span>
+              </h2>
+              
+              <p className="text-gray-600 text-base sm:text-lg mb-10 max-w-lg leading-relaxed">
+                From timeless ethnic wear to stunning makeovers, we bring out the absolute best in you with our premium studio services.
+              </p>
+              
+              <div className="flex flex-wrap items-center gap-4">
+                <Link to="/services" className="bg-[#d4af37] text-white px-8 py-4 rounded-xl font-bold hover:bg-[#ebd576] transition-all flex items-center gap-2 shadow-lg shadow-[#d4af37]/30 transform hover:-translate-y-1">
+                  Explore Services <span className="text-xl">→</span>
+                </Link>
+                <Link to="/book" className="bg-white border-2 border-gray-200 text-gray-800 px-8 py-4 rounded-xl font-bold hover:border-[#d4af37] hover:text-[#d4af37] transition-all flex items-center gap-2">
+                  Book Appointment <CalendarIcon className="w-5 h-5" />
+                </Link>
+              </div>
 
-            <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 text-gray-700 text-sm font-medium">
-              <div className="flex items-start gap-3 bg-white shadow-sm rounded-3xl p-4 border border-gray-100">
-                <span className="w-10 h-10 rounded-full border border-[#d4af37] flex items-center justify-center text-[#d4af37] text-xl">♔</span>
-                <div>
-                  <p className="font-semibold text-gray-900">Premium Quality</p>
-                  <p className="text-xs text-gray-500">Materials</p>
+              <div className="mt-12 pt-8 border-t border-gray-100 grid grid-cols-1 sm:grid-cols-3 gap-6 text-gray-700 text-sm font-medium">
+                <div className="flex items-start gap-3">
+                  <span className="w-10 h-10 rounded-full bg-rose-50 text-[#d4af37] flex items-center justify-center shrink-0">♔</span>
+                  <div>
+                    <p className="font-bold text-gray-900">Premium Quality</p>
+                    <p className="text-xs text-gray-500 mt-0.5">Materials & Tools</p>
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-start gap-3 bg-white shadow-sm rounded-3xl p-4 border border-gray-100">
-                <span className="w-10 h-10 rounded-full border border-[#d4af37] flex items-center justify-center text-[#d4af37]">
-                  <Users className="w-5 h-5" />
-                </span>
-                <div>
-                  <p className="font-semibold text-gray-900">Expert Professionals</p>
+                <div className="flex items-start gap-3">
+                  <span className="w-10 h-10 rounded-full bg-rose-50 text-[#d4af37] flex items-center justify-center shrink-0">
+                    <Users className="w-5 h-5" />
+                  </span>
+                  <div>
+                    <p className="font-bold text-gray-900">Expert Team</p>
+                    <p className="text-xs text-gray-500 mt-0.5">Highly Trained</p>
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-start gap-3 bg-white shadow-sm rounded-3xl p-4 border border-gray-100">
-                <span className="w-10 h-10 rounded-full border border-[#d4af37] flex items-center justify-center text-[#d4af37]">
-                  <Check className="w-5 h-5" />
-                </span>
-                <div>
-                  <p className="font-semibold text-gray-900">100% Customer Satisfaction</p>
+                <div className="flex items-start gap-3">
+                  <span className="w-10 h-10 rounded-full bg-rose-50 text-[#d4af37] flex items-center justify-center shrink-0">
+                    <Check className="w-5 h-5" />
+                  </span>
+                  <div>
+                    <p className="font-bold text-gray-900">100% Guaranteed</p>
+                    <p className="text-xs text-gray-500 mt-0.5">Customer Joy</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+          
+          {/* Image - Right Side */}
+          <div className="flex-1 w-full lg:h-auto min-h-[50vh] sm:min-h-[60vh] relative order-1 lg:order-2 px-4 sm:px-6 lg:px-0 lg:pr-8 py-4 lg:py-8">
+            <div className="w-full h-full relative rounded-[2rem] sm:rounded-[3rem] overflow-hidden shadow-2xl group">
+              <img 
+                src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=1200&auto=format&fit=crop" 
+                alt="Kalashri Bride" 
+                className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-1000 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+              
+              {/* Decorative Floating Card */}
+              <div className="absolute bottom-6 sm:bottom-10 left-6 sm:left-10 bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-xl flex items-center gap-4 transform transition-transform hover:-translate-y-2 cursor-pointer">
+                <div className="w-12 h-12 rounded-full bg-rose-50 flex items-center justify-center shrink-0">
+                  <Star className="w-6 h-6 text-[#d4af37] fill-current" />
+                </div>
+                <div>
+                  <div className="flex gap-1 mb-1">
+                    {[1,2,3,4,5].map(i => <Star key={i} className="w-3 h-3 text-[#d4af37] fill-current" />)}
+                  </div>
+                  <p className="font-bold text-gray-900 text-sm">4.9/5 Average Rating</p>
+                  <p className="text-xs text-gray-500">Based on 5,000+ reviews</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
         </div>
       </div>
 
