@@ -2,9 +2,7 @@ import axios from "axios";
 import { useAuthStore } from "../store/authStore";
 
 const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
-const baseURL = isLocal
-  ? (import.meta.env.VITE_API_URL || "http://localhost:5000/api")
-  : "https://salon-management-system-ijtv.onrender.com/api";
+const baseURL = import.meta.env.VITE_API_URL || (isLocal ? "http://localhost:5000/api" : "https://kalashri.onrender.com/api");
 
 const api = axios.create({
   baseURL,

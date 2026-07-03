@@ -16,7 +16,7 @@ const pingServer = async () => {
   const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
   const url = isLocal
     ? (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/api$/, "")
-    : "https://salon-management-system-ijtv.onrender.com";
+    : (import.meta.env.VITE_API_URL || "https://kalashri.onrender.com").replace(/\/api$/, "");
   
   try {
     const res = await fetch(url);

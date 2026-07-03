@@ -30,6 +30,7 @@ const allowedOrigins = [
     "http://localhost:5173",
     "http://localhost:5174",
     "https://salon-management-system-henna.vercel.app",
+    "https://kalashri.vercel.app",
     process.env.CLIENT_URL,
     ...(process.env.CORS_ORIGINS || "").split(","),
 ]
