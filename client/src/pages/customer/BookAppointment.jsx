@@ -62,23 +62,12 @@ export default function BookAppointment() {
   };
 
   const handleConfirm = () => {
-    if(!selectedService) return;
-    
     const payload = {
-      appointmentCategory: category,
-      services: [{
-        service: selectedService._id,
-        serviceName: selectedService.name,
-        price: selectedService.price || 0,
-        duration: selectedService.duration || 30,
-        isCustom: false
-      }],
+      serviceIds: selectedServiceId === "custom" ? [] : [selectedService._id],
+      customServices: selectedServiceId === "custom" ? ["General Consultation"] : [],
       appointmentDate: date,
       appointmentTime: time,
-      totalAmount: selectedService.price || 0,
-      totalDuration: selectedService.duration || 30,
-      notes: notes,
-      status: "Pending"
+      notes: notes
     };
 
     createAppointment.mutate(payload);
@@ -90,7 +79,7 @@ export default function BookAppointment() {
   ];
 
   return (
-    <div className="min-h-screen bg-[var(--color-surface)] flex flex-col pb-24">
+    <div className="min-h-screen bg-[var(--color-surface)] flex flex-col pb-40">
       <MobileHeader title="Book Appointment" showBack className="bg-[var(--color-primary-dark)]" />
       
       {/* Stepper */}
@@ -258,7 +247,7 @@ export default function BookAppointment() {
 
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white max-w-md mx-auto z-50 flex gap-3">
+      <div className="fixed bottom-16 left-0 right-0 p-6 bg-white max-w-md mx-auto z-40 flex gap-3 border-t border-gray-100 shadow-[0_-10px_20px_rgba(0,0,0,0.05)]">
         {step > 1 && (
           <button 
             onClick={() => setStep(step - 1)}

@@ -7,7 +7,7 @@ export default function BeautyServiceDetails() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-[var(--color-surface)] flex flex-col pb-24">
+    <div className="min-h-screen bg-[var(--color-surface)] flex flex-col pb-40">
       <div className="relative">
         <MobileHeader className="absolute top-0 w-full bg-transparent shadow-none" showBack />
         <img 
@@ -39,7 +39,7 @@ export default function BeautyServiceDetails() {
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white border-t border-gray-100 max-w-md mx-auto z-50">
+      <div className="fixed bottom-16 left-0 right-0 p-6 bg-white border-t border-gray-100 max-w-md mx-auto z-40">
         <button 
           onClick={() => navigate("/book")}
           className="w-full py-4 bg-[var(--color-primary-dark)] text-white rounded-full font-bold text-sm hover:bg-[var(--color-primary)] transition-colors shadow-lg"
