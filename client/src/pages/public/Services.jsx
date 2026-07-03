@@ -6,7 +6,7 @@ import { serviceService } from "../../services";
 import { QUERY_KEYS } from "../../constants/queryKeys";
 import { SkeletonCard } from "../../components/ui/Skeleton";
 import MobileHeader from "../../components/layout/MobileHeader";
-import { formatCurrency } from "../../utils/formatters";
+import { formatCurrency } from "../../utils";
 
 export default function Services() {
   const { data, isLoading } = useQuery({

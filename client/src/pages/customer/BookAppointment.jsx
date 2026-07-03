@@ -7,7 +7,7 @@ import { serviceService, appointmentService } from "../../services";
 import { format, addDays } from "date-fns";
 import { toast } from "sonner";
 import { useAuthStore } from "../../store/authStore";
-import { formatCurrency } from "../../utils/formatters";
+import { formatCurrency } from "../../utils";
 
 export default function BookAppointment() {
   const navigate = useNavigate();
