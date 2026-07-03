@@ -55,7 +55,7 @@ export default function NauvariSarees() {
                   <span className="text-[var(--color-accent)] font-bold">{saree.price}</span>
                 </div>
                 <p className="text-xs text-[var(--color-text-secondary)] mb-4">{saree.desc}</p>
-                <Link to={`/book`} className="text-xs font-semibold uppercase tracking-wider text-white bg-[var(--color-surface-3)] hover:bg-[var(--color-accent)] hover:text-[var(--color-primary-dark)] px-4 py-2 rounded-lg transition-colors border border-[var(--color-border)]">
+                <Link to={`/book?category=Nauvari`} className="text-xs font-semibold uppercase tracking-wider text-white bg-[var(--color-surface-3)] hover:bg-[var(--color-accent)] hover:text-[var(--color-primary-dark)] px-4 py-2 rounded-lg transition-colors border border-[var(--color-border)]">
                   Book Now
                 </Link>
               </div>

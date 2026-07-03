@@ -1,19 +1,22 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import MobileHeader from "../../components/layout/MobileHeader";
-import { Check, ChevronDown, Calendar as CalendarIcon, Clock, Sparkles, Scissors } from "lucide-react";
+import { Check, Calendar as CalendarIcon, Clock, Sparkles, Scissors, ChevronLeft } from "lucide-react";
 import { serviceService, appointmentService } from "../../services";
 import { format, addDays } from "date-fns";
 import { toast } from "sonner";
 import { useAuthStore } from "../../store/authStore";
+import { formatCurrency } from "../../utils/formatters";
 
 export default function BookAppointment() {
   const navigate = useNavigate();
+  const location = useLocation();
   const user = useAuthStore(s => s.user);
   
   const [step, setStep] = useState(1);
   const [category, setCategory] = useState("Beauty");
+  const [subCategory, setSubCategory] = useState("");
   const [selectedServiceId, setSelectedServiceId] = useState("");
   const [date, setDate] = useState(format(addDays(new Date(), 1), 'yyyy-MM-dd'));
   const [time, setTime] = useState("10:00 AM");
@@ -28,13 +31,30 @@ export default function BookAppointment() {
 
   const allServices = servicesData?.data || [];
   
+  // Parse query params for direct links
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const catQuery = params.get("category");
+    if (catQuery) {
+      setCategory("Fashion");
+      if (catQuery === "Nauvari") setSubCategory("Nauvari Saree");
+      else if (catQuery === "Blouse") setSubCategory("Blouse Stitching");
+      else if (catQuery === "Dress") setSubCategory("Dress Stitching");
+      else if (catQuery === "Aari") setSubCategory("Aari Work");
+      setStep(2);
+    }
+  }, [location]);
+
   const filteredServices = useMemo(() => {
     if(category === "Beauty") {
-      return allServices.filter(s => s.category !== "Fashion" && s.category !== "Stitching");
+      return allServices.filter(s => s.category !== "Fashion" && s.category !== "Nauvari Saree" && s.category !== "Blouse Stitching" && s.category !== "Dress Stitching" && s.category !== "Aari Work" && s.category !== "Stitching");
     } else {
-      return allServices.filter(s => s.category === "Fashion" || s.category === "Stitching");
+      if (subCategory) {
+        return allServices.filter(s => s.category === subCategory);
+      }
+      return [];
     }
-  }, [allServices, category]);
+  }, [allServices, category, subCategory]);
 
   const selectedService = allServices.find(s => s._id === selectedServiceId);
 
@@ -79,7 +99,7 @@ export default function BookAppointment() {
   ];
 
   return (
-    <div className="min-h-screen bg-[var(--color-surface)] flex flex-col pb-40">
+    <div className="min-h-screen bg-[var(--color-surface)] flex flex-col pb-40 font-sans">
       <MobileHeader title="Book Appointment" showBack className="bg-[var(--color-primary-dark)]" />
       
       {/* Stepper */}
@@ -107,10 +127,10 @@ export default function BookAppointment() {
         
         {step === 1 && (
           <div className="space-y-4 animate-fade-in">
-            <h2 className="text-xl font-bold text-white mb-6">What are you looking for today?</h2>
+            <h2 className="text-xl font-display font-bold text-white mb-6">What are you looking for today?</h2>
             
             <div 
-              onClick={() => { setCategory("Beauty"); setStep(2); setSelectedServiceId(""); }}
+              onClick={() => { setCategory("Beauty"); setSubCategory(""); setStep(2); setSelectedServiceId(""); }}
               className={`p-6 rounded-2xl border cursor-pointer transition-all ${category === "Beauty" ? "border-[var(--color-accent)] bg-[var(--color-accent)]/5" : "border-[var(--color-border)] hover:border-[var(--color-accent)]/30 card-luxury"}`}
             >
               <div className="w-12 h-12 rounded-full bg-[var(--color-surface-3)] border border-[var(--color-border)] flex items-center justify-center mb-4">
@@ -121,7 +141,7 @@ export default function BookAppointment() {
             </div>
 
             <div 
-              onClick={() => { setCategory("Fashion"); setStep(2); setSelectedServiceId(""); }}
+              onClick={() => { setCategory("Fashion"); setSubCategory(""); setStep(2); setSelectedServiceId(""); }}
               className={`p-6 rounded-2xl border cursor-pointer transition-all ${category === "Fashion" ? "border-[var(--color-accent)] bg-[var(--color-accent)]/5" : "border-[var(--color-border)] hover:border-[var(--color-accent)]/30 card-luxury"}`}
             >
               <div className="w-12 h-12 rounded-full bg-[var(--color-surface-3)] border border-[var(--color-border)] flex items-center justify-center mb-4">
@@ -135,39 +155,62 @@ export default function BookAppointment() {
 
         {step === 2 && (
           <div className="space-y-6 animate-fade-in">
-            <h2 className="text-xl font-bold text-white mb-2">Select a Service</h2>
-            <p className="text-sm text-white/60 mb-6">Showing {category} services</p>
+            <h2 className="text-xl font-display font-bold text-white mb-2">Select a Service</h2>
             
-            {isLoading ? (
-              <div className="text-center py-8 text-white/60">Loading services...</div>
-            ) : filteredServices.length === 0 ? (
-              <div className="text-center py-8">
-                <p className="text-white/60 mb-4">No specific {category.toLowerCase()} services found in the catalog.</p>
-                <div 
-                  onClick={() => setSelectedServiceId("custom")}
-                  className={`p-4 rounded-xl border cursor-pointer transition-all ${selectedServiceId === "custom" ? "border-[var(--color-accent)] bg-[var(--color-accent)]/5" : "border-[var(--color-border)] card-luxury"}`}
-                >
-                  <h3 className="font-bold text-white">General Consultation</h3>
-                  <p className="text-sm text-white/60">Book an open appointment to discuss your needs.</p>
+            {category === "Fashion" && !subCategory ? (
+              <div>
+                <p className="text-sm text-white/60 mb-6">Select a fashion category</p>
+                <div className="grid grid-cols-2 gap-4">
+                  {["Nauvari Saree", "Blouse Stitching", "Dress Stitching", "Aari Work"].map(sub => (
+                    <div 
+                      key={sub}
+                      onClick={() => setSubCategory(sub)}
+                      className="p-4 rounded-xl border border-[var(--color-border)] cursor-pointer card-luxury hover:border-[var(--color-accent)]/50 text-center"
+                    >
+                      <h3 className="font-bold text-white text-sm">{sub}</h3>
+                    </div>
+                  ))}
                 </div>
+                <button onClick={() => setStep(1)} className="mt-6 text-sm text-[var(--color-accent)] flex items-center gap-1"><ChevronLeft className="w-4 h-4"/> Back to main categories</button>
               </div>
             ) : (
-              <div className="space-y-3">
-                {filteredServices.map(svc => (
-                  <div 
-                    key={svc._id}
-                    onClick={() => setSelectedServiceId(svc._id)}
-                    className={`p-4 rounded-xl border cursor-pointer transition-all flex items-center justify-between ${selectedServiceId === svc._id ? "border-[var(--color-accent)] bg-[var(--color-accent)]/5" : "border-[var(--color-border)] hover:border-[var(--color-accent)]/30 card-luxury"}`}
-                  >
-                    <div>
-                      <h3 className="font-bold text-white">{svc.name}</h3>
-                      <p className="text-sm text-white/60">{svc.duration} mins</p>
-                    </div>
-                    <div className="text-[var(--color-accent)] font-bold">
-                      ₹{svc.price}
+              <div>
+                {category === "Fashion" && (
+                   <button onClick={() => setSubCategory("")} className="mb-4 text-sm text-[var(--color-accent)] flex items-center gap-1"><ChevronLeft className="w-4 h-4"/> Back to Fashion categories</button>
+                )}
+                
+                {isLoading ? (
+                  <div className="text-center py-8 text-white/60">Loading services...</div>
+                ) : filteredServices.length === 0 ? (
+                  <div className="text-center py-8">
+                    <p className="text-white/60 mb-4">No specific services found.</p>
+                    <div 
+                      onClick={() => setSelectedServiceId("custom")}
+                      className={`p-4 rounded-xl border cursor-pointer transition-all ${selectedServiceId === "custom" ? "border-[var(--color-accent)] bg-[var(--color-accent)]/5" : "border-[var(--color-border)] card-luxury"}`}
+                    >
+                      <h3 className="font-bold text-white">General Consultation</h3>
+                      <p className="text-sm text-white/60">Book an open appointment to discuss your needs.</p>
                     </div>
                   </div>
-                ))}
+                ) : (
+                  <div className="space-y-3">
+                    {filteredServices.map(svc => (
+                      <div 
+                        key={svc._id}
+                        onClick={() => setSelectedServiceId(svc._id)}
+                        className={`p-4 rounded-xl border cursor-pointer transition-all flex items-center justify-between ${selectedServiceId === svc._id ? "border-[var(--color-accent)] bg-[var(--color-accent)]/5 shadow-[0_0_15px_rgba(212,175,55,0.15)]" : "border-[var(--color-border)] hover:border-[var(--color-accent)]/30 card-luxury"}`}
+                      >
+                        <div>
+                          <h3 className="font-bold text-white">{svc.name}</h3>
+                          <p className="text-xs text-white/50 flex items-center gap-1 mt-1"><Clock className="w-3 h-3"/> {svc.duration} mins</p>
+                        </div>
+                        <div className="text-[var(--color-accent)] font-bold text-sm bg-[var(--color-surface-2)] px-3 py-1 rounded-full border border-[var(--color-border)]">
+                          {svc.displayPrice || formatCurrency(svc.price)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -175,10 +218,10 @@ export default function BookAppointment() {
 
         {step === 3 && (
           <div className="space-y-6 animate-fade-in">
-            <h2 className="text-xl font-bold text-white mb-6">Choose Date & Time</h2>
+            <h2 className="text-xl font-display font-bold text-white mb-6">Choose Date & Time</h2>
             
             <div>
-              <label className="block text-xs text-white/60 font-medium mb-2 uppercase tracking-wider">Date</label>
+              <label className="block text-xs text-[var(--color-text-secondary)] font-medium mb-2 uppercase tracking-wider">Date</label>
               <div className="relative">
                 <input 
                   type="date" 
@@ -191,7 +234,7 @@ export default function BookAppointment() {
             </div>
 
             <div>
-              <label className="block text-xs text-white/60 font-medium mb-3 uppercase tracking-wider">Available Slots</label>
+              <label className="block text-xs text-[var(--color-text-secondary)] font-medium mb-3 uppercase tracking-wider">Available Slots</label>
               <div className="grid grid-cols-3 gap-3">
                 {availableTimes.map(t => (
                   <button
@@ -206,7 +249,7 @@ export default function BookAppointment() {
             </div>
 
             <div>
-              <label className="block text-xs text-white/60 font-medium mb-2 uppercase tracking-wider">Any specific requests?</label>
+              <label className="block text-xs text-[var(--color-text-secondary)] font-medium mb-2 uppercase tracking-wider">Any specific requests?</label>
               <textarea 
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
@@ -222,23 +265,23 @@ export default function BookAppointment() {
             <div className="w-16 h-16 bg-[var(--color-accent)]/20 border border-[var(--color-accent)] rounded-full flex items-center justify-center mx-auto mb-2 shadow-lg shadow-[var(--color-accent)]/10">
               <Check className="w-8 h-8 text-[var(--color-accent)]" />
             </div>
-            <h2 className="text-2xl font-bold text-white text-center">Ready to Confirm</h2>
+            <h2 className="text-2xl font-display font-bold text-white text-center">Ready to Confirm</h2>
             
             <div className="card-luxury p-5 space-y-4">
               <div className="flex justify-between items-center border-b border-[var(--color-border)] pb-4">
-                <span className="text-sm text-white/60">Business</span>
-                <span className="font-bold text-white">{category}</span>
+                <span className="text-sm text-[var(--color-text-secondary)]">Business</span>
+                <span className="font-bold text-white">{category} {subCategory && `(${subCategory})`}</span>
               </div>
               <div className="flex justify-between items-center border-b border-[var(--color-border)] pb-4">
-                <span className="text-sm text-white/60">Service</span>
-                <span className="font-bold text-white">{selectedService?.name || "General Consultation"}</span>
+                <span className="text-sm text-[var(--color-text-secondary)]">Service</span>
+                <span className="font-bold text-white text-right max-w-[60%]">{selectedService?.name || "General Consultation"}</span>
               </div>
               <div className="flex justify-between items-center border-b border-[var(--color-border)] pb-4">
-                <span className="text-sm text-white/60">Date</span>
+                <span className="text-sm text-[var(--color-text-secondary)]">Date</span>
                 <span className="font-bold text-white">{format(new Date(date), 'MMM dd, yyyy')}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm text-white/60">Time</span>
+                <span className="text-sm text-[var(--color-text-secondary)]">Time</span>
                 <span className="font-bold text-[var(--color-accent)]">{time}</span>
               </div>
             </div>
@@ -259,8 +302,8 @@ export default function BookAppointment() {
         )}
         <button 
           onClick={handleNext}
-          disabled={createAppointment.isPending}
-          className="flex-1 py-4 btn-luxury-primary text-sm flex items-center justify-center gap-2"
+          disabled={createAppointment.isPending || (step === 2 && category === "Fashion" && !subCategory)}
+          className={`flex-1 py-4 btn-luxury-primary text-sm flex items-center justify-center gap-2 ${step === 2 && category === "Fashion" && !subCategory ? "opacity-50 cursor-not-allowed" : ""}`}
         >
           {createAppointment.isPending ? "Processing..." : step === 4 ? "Confirm Booking" : "Next Step"}
         </button>

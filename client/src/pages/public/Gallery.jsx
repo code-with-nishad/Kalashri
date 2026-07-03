@@ -13,7 +13,7 @@ export default function Gallery() {
 
   const images = galleryData?.data || [];
 
-  const categories = ["All", "Fashion", "Beauty", "Aari Work", "Bridal", "Traditional Wear", "Before & After"];
+  const categories = ["All", "Nauvari Sarees", "Designer Blouses", "Aari Work", "Dress Collection", "Customer Designs", "Beauty"];
 
   const filteredImages = activeTab === "All" 
     ? images 

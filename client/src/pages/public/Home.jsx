@@ -84,7 +84,7 @@ export default function Home() {
             </h2>
             
             <p className="text-white/80 text-lg mb-10 max-w-lg leading-relaxed">
-              From timeless ethnic wear to stunning makeovers, we bring out the best in you.
+              Premium Nauvari Saree Specialist, Designer Blouse Stitching, Aari Work, and Custom Dress Stitching in Maharashtra.
             </p>
             
             <div className="flex flex-wrap items-center gap-4">
@@ -141,7 +141,7 @@ export default function Home() {
             {/* Fashion Card */}
             <div className="card-luxury relative overflow-hidden group min-h-[400px] flex p-0">
               <div className="absolute right-0 top-0 bottom-0 w-1/2 z-0 hidden md:block">
-                <img src="https://images.unsplash.com/photo-1610030469983-98e550d615ef?q=80&w=800&auto=format&fit=crop" alt="Fashion" className="w-full h-full object-cover object-left opacity-80 transition-transform duration-700 group-hover:scale-105" />
+                <img src="/images/bharti-hero.jpg" alt="Fashion Boutique in Maharashtra" className="w-full h-full object-cover object-left opacity-80 transition-transform duration-700 group-hover:scale-105" onError={(e) => { e.target.onerror = null; e.target.src = "https://images.unsplash.com/photo-1610030469983-98e550d615ef?q=80&w=800&auto=format&fit=crop"; }} />
                 <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-surface-card)] via-[var(--color-surface-card)]/80 to-transparent"></div>
               </div>
               
@@ -174,7 +174,7 @@ export default function Home() {
             {/* Beauty Card */}
             <div className="card-luxury relative overflow-hidden group min-h-[400px] flex p-0">
               <div className="absolute right-0 top-0 bottom-0 w-1/2 z-0 hidden md:block">
-                <img src="https://images.unsplash.com/photo-1516975080661-460d3fcb6215?q=80&w=800&auto=format&fit=crop" alt="Beauty" className="w-full h-full object-cover object-left opacity-80 transition-transform duration-700 group-hover:scale-105" />
+                <img src="/images/hero-girl.png" alt="Beauty" className="w-full h-full object-cover object-left opacity-80 transition-transform duration-700 group-hover:scale-105" onError={(e) => { e.target.onerror = null; e.target.src = "https://images.unsplash.com/photo-1516975080661-460d3fcb6215?q=80&w=800&auto=format&fit=crop"; }} />
                 <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-surface-card)] via-[var(--color-surface-card)]/80 to-transparent"></div>
               </div>
               
@@ -207,36 +207,37 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Stats Section */}
-      <div className="border-y border-[var(--color-border)] bg-[var(--color-surface-2)] py-12 px-8">
-        <div className="max-w-7xl mx-auto flex flex-wrap justify-center md:justify-between items-center gap-8 divide-x-0 md:divide-x divide-[var(--color-border)]">
-          <div className="flex items-center gap-4 px-8 w-full md:w-auto justify-center">
-            <Users className="w-12 h-12 text-[#d4af37]" strokeWidth={1} />
-            <div>
-              <p className="text-3xl font-display font-bold text-white">5000+</p>
-              <p className="text-sm text-[var(--color-text-muted)] font-medium">Happy Customers</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-4 px-8 w-full md:w-auto justify-center">
-            <Star className="w-12 h-12 text-[#d4af37]" strokeWidth={1} />
-            <div>
-              <p className="text-3xl font-display font-bold text-white">50+</p>
-              <p className="text-sm text-[var(--color-text-muted)] font-medium">Expert Professionals</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-4 px-8 w-full md:w-auto justify-center">
-            <span className="w-12 h-12 flex items-center justify-center border-2 border-[var(--color-border)] rounded-full text-[#d4af37] text-xl">🎖</span>
-            <div>
-              <p className="text-3xl font-display font-bold text-white">100%</p>
-              <p className="text-sm text-[var(--color-text-muted)] font-medium">Quality Service</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-4 px-8 w-full md:w-auto justify-center">
-            <span className="w-12 h-12 flex items-center justify-center border-2 border-[var(--color-border)] rounded-full text-[#d4af37] text-xl">☺</span>
-            <div>
-              <p className="text-3xl font-display font-bold text-white">4.9/5</p>
-              <p className="text-sm text-[var(--color-text-muted)] font-medium">Customer Rating</p>
-            </div>
+      {/* Awards Section (Replacing Stats) */}
+      <div className="border-y border-[var(--color-border)] bg-[var(--color-surface-2)] py-12 overflow-hidden">
+        <div className="text-center mb-8">
+          <p className="text-[#d4af37] uppercase tracking-[0.2em] text-xs font-bold mb-2">Recognized for Excellence</p>
+          <h3 className="font-display text-3xl font-bold text-white">Our Awards & Achievements</h3>
+        </div>
+        <div className="w-full relative flex items-center h-32">
+          {/* Fading Edges for the marquee effect */}
+          <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[var(--color-surface-2)] to-transparent z-10" />
+          <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[var(--color-surface-2)] to-transparent z-10" />
+          
+          <div className="flex animate-[scroll-horizontal_20s_linear_infinite] whitespace-nowrap items-center hover:[animation-play-state:paused]">
+            {[
+              { title: "Best Bridal Makeup 2023", org: "Beauty & Wellness Awards" },
+              { title: "Excellence in Fashion Design", org: "Maharashtra Fashion Week" },
+              { title: "Top Nauvari Specialist", org: "Traditional Wear Expo" },
+              { title: "Outstanding Customer Service", org: "Local Business Awards 2022" },
+              // Duplicate for infinite scroll illusion
+              { title: "Best Bridal Makeup 2023", org: "Beauty & Wellness Awards" },
+              { title: "Excellence in Fashion Design", org: "Maharashtra Fashion Week" },
+              { title: "Top Nauvari Specialist", org: "Traditional Wear Expo" },
+              { title: "Outstanding Customer Service", org: "Local Business Awards 2022" },
+            ].map((award, i) => (
+              <div key={i} className="inline-flex items-center gap-4 px-12 border-l border-[var(--color-border)] first:border-0 h-16">
+                <span className="w-12 h-12 flex items-center justify-center border-2 border-[#d4af37]/30 bg-[#d4af37]/10 rounded-full text-[#d4af37] text-2xl shrink-0">🏆</span>
+                <div className="flex flex-col">
+                  <p className="text-lg font-display font-bold text-white leading-tight">{award.title}</p>
+                  <p className="text-xs text-[var(--color-text-muted)] font-medium uppercase tracking-wider">{award.org}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -325,7 +326,37 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Footer Banner */}
+      {/* FAQ Section */}
+      <div className="bg-[var(--color-surface)] py-20 px-8 border-t border-[var(--color-border)]">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="font-display text-4xl text-white font-bold mb-4">Frequently Asked Questions</h2>
+            <p className="text-[var(--color-text-secondary)]">Everything you need to know about our services.</p>
+          </div>
+          
+          <div className="space-y-4">
+            {[
+              { q: "What are the blouse stitching charges?", a: "Blouse stitching starts from ₹300. Designer and premium blouses depend on the complexity and customization required." },
+              { q: "Do you stitch designer blouses?", a: "Yes, we specialize in stitching all types of fashionable, designer and customized blouses tailored perfectly to your measurements." },
+              { q: "Can I bring my own design?", a: "Absolutely! We love bringing your custom designs to life. Just show us a reference picture." },
+              { q: "Do you provide Aari work?", a: "Yes, we offer premium Aari work for Blouses, Dresses, Sarees, and Bridal Wear starting from ₹1200." },
+              { q: "Do you stitch Nauvari sarees?", a: "Yes, we are Nauvari Specialists. We stitch all styles including Brahmani, Peshawai, Mastani, Rajlaxmi, and more." },
+              { q: "How long does stitching take?", a: "Standard stitching usually takes 3-5 days. For bridal or heavily customized work, we recommend booking 2 weeks in advance." },
+              { q: "Do you take custom measurements?", a: "Yes, we take precise custom measurements to ensure a 100% perfect fit for every garment." }
+            ].map((faq, i) => (
+              <details key={i} className="group card-luxury border border-[var(--color-border)] rounded-xl open:border-[var(--color-accent)]/30 transition-all duration-300">
+                <summary className="flex items-center justify-between cursor-pointer p-5 font-semibold text-white/90 group-open:text-white">
+                  {faq.q}
+                  <span className="text-[var(--color-accent)] transition-transform duration-300 group-open:rotate-180">▼</span>
+                </summary>
+                <div className="px-5 pb-5 text-[var(--color-text-secondary)] text-sm leading-relaxed border-t border-[var(--color-border)] pt-4 mt-2">
+                  {faq.a}
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </div>
       <div className="bg-[var(--color-surface)] py-12 px-8 border-t border-[var(--color-border)]">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
           
