@@ -22,71 +22,8 @@ export default function Home() {
         </a>
       </div>
 
-      {/* MOBILE HOME LAYOUT (Screen 4) */}
-      <div className="md:hidden flex flex-col w-full min-h-screen px-4 pt-10 pb-20 bg-[var(--color-primary-dark)]">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-2">
-            <button className="text-white hover:text-[var(--color-gold)] p-1">
-              <span className="text-xl">←</span>
-            </button>
-            <h1 className="text-white font-display text-lg tracking-wide">Kalashri</h1>
-          </div>
-          <button className="text-[var(--color-gold)] relative p-2">
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
-            <span className="absolute top-2 right-2 w-2 h-2 bg-yellow-400 rounded-full"></span>
-          </button>
-        </div>
-        
-        <h2 className="text-white text-xl font-bold mt-4 mb-1">Good Morning, Priya 👋</h2>
-        <p className="text-white/60 text-xs mb-8">How can we help you today?</p>
-
-        {/* Cards */}
-        <div className="space-y-4">
-          <Link to="/fashion" className="block relative rounded-2xl overflow-hidden bg-gradient-to-r from-[#a11d51] to-[#d62261] p-5 shadow-lg min-h-[140px] flex items-center">
-             <div className="w-3/5 relative z-10">
-               <h3 className="text-white font-bold text-lg mb-1">Fashion</h3>
-               <p className="text-white/80 text-[10px] leading-tight">Stitching, Dresses<br/>& Aari Work</p>
-             </div>
-             <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=200&fit=crop" alt="Fashion" className="absolute right-0 top-0 bottom-0 h-full w-[45%] object-cover object-top mask-image-gradient-left" />
-          </Link>
-
-          <Link to="/beauty" className="block relative rounded-2xl overflow-hidden bg-gradient-to-r from-[#2b0a2f] to-[#4a1251] border border-white/5 p-5 shadow-lg min-h-[140px] flex items-center">
-             <div className="w-3/5 relative z-10">
-               <h3 className="text-white font-bold text-lg mb-1">Beauty Parlour</h3>
-               <p className="text-white/80 text-[10px] leading-tight">Makeup, Hair,<br/>Skin & More</p>
-             </div>
-             <img src="https://images.unsplash.com/photo-1516975080661-460d3fcb6215?w=200&fit=crop" alt="Beauty" className="absolute right-0 top-0 bottom-0 h-full w-[45%] object-cover mask-image-gradient-left" />
-          </Link>
-
-        </div>
-
-        {/* Why Choose Kalashri */}
-        <h3 className="text-white font-bold mt-8 mb-4">Why Choose Kalashri?</h3>
-        <div className="flex justify-between items-center mb-6 px-2">
-           <div className="flex flex-col items-center gap-2">
-              <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
-                 <span className="text-xl text-[var(--color-gold)]">💎</span>
-              </div>
-              <span className="text-[10px] text-white/70">Quality Service</span>
-           </div>
-           <div className="flex flex-col items-center gap-2">
-              <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
-                 <span className="text-xl text-[var(--color-gold)]">👥</span>
-              </div>
-              <span className="text-[10px] text-white/70">Expert Team</span>
-           </div>
-           <div className="flex flex-col items-center gap-2">
-              <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
-                 <span className="text-xl text-[var(--color-gold)]">🛡️</span>
-              </div>
-              <span className="text-[10px] text-white/70">Trusted Brand</span>
-           </div>
-        </div>
-      </div>
-
-      {/* Desktop Hero Section */}
-      <div className="hidden md:flex relative w-full min-h-[90vh] bg-[#1a1110] overflow-hidden flex-col">
+      {/* Mobile + Desktop Hero Section */}
+      <div className="relative w-full min-h-screen bg-[#1a1110] overflow-hidden flex flex-col">
         {/* Background Image Setup */}
         <div className="absolute inset-0 z-0">
           <img 
@@ -98,50 +35,49 @@ export default function Home() {
         </div>
 
         {/* Top Navbar */}
-        <nav className="relative z-20 flex items-center justify-between px-8 py-6 w-full max-w-7xl mx-auto">
+        <nav className="relative z-20 flex flex-col md:flex-row items-start md:items-center justify-between px-4 sm:px-6 md:px-8 py-6 w-full max-w-7xl mx-auto gap-4">
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full border border-[#d4af37] flex items-center justify-center">
-              <span className="font-display text-[#d4af37] text-2xl font-bold">K</span>
+            <div className="w-11 h-11 rounded-full border border-[#d4af37] flex items-center justify-center">
+              <span className="font-display text-[#d4af37] text-xl font-bold">K</span>
             </div>
             <div>
-              <h1 className="font-display text-[#d4af37] text-xl font-bold tracking-widest uppercase">Kalashri</h1>
+              <h1 className="font-display text-[#d4af37] text-lg sm:text-xl font-bold tracking-widest uppercase">Kalashri</h1>
               <p className="text-white/60 text-[10px] tracking-widest uppercase">Fashion & Beauty Studio</p>
             </div>
           </div>
 
-          {/* Desktop Links */}
-          <div className="hidden lg:flex items-center gap-8 text-sm font-medium text-white/80">
+          {/* Primary Links */}
+          <div className="flex flex-wrap items-center gap-3 text-sm font-medium text-white/90 w-full md:w-auto">
             <Link to="/" className="text-[#d4af37] border-b-2 border-[#d4af37] pb-1">Home</Link>
             <Link to="/fashion" className="hover:text-[#d4af37] transition-colors">Fashion</Link>
-            <Link to="/beauty" className="hover:text-[#d4af37] transition-colors">Beauty Parlour</Link>
+            <Link to="/beauty" className="hover:text-[#d4af37] transition-colors">Beauty</Link>
             <Link to="/gallery" className="hover:text-[#d4af37] transition-colors">Gallery</Link>
             <Link to="/offers" className="hover:text-[#d4af37] transition-colors">Offers</Link>
-            <Link to="/about" className="hover:text-[#d4af37] transition-colors">About Us</Link>
-            <Link to="/contact" className="hover:text-[#d4af37] transition-colors">Contact</Link>
+            <Link to="/about" className="hover:text-[#d4af37] transition-colors">About</Link>
           </div>
 
           {/* Nav Actions */}
-          <div className="flex items-center gap-4">
-            <Link to="/book" className="hidden md:flex items-center gap-2 border border-[#d4af37] text-[#d4af37] px-6 py-2.5 rounded hover:bg-[#d4af37] hover:text-black transition-all font-semibold text-sm">
+          <div className="flex flex-wrap items-center gap-3">
+            <Link to="/book" className="inline-flex items-center gap-2 border border-[#d4af37] text-[#d4af37] px-4 py-2.5 rounded hover:bg-[#d4af37] hover:text-black transition-all font-semibold text-sm">
               Book Appointment
             </Link>
             <button className="lg:hidden text-white hover:text-[#d4af37]">
-              <Menu className="w-8 h-8" />
+              <Menu className="w-7 h-7" />
             </button>
           </div>
         </nav>
 
         {/* Hero Content */}
-        <div className="relative z-10 flex-1 flex flex-col justify-center px-8 max-w-7xl mx-auto w-full">
-          <div className="max-w-2xl">
+        <div className="relative z-10 flex-1 flex flex-col justify-center px-4 sm:px-6 md:px-8 pb-10 max-w-7xl mx-auto w-full">
+          <div className="max-w-3xl md:max-w-2xl">
             <div className="flex items-center gap-3 mb-6">
               <div className="h-[1px] w-8 bg-[#d4af37]"></div>
               <span className="text-[#d4af37] uppercase tracking-[0.2em] text-xs font-bold">Welcome to Kalashri</span>
               <div className="h-[1px] w-8 bg-[#d4af37]"></div>
             </div>
             
-            <h2 className="font-display text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+            <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
               Where Tradition <br/>
               <span className="text-[#d4af37]">Meets Elegance</span>
             </h2>
@@ -159,22 +95,29 @@ export default function Home() {
               </Link>
             </div>
 
-            <div className="mt-16 flex flex-wrap items-center gap-8 text-white/80 text-sm font-medium">
-              <div className="flex items-center gap-3">
+            <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 text-white/80 text-sm font-medium">
+              <div className="flex items-start gap-3 bg-white/5 rounded-3xl p-4 border border-white/10">
                 <span className="w-10 h-10 rounded-full border border-[#d4af37] flex items-center justify-center text-[#d4af37] text-xl">♔</span>
-                <span>Premium Quality<br/>Materials</span>
+                <div>
+                  <p className="font-semibold">Premium Quality</p>
+                  <p className="text-xs text-white/70">Materials</p>
+                </div>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-start gap-3 bg-white/5 rounded-3xl p-4 border border-white/10">
                 <span className="w-10 h-10 rounded-full border border-[#d4af37] flex items-center justify-center text-[#d4af37]">
                   <Users className="w-5 h-5" />
                 </span>
-                <span>Expert<br/>Professionals</span>
+                <div>
+                  <p className="font-semibold">Expert Professionals</p>
+                </div>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-start gap-3 bg-white/5 rounded-3xl p-4 border border-white/10">
                 <span className="w-10 h-10 rounded-full border border-[#d4af37] flex items-center justify-center text-[#d4af37]">
                   <Check className="w-5 h-5" />
                 </span>
-                <span>100% Customer<br/>Satisfaction</span>
+                <div>
+                  <p className="font-semibold">100% Customer Satisfaction</p>
+                </div>
               </div>
             </div>
           </div>
