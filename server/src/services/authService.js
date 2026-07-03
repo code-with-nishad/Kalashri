@@ -73,12 +73,12 @@ const updateCurrentUser = async (id, data) => {
 };
 
 const googleLogin = async (token) => {
-    const ticket = await client.verifyIdToken({
-        idToken: token,
-        audience: process.env.GOOGLE_CLIENT_ID,
+    client.setCredentials({ access_token: token });
+    const userInfoResponse = await client.request({
+        url: 'https://www.googleapis.com/oauth2/v3/userinfo'
     });
     
-    const payload = ticket.getPayload();
+    const payload = userInfoResponse.data;
     const { email, given_name, family_name, sub } = payload;
 
     let user = await User.findOne({ email }).select("+password");
