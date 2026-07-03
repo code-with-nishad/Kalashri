@@ -9,7 +9,7 @@ import { Modal } from "../../components/ui/Modal";
 import { Badge } from "../../components/ui/Badge";
 import { toast } from "sonner";
 
-const emptyForm = { name: "", description: "", price: "", duration: "", category: "", isActive: true };
+const emptyForm = { name: "", description: "", price: "", displayPrice: "", duration: "", category: "", isActive: true };
 
 export default function Services() {
   const qc = useQueryClient();
@@ -83,7 +83,7 @@ export default function Services() {
   };
 
   const openEdit = (svc) => {
-    setForm({ ...svc, price: svc.price, duration: svc.duration });
+    setForm({ ...svc, price: svc.price, displayPrice: svc.displayPrice || "", duration: svc.duration });
     setModal(svc);
   };
 
@@ -153,7 +153,7 @@ export default function Services() {
                   </div>
                 </td>
                 <td className="px-4 py-3.5 text-sm text-[var(--color-text-muted)]">{svc.category || "--"}</td>
-                <td className="px-4 py-3.5 text-sm font-semibold text-[var(--color-rose-400)]">{formatCurrency(svc.price)}</td>
+                <td className="px-4 py-3.5 text-sm font-semibold text-[var(--color-rose-400)]">{svc.displayPrice || formatCurrency(svc.price)}</td>
                 <td className="px-4 py-3.5 text-sm text-[var(--color-text-muted)] flex items-center gap-1"><Clock className="w-3 h-3" />{svc.duration}min</td>
                 <td className="px-4 py-3.5"><Badge variant={svc.isActive ? "success" : "error"}>{svc.isActive ? "Active" : "Inactive"}</Badge></td>
                 <td className="px-4 py-3.5">
@@ -173,7 +173,8 @@ export default function Services() {
           {[
             { key: "name", label: "Service Name", placeholder: "e.g. Hair Spa" },
             { key: "category", label: "Category", placeholder: "e.g. Hair" },
-            { key: "price", label: "Price (Rs.)", type: "number", placeholder: "899" },
+            { key: "price", label: "Base Price (Rs.)", type: "number", placeholder: "899" },
+            { key: "displayPrice", label: "Display Price (e.g. 400 - 700)", type: "text", placeholder: "Optional: text to show instead of base price" },
             { key: "duration", label: "Duration (minutes)", type: "number", placeholder: "60" },
           ].map(({ key, label, type = "text", placeholder }) => (
             <div key={key}>

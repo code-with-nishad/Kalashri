@@ -22,6 +22,10 @@ const serviceSchema = new mongoose.Schema(
             required: [true, "Service price is required"],
             min: [0, "Price cannot be negative"],
         },
+        displayPrice: {
+            type: String,
+            trim: true,
+        },
         discountPrice: {
             type: Number,
             min: [0, "Discount price cannot be negative"],

@@ -3,12 +3,12 @@ import MobileHeader from "../../components/layout/MobileHeader";
 import { Link, useNavigate } from "react-router-dom";
 
 const services = [
-  { name: "Bridal Makeup", icon: "👰", to: "/beauty/details" },
-  { name: "Party Makeup", icon: "💄", to: "/beauty/details" },
-  { name: "Hair Styling", icon: "💇‍♀️", to: "/beauty/details" },
-  { name: "Facial", icon: "🧖‍♀️", to: "/beauty/details" },
-  { name: "Mehendi", icon: "🌿", to: "/beauty/details" },
-  { name: "Skin Care", icon: "🧴", to: "/beauty/details" },
+  { name: "Bridal Makeup", icon: "👰", to: "/book" },
+  { name: "Party Makeup", icon: "💄", to: "/book" },
+  { name: "Hair Styling", icon: "💇‍♀️", to: "/book" },
+  { name: "Facial", icon: "🧖‍♀️", to: "/book" },
+  { name: "Mehendi", icon: "🌿", to: "/book" },
+  { name: "Skin Care", icon: "🧴", to: "/book" },
 ];
 
 export default function Beauty() {
@@ -21,9 +21,9 @@ export default function Beauty() {
       {/* Hero */}
       <div className="relative">
         <img 
-          src="https://images.unsplash.com/photo-1516975080661-460d3fcb6215?w=800&auto=format&fit=crop" 
+          src="/images/hero-girl.png" 
           alt="Beauty Hero" 
-          className="w-full h-64 object-cover"
+          className="w-full h-64 object-cover object-top"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-[#12080a]/90 to-transparent flex flex-col justify-center px-6">
           <h2 className="text-2xl font-display font-bold text-white mb-2 leading-tight">

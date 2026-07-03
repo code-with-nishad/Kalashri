@@ -20,9 +20,9 @@ export default function FashionHome() {
       {/* Hero */}
       <div className="relative">
         <img 
-          src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&auto=format&fit=crop" 
+          src="/images/bharti-hero.jpg" 
           alt="Fashion Hero" 
-          className="w-full h-64 object-cover"
+          className="w-full h-64 object-cover object-top"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-[#12080a]/90 to-transparent flex flex-col justify-center px-6">
           <h2 className="text-3xl font-display font-bold text-white mb-2 leading-tight">
