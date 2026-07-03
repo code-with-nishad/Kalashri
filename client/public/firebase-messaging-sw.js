@@ -1,7 +1,14 @@
 importScripts("https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js");
 importScripts("https://www.gstatic.com/firebasejs/10.9.0/firebase-messaging-compat.js");
 
-const firebaseConfig = {};
+const firebaseConfig = {
+    "apiKey": "AIzaSyD5thbzES_YjsZhNQk01h_S7ovi4R-nRAI",
+    "authDomain": "kalashri-52abf.firebaseapp.com",
+    "projectId": "kalashri-52abf",
+    "storageBucket": "kalashri-52abf.firebasestorage.app",
+    "messagingSenderId": "663360298066",
+    "appId": "1:663360298066:web:8035eb93ed4df65b6a138b"
+};
 
 if (firebaseConfig.apiKey) {
     firebase.initializeApp(firebaseConfig);

@@ -89,8 +89,8 @@ export default defineConfig({
         ],
       },
       manifest: {
-        name: "Gayatri Beauty Studio",
-        short_name: "Gayatri Beauty",
+        name: "Kalashri",
+        short_name: "Kalashri",
         description: "Premium Salon Booking & Management Platform",
         theme_color: "#E91E63",
         background_color: "#FFFFFF",

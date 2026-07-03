@@ -13,10 +13,8 @@ import { usePwaUpdate } from "../hooks/usePwaUpdate";
 const PING_TIMEOUT = 1200; // ms to wait before showing the splash screen
 
 const pingServer = async () => {
-  const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
-  const url = isLocal
-    ? (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/api$/, "")
-    : (import.meta.env.VITE_API_URL || "https://kalashri.onrender.com").replace(/\/api$/, "");
+  let url = (import.meta.env.VITE_API_URL || "/api").replace(/\/api\/?$/, "");
+  if (!url) url = "/";
   
   try {
     const res = await fetch(url);
