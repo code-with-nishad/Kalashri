@@ -105,6 +105,7 @@ export default function BookAppointment() {
       {/* Form Area */}
       <div className="bg-[var(--color-surface)] border-t border-[var(--color-border)] rounded-t-3xl -mt-6 p-6 flex-1 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] relative z-20">
         
+        {step === 1 && (
           <div className="space-y-4 animate-fade-in">
             <h2 className="text-xl font-bold text-white mb-6">What are you looking for today?</h2>
             

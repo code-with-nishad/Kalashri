@@ -43,20 +43,7 @@ const navGroups = [  {
   },
 ];
 
-export default function AdminLayout() {
-  const [collapsed, setCollapsed] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const location = useLocation();
-  const user = useAuthStore((s) => s.user);
-  const { mutate: logout } = useLogout();
 
-  // Mount notification listener so toasts and cache invalidations run globally
-  useNotifications();
-
-  useEffect(() => {
-    // Lock body scroll when mobile menu is open
-    if (mobileMenuOpen) {
-];
 
 export default function AdminLayout() {
   const [collapsed, setCollapsed] = useState(false);
