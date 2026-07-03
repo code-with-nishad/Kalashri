@@ -14,6 +14,7 @@ export const serviceService = {
   getOne: (id) => api.get(`/services/${id}`),
   create: (data) => api.post("/services", data),
   createBulkServices: (data) => api.post("/services/bulk", { services: data }),
+  parseBulkAI: (data) => api.post("/services/bulk-ai", data),
   update: (id, data) => api.put(`/services/${id}`, data),
   delete: (id) => api.delete(`/services/${id}`),
 };

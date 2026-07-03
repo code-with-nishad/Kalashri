@@ -43,20 +43,20 @@
   --color-blush: #fff0f5;
   --color-champagne: #f7e7ce;
 
-  /* Backgrounds - Dark Mode */
-  --color-surface: #1a1110;
-  --color-surface-2: #241a18;
-  --color-surface-3: #3d2b28;
-  --color-surface-card: #241a18;
+  /* Backgrounds - Light Mode */
+  --color-surface: #fdfbf7;
+  --color-surface-2: #ffffff;
+  --color-surface-3: #f4f0e6;
+  --color-surface-card: #ffffff;
 
-  /* Text - Dark Mode */
-  --color-text-primary: #ffffff;
-  --color-text-secondary: rgba(255, 255, 255, 0.8);
-  --color-text-muted: rgba(255, 255, 255, 0.6);
+  /* Text - Light Mode */
+  --color-text-primary: #1a1110;
+  --color-text-secondary: #4a3632;
+  --color-text-muted: #745b17;
 
-  /* Borders - Dark Mode */
+  /* Borders - Light Mode */
   --color-border: rgba(212, 175, 55, 0.3);
-  --color-border-subtle: rgba(255, 255, 255, 0.1);
+  --color-border-subtle: rgba(0, 0, 0, 0.05);
 
   /* Gradients */
   --color-gradient-rose: linear-gradient(135deg, #ffb6c1 0%, #ff69b4 50%, #ff1493 100%);

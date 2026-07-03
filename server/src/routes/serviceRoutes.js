@@ -8,6 +8,7 @@ const {
     deleteService,
     getAllServices,
     getSingleService,
+    parseBulkServicesAI,
 } = require("../controllers/serviceController");
 
 const { protect, authorize } = require("../middleware/authMiddleware");
@@ -22,6 +23,7 @@ router.use(authorize("admin"));
 
 router.post("/", createService);
 router.post("/bulk", createBulkServices);
+router.post("/bulk-ai", parseBulkServicesAI);
 router.put("/:id", updateService);
 router.delete("/:id", deleteService);
 

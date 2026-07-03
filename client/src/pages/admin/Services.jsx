@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Plus, Pencil, Trash2, Clock, Sparkles } from "lucide-react";
+import { Plus, Pencil, Trash2, Clock, Sparkles, Bot, Loader2 } from "lucide-react";
 import { serviceService, uploadService } from "../../services";
 import { QUERY_KEYS } from "../../constants/queryKeys";
 import { formatCurrency } from "../../utils";
@@ -16,6 +16,8 @@ export default function Services() {
   const [modal, setModal] = useState(null);
   const [form, setForm] = useState(emptyForm);
   const [uploading, setUploading] = useState(false);
+  const [aiModalOpen, setAiModalOpen] = useState(false);
+  const [aiPrompt, setAiPrompt] = useState("");
 
   const { data } = useQuery({ queryKey: QUERY_KEYS.SERVICES, queryFn: serviceService.getAll });
   const services = data?.data || [];
@@ -29,6 +31,31 @@ export default function Services() {
       setForm(emptyForm);
     },
     onError: (err) => toast.error(err.message),
+  });
+
+  const { mutate: createBulk, isPending: creatingBulk } = useMutation({
+    mutationFn: serviceService.createBulkServices,
+    onSuccess: (res) => {
+      toast.success(res?.data?.message || "Services added successfully!");
+      qc.invalidateQueries({ queryKey: QUERY_KEYS.SERVICES });
+      setAiModalOpen(false);
+      setAiPrompt("");
+    },
+    onError: (err) => toast.error(err.response?.data?.message || err.message),
+  });
+
+  const { mutate: parseWithAI, isPending: parsingAI } = useMutation({
+    mutationFn: (textPrompt) => serviceService.parseBulkAI({ textPrompt }),
+    onSuccess: (res) => {
+      const parsedServices = res.data.data;
+      if (parsedServices && parsedServices.length > 0) {
+        toast.info(`Successfully parsed ${parsedServices.length} services. Saving...`);
+        createBulk(parsedServices);
+      } else {
+        toast.error("No services found in the text.");
+      }
+    },
+    onError: (err) => toast.error(err.response?.data?.message || err.message),
   });
 
   const { mutate: updateSvc, isPending: updating } = useMutation({
@@ -97,9 +124,14 @@ export default function Services() {
           <h1 className="font-display text-2xl font-bold text-[var(--color-text-primary)]">Services</h1>
           <p className="text-[var(--color-text-muted)] text-sm">{services.length} services</p>
         </div>
-        <button onClick={openCreate} className="flex items-center gap-2 px-5 py-2.5 -white text-sm font-medium rounded-xl transition-all">
-          <Plus className="w-4 h-4" /> Add Service
-        </button>
+        <div className="flex gap-2">
+          <button onClick={() => setAiModalOpen(true)} className="flex items-center gap-2 px-5 py-2.5 bg-[var(--color-surface-2)] text-[var(--color-text-primary)] border border-[var(--color-border)] text-sm font-medium rounded-xl transition-all hover:bg-[var(--color-surface-3)]">
+            <Bot className="w-4 h-4 text-purple-500" /> Bulk Add (AI)
+          </button>
+          <button onClick={openCreate} className="flex items-center gap-2 px-5 py-2.5 bg-[var(--color-primary)] text-white text-sm font-medium rounded-xl transition-all">
+            <Plus className="w-4 h-4" /> Add Service
+          </button>
+        </div>
       </div>
 
       <div className="rounded-2xl overflow-hidden border border-[var(--color-border)] overflow-x-auto">
@@ -147,14 +179,14 @@ export default function Services() {
             <div key={key}>
               <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1">{label}</label>
               <input value={form[key] || ""} type={type} onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))} placeholder={placeholder}
-                className="w-full px-4 py-2.5 rounded-xl bg-[var(--color-surface-3)] border border-[var(--color-border)] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-rose-500)] transition-all text-sm"
+                className="w-full px-4 py-2.5 rounded-xl bg-[var(--color-surface-3)] border border-[var(--color-border)] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-primary)] transition-all text-sm"
               />
             </div>
           ))}
           <div>
             <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1">Description</label>
             <textarea value={form.description || ""} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} rows={3} placeholder="Service description..."
-              className="w-full px-4 py-2.5 rounded-xl bg-[var(--color-surface-3)] border border-[var(--color-border)] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-rose-500)] transition-all text-sm resize-none"
+              className="w-full px-4 py-2.5 rounded-xl bg-[var(--color-surface-3)] border border-[var(--color-border)] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-primary)] transition-all text-sm resize-none"
             />
           </div>
           <div>
@@ -164,8 +196,32 @@ export default function Services() {
           </div>
           <div className="flex gap-3 pt-2">
             <button onClick={() => setModal(null)} className="flex-1 py-2.5 border border-[var(--color-border)] text-[var(--color-text-secondary)] rounded-xl">Cancel</button>
-            <button onClick={handleSubmit} disabled={creating || updating || uploading} className="flex-1 py-2.5 -white font-medium rounded-xl transition-all disabled:opacity-50">
+            <button onClick={handleSubmit} disabled={creating || updating || uploading} className="flex-1 py-2.5 bg-[var(--color-primary)] text-white font-medium rounded-xl transition-all disabled:opacity-50">
               {creating || updating ? "Saving..." : "Save"}
+            </button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={aiModalOpen} onClose={() => setAiModalOpen(false)} title="Bulk Add Services with AI">
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-2">
+              Paste your messy service list here (e.g., from WhatsApp or a menu card). Our AI will organize it and extract names, categories, and prices automatically!
+            </label>
+            <textarea 
+              value={aiPrompt} 
+              onChange={e => setAiPrompt(e.target.value)} 
+              rows={8} 
+              placeholder="E.g. Bridal Makeup Rs. 5000\nHaircut 250\nAari work blouse 1500"
+              className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface-3)] border border-[var(--color-border)] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-primary)] transition-all text-sm resize-none"
+            />
+          </div>
+          <div className="flex gap-3 pt-2">
+            <button onClick={() => setAiModalOpen(false)} className="flex-1 py-2.5 border border-[var(--color-border)] text-[var(--color-text-secondary)] rounded-xl hover:bg-[var(--color-surface-2)]">Cancel</button>
+            <button onClick={() => parseWithAI(aiPrompt)} disabled={parsingAI || creatingBulk || !aiPrompt.trim()} className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-medium rounded-xl transition-all disabled:opacity-50 hover:opacity-90">
+              {parsingAI || creatingBulk ? <Loader2 className="w-4 h-4 animate-spin" /> : <Bot className="w-4 h-4" />}
+              {parsingAI ? "Parsing AI..." : creatingBulk ? "Saving..." : "Parse & Save"}
             </button>
           </div>
         </div>
