@@ -1,3 +1,201 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Playfair Display", ui-serif, Georgia, serif;
+
+  /* Brand Colors - Kalashri Super App (Premium Luxury Dark Theme) */
+  --color-primary-dark: #0a0405; 
+  --color-primary: #12080A; 
+  --color-accent: #d4af37; /* Metallic Gold */
+  --color-accent-light: #f3e5ab;
+  --color-gold: #d4af37; 
+  --color-gold-light: #f3e5ab;
+  
+  --color-surface: #12080A;
+  --color-surface-2: #1a1110;
+  --color-surface-3: #241a18;
+  --color-surface-card: rgba(36, 26, 24, 0.7);
+
+  /* Text - Dark Mode */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.7);
+  --color-text-muted: rgba(255, 255, 255, 0.5);
+
+  /* Borders - Dark Mode */
+  --color-border: rgba(212, 175, 55, 0.2); 
+  --color-border-subtle: rgba(255, 255, 255, 0.05);
+
+  /* Gradients */
+  --color-gradient-gold: linear-gradient(135deg, #f3e5ab 0%, #d4af37 50%, #996515 100%);
+  --color-gradient-rose: linear-gradient(135deg, #ffb6c1 0%, #ff69b4 50%, #ff1493 100%);
+
+  /* Shadows - Dark Mode */
+  --shadow-glow-gold: 0 4px 20px rgba(212, 175, 55, 0.2);
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-card-hover: 0 12px 40px rgba(212, 175, 55, 0.15);
+
+  /* Border Radius */
+  --radius-sm: 0.375rem;
+  --radius: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+}
+
+/* Global base styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-surface);
+}
+
+body {
+  background-color: var(--color-surface); 
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior-y: none; 
+}
+
+/* Mobile Frame Wrapper */
+.mobile-frame {
+  max-width: 440px;
+  margin: 0 auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--color-surface);
+  position: relative;
+  box-shadow: 0 0 50px rgba(0,0,0,0.8);
+  overflow-x: hidden;
+}
+
+/* iOS Safe Area Padding */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Utility classes */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.text-gradient-gold {
+  background: var(--color-gradient-gold);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Master Design System Classes */
+.card-luxury {
+  background: var(--color-surface-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-card);
+  transition: all 0.3s ease;
+}
+
+.card-luxury:hover {
+  box-shadow: var(--shadow-card-hover);
+  border-color: rgba(212, 175, 55, 0.4);
+  transform: translateY(-2px);
+}
+
+.glass-luxury {
+  background: rgba(18, 8, 10, 0.6);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.btn-luxury-primary {
+  background: var(--color-gradient-gold);
+  color: #12080A;
+  font-weight: 700;
+  border: none;
+  border-radius: 9999px;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-glow-gold);
+}
+
+.btn-luxury-primary:hover:not(:disabled) {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+}
+
+.btn-luxury-outline {
+  background: transparent;
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  font-weight: 600;
+  border-radius: 9999px;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.btn-luxury-outline:hover:not(:disabled) {
+  background: rgba(212, 175, 55, 0.1);
+}
+
+.input-luxury {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-text-primary);
+  border-radius: var(--radius-xl);
+  padding: 1rem 1.25rem;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+.input-luxury:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+}
+
+/* Animations */
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Scrollbar - Dark */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-surface);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(212, 175, 55, 0.3);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
+
+::selection {
+  background: rgba(212, 175, 55, 0.3);
+  color: #fff;
+}
+
 /* ── Ambient background blobs ─────────────────────────────────── */
 .home-blob-1 {
   position: absolute;
