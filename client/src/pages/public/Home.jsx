@@ -23,15 +23,15 @@ export default function Home() {
       </div>
 
       {/* Mobile + Desktop Hero Section */}
-      <div className="relative w-full min-h-screen bg-[#1a1110] overflow-hidden flex flex-col">
+      <div className="relative w-full min-h-screen bg-[var(--color-surface-2)] overflow-hidden flex flex-col">
         {/* Background Image Setup */}
         <div className="absolute inset-0 z-0">
           <img 
             src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=2000&auto=format&fit=crop" 
             alt="Kalashri Bride" 
-            className="w-full h-full object-cover object-center opacity-60"
+            className="w-full h-full object-cover object-center opacity-20"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#1a1110] via-[#1a1110]/80 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-surface-2)] via-[var(--color-surface-2)]/90 to-transparent"></div>
         </div>
 
         {/* Top Navbar */}
@@ -48,7 +48,7 @@ export default function Home() {
           </div>
 
           {/* Primary Links */}
-          <div className="flex flex-wrap items-center gap-3 text-sm font-medium text-white/90 w-full md:w-auto">
+          <div className="flex flex-wrap items-center gap-3 text-sm font-medium text-gray-700 w-full md:w-auto">
             <Link to="/" className="text-[#d4af37] border-b-2 border-[#d4af37] pb-1">Home</Link>
             <Link to="/fashion" className="hover:text-[#d4af37] transition-colors">Fashion</Link>
             <Link to="/beauty" className="hover:text-[#d4af37] transition-colors">Beauty</Link>
@@ -59,10 +59,10 @@ export default function Home() {
 
           {/* Nav Actions */}
           <div className="flex flex-wrap items-center gap-3">
-            <Link to="/book" className="inline-flex items-center gap-2 border border-[#d4af37] text-[#d4af37] px-4 py-2.5 rounded hover:bg-[#d4af37] hover:text-black transition-all font-semibold text-sm">
+            <Link to="/book" className="inline-flex items-center gap-2 border border-[#d4af37] text-[#d4af37] px-4 py-2.5 rounded hover:bg-[#d4af37] hover:text-white transition-all font-semibold text-sm">
               Book Appointment
             </Link>
-            <button className="lg:hidden text-white hover:text-[#d4af37]">
+            <button className="lg:hidden text-gray-800 hover:text-[#d4af37]">
               <Menu className="w-7 h-7" />
             </button>
           </div>
@@ -77,46 +77,46 @@ export default function Home() {
               <div className="h-[1px] w-8 bg-[#d4af37]"></div>
             </div>
             
-            <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+            <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
               Where Tradition <br/>
               <span className="text-[#d4af37]">Meets Elegance</span>
             </h2>
             
-            <p className="text-white/80 text-lg mb-10 max-w-lg leading-relaxed">
+            <p className="text-gray-600 text-lg mb-10 max-w-lg leading-relaxed">
               From timeless ethnic wear to stunning makeovers, we bring out the best in you.
             </p>
             
             <div className="flex flex-wrap items-center gap-4">
-              <Link to="/services" className="bg-[#d4af37] text-black px-8 py-3.5 rounded font-bold hover:bg-[#ebd576] transition-colors flex items-center gap-2">
+              <Link to="/services" className="bg-[#d4af37] text-white px-8 py-3.5 rounded font-bold hover:bg-[#ebd576] transition-colors flex items-center gap-2 shadow-lg shadow-[#d4af37]/30">
                 Explore Services <span className="text-xl">→</span>
               </Link>
-              <Link to="/book" className="bg-transparent border border-white/30 text-white px-8 py-3.5 rounded font-bold hover:border-[#d4af37] hover:text-[#d4af37] transition-colors flex items-center gap-2">
+              <Link to="/book" className="bg-transparent border border-gray-300 text-gray-700 px-8 py-3.5 rounded font-bold hover:border-[#d4af37] hover:text-[#d4af37] transition-colors flex items-center gap-2">
                 Book Appointment <CalendarIcon className="w-5 h-5" />
               </Link>
             </div>
 
-            <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 text-white/80 text-sm font-medium">
-              <div className="flex items-start gap-3 bg-white/5 rounded-3xl p-4 border border-white/10">
+            <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 text-gray-700 text-sm font-medium">
+              <div className="flex items-start gap-3 bg-white shadow-sm rounded-3xl p-4 border border-gray-100">
                 <span className="w-10 h-10 rounded-full border border-[#d4af37] flex items-center justify-center text-[#d4af37] text-xl">♔</span>
                 <div>
-                  <p className="font-semibold">Premium Quality</p>
-                  <p className="text-xs text-white/70">Materials</p>
+                  <p className="font-semibold text-gray-900">Premium Quality</p>
+                  <p className="text-xs text-gray-500">Materials</p>
                 </div>
               </div>
-              <div className="flex items-start gap-3 bg-white/5 rounded-3xl p-4 border border-white/10">
+              <div className="flex items-start gap-3 bg-white shadow-sm rounded-3xl p-4 border border-gray-100">
                 <span className="w-10 h-10 rounded-full border border-[#d4af37] flex items-center justify-center text-[#d4af37]">
                   <Users className="w-5 h-5" />
                 </span>
                 <div>
-                  <p className="font-semibold">Expert Professionals</p>
+                  <p className="font-semibold text-gray-900">Expert Professionals</p>
                 </div>
               </div>
-              <div className="flex items-start gap-3 bg-white/5 rounded-3xl p-4 border border-white/10">
+              <div className="flex items-start gap-3 bg-white shadow-sm rounded-3xl p-4 border border-gray-100">
                 <span className="w-10 h-10 rounded-full border border-[#d4af37] flex items-center justify-center text-[#d4af37]">
                   <Check className="w-5 h-5" />
                 </span>
                 <div>
-                  <p className="font-semibold">100% Customer Satisfaction</p>
+                  <p className="font-semibold text-gray-900">100% Customer Satisfaction</p>
                 </div>
               </div>
             </div>
@@ -125,7 +125,7 @@ export default function Home() {
       </div>
 
       {/* Services Section */}
-      <div className="bg-[#faf7f2] py-20 px-8">
+      <div className="bg-[var(--color-surface)] py-20 px-8 border-y border-gray-100">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <div className="flex items-center justify-center gap-3 mb-4">
@@ -138,25 +138,25 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Fashion Card */}
-            <div className="relative rounded-2xl overflow-hidden group bg-[#3d0c34] text-white min-h-[400px] flex">
-              <div className="absolute right-0 top-0 bottom-0 w-1/2 z-0">
+            <div className="relative rounded-2xl overflow-hidden group bg-white shadow-xl shadow-gray-200/50 text-gray-900 border border-gray-100 min-h-[400px] flex">
+              <div className="absolute right-0 top-0 bottom-0 w-1/2 z-0 hidden md:block">
                 <img src="https://images.unsplash.com/photo-1610030469983-98e550d615ef?q=80&w=800&auto=format&fit=crop" alt="Fashion" className="w-full h-full object-cover object-left opacity-90 transition-transform duration-700 group-hover:scale-105" />
-                <div className="absolute inset-0 bg-gradient-to-r from-[#3d0c34] via-[#3d0c34]/80 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent"></div>
               </div>
               
               <div className="relative z-10 p-10 flex flex-col justify-center w-full md:w-[65%]">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-lg">
-                    <span className="text-[#3d0c34] text-2xl">👗</span>
+                  <div className="w-14 h-14 bg-gray-50 border border-gray-200 rounded-full flex items-center justify-center shadow-sm">
+                    <span className="text-2xl">👗</span>
                   </div>
                   <h3 className="font-display text-3xl font-bold text-[#d4af37]">Fashion &<br/>Tailoring</h3>
                 </div>
                 
-                <p className="text-white/80 mb-8 text-sm leading-relaxed pr-4">
+                <p className="text-gray-600 mb-8 text-sm leading-relaxed pr-4">
                   Custom stitching, designer wear, aari work & traditional outfits crafted with perfection.
                 </p>
                 
-                <ul className="space-y-3 mb-10 text-sm">
+                <ul className="space-y-3 mb-10 text-sm font-medium text-gray-700">
                   <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#d4af37]" /> Nauvari Saree Stitching</li>
                   <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#d4af37]" /> Blouse Stitching</li>
                   <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#d4af37]" /> Custom Dresses</li>
@@ -164,32 +164,32 @@ export default function Home() {
                   <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#d4af37]" /> Alterations & More</li>
                 </ul>
 
-                <Link to="/fashion" className="bg-[#f3e5ab] text-[#3d0c34] px-6 py-3 rounded font-bold w-max hover:bg-white transition-colors">
+                <Link to="/fashion" className="bg-[#d4af37] text-white px-6 py-3 rounded font-bold w-max hover:bg-[#ebd576] transition-colors shadow-md">
                   Explore Fashion →
                 </Link>
               </div>
             </div>
 
             {/* Beauty Card */}
-            <div className="relative rounded-2xl overflow-hidden group bg-[#1a1a1a] text-white min-h-[400px] flex">
-              <div className="absolute right-0 top-0 bottom-0 w-1/2 z-0">
-                <img src="https://images.unsplash.com/photo-1516975080661-460d3fcb6215?q=80&w=800&auto=format&fit=crop" alt="Beauty" className="w-full h-full object-cover object-left opacity-80 transition-transform duration-700 group-hover:scale-105" />
-                <div className="absolute inset-0 bg-gradient-to-r from-[#1a1a1a] via-[#1a1a1a]/90 to-transparent"></div>
+            <div className="relative rounded-2xl overflow-hidden group bg-white shadow-xl shadow-gray-200/50 text-gray-900 border border-gray-100 min-h-[400px] flex">
+              <div className="absolute right-0 top-0 bottom-0 w-1/2 z-0 hidden md:block">
+                <img src="https://images.unsplash.com/photo-1516975080661-460d3fcb6215?q=80&w=800&auto=format&fit=crop" alt="Beauty" className="w-full h-full object-cover object-left opacity-90 transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent"></div>
               </div>
               
               <div className="relative z-10 p-10 flex flex-col justify-center w-full md:w-[65%]">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-lg">
-                    <span className="text-[#1a1a1a] text-2xl">🪷</span>
+                  <div className="w-14 h-14 bg-gray-50 border border-gray-200 rounded-full flex items-center justify-center shadow-sm">
+                    <span className="text-2xl">🪷</span>
                   </div>
                   <h3 className="font-display text-3xl font-bold text-[#d4af37]">Beauty<br/>Parlour</h3>
                 </div>
                 
-                <p className="text-white/80 mb-8 text-sm leading-relaxed pr-4">
+                <p className="text-gray-600 mb-8 text-sm leading-relaxed pr-4">
                   Pamper yourself with our premium beauty & salon services.
                 </p>
                 
-                <ul className="space-y-3 mb-10 text-sm">
+                <ul className="space-y-3 mb-10 text-sm font-medium text-gray-700">
                   <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#d4af37]" /> Bridal Makeup</li>
                   <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#d4af37]" /> Hair Styling</li>
                   <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#d4af37]" /> Skin & Hair Care</li>
@@ -197,7 +197,7 @@ export default function Home() {
                   <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#d4af37]" /> Packages & More</li>
                 </ul>
 
-                <Link to="/beauty" className="bg-[#f3e5ab] text-[#1a1a1a] px-6 py-3 rounded font-bold w-max hover:bg-white transition-colors">
+                <Link to="/beauty" className="bg-[#d4af37] text-white px-6 py-3 rounded font-bold w-max hover:bg-[#ebd576] transition-colors shadow-md">
                   Explore Beauty →
                 </Link>
               </div>
@@ -278,7 +278,7 @@ export default function Home() {
       </div>
 
       {/* Testimonials */}
-      <div className="bg-[#2a0e24] py-20 px-8 relative overflow-hidden">
+      <div className="bg-[var(--color-surface-2)] py-20 px-8 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: "radial-gradient(#d4af37 1px, transparent 1px)", backgroundSize: "40px 40px" }}></div>
         
         <div className="max-w-7xl mx-auto relative z-10">
@@ -296,17 +296,17 @@ export default function Home() {
               { text: "The stitching quality is amazing. They understand exactly what we want. Highly recommended!", name: "Snehal M." },
               { text: "Very professional service and staff. I always love their work and the way they treat customers.", name: "Anjali K." }
             ].map((review, i) => (
-              <div key={i} className="bg-[#381631] border border-white/10 rounded-2xl p-8 relative">
+              <div key={i} className="bg-white border border-gray-100 rounded-2xl p-8 relative shadow-lg shadow-gray-200/40">
                 <span className="text-5xl text-[#d4af37] opacity-20 font-display absolute top-4 left-6">"</span>
-                <p className="text-white/80 text-sm leading-relaxed relative z-10 mb-8 min-h-[80px]">
+                <p className="text-gray-600 text-sm leading-relaxed relative z-10 mb-8 min-h-[80px]">
                   {review.text}
                 </p>
-                <div className="flex items-center justify-between border-t border-white/10 pt-4 mt-auto">
+                <div className="flex items-center justify-between border-t border-gray-100 pt-4 mt-auto">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gray-500 overflow-hidden">
+                    <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
                       <img src={`https://i.pravatar.cc/100?img=${i+10}`} alt={review.name} />
                     </div>
-                    <span className="text-white font-medium text-sm">{review.name}</span>
+                    <span className="text-gray-900 font-medium text-sm">{review.name}</span>
                   </div>
                   <div className="flex gap-1">
                     {[1,2,3,4,5].map(star => <Star key={star} className="w-3.5 h-3.5 fill-[#d4af37] text-[#d4af37]" />)}
@@ -318,34 +318,34 @@ export default function Home() {
 
           <div className="flex justify-center gap-2 mt-10">
             <div className="w-3 h-3 rounded-full bg-[#d4af37]"></div>
-            <div className="w-3 h-3 rounded-full bg-white/20"></div>
-            <div className="w-3 h-3 rounded-full bg-white/20"></div>
+            <div className="w-3 h-3 rounded-full bg-gray-300"></div>
+            <div className="w-3 h-3 rounded-full bg-gray-300"></div>
           </div>
         </div>
       </div>
 
       {/* Footer Banner */}
-      <div className="bg-[#111] text-white py-12 px-8 border-t border-white/10">
+      <div className="bg-white text-gray-900 py-12 px-8 border-t border-gray-100">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
           
-          <div className="flex items-center gap-6 flex-1 bg-white/5 p-6 rounded-2xl border border-white/10">
+          <div className="flex items-center gap-6 flex-1 bg-rose-50 p-6 rounded-2xl border border-rose-100">
             <div className="text-5xl">🎁</div>
             <div>
               <h3 className="text-xl font-display font-bold text-[#d4af37] mb-1">Special Offers Just For You!</h3>
-              <p className="text-sm text-white/60 mb-4 max-w-sm">Grab the best deals on fashion & beauty services. Limited time only!</p>
-              <Link to="/offers" className="bg-[#f3e5ab] text-black px-6 py-2 rounded font-bold text-sm hover:bg-white inline-block">View Offers →</Link>
+              <p className="text-sm text-gray-600 mb-4 max-w-sm">Grab the best deals on fashion & beauty services. Limited time only!</p>
+              <Link to="/offers" className="bg-[#d4af37] text-white px-6 py-2 rounded font-bold text-sm hover:bg-[#ebd576] inline-block shadow-md">View Offers →</Link>
             </div>
           </div>
 
           <div className="flex-1 text-center">
             <h2 className="text-3xl font-display font-bold mb-4">Ready to Experience <span className="text-[#d4af37]">the Best?</span></h2>
-            <p className="text-white/60 text-sm mb-6 max-w-sm mx-auto">Book your appointment now and let us bring out the most beautiful you!</p>
-            <Link to="/book" className="bg-[#d4af37] text-black px-8 py-3 rounded font-bold hover:bg-[#ebd576] transition-colors inline-block">
+            <p className="text-gray-600 text-sm mb-6 max-w-sm mx-auto">Book your appointment now and let us bring out the most beautiful you!</p>
+            <Link to="/book" className="bg-[#d4af37] text-white px-8 py-3 rounded font-bold hover:bg-[#ebd576] transition-colors inline-block shadow-lg shadow-[#d4af37]/30">
               Book Appointment Now
             </Link>
           </div>
 
-          <div className="flex-1 space-y-4 text-sm text-white/70 bg-white/5 p-6 rounded-2xl border border-white/10">
+          <div className="flex-1 space-y-4 text-sm text-gray-700 bg-gray-50 p-6 rounded-2xl border border-gray-100">
             <div className="flex gap-3">
               <MapPin className="w-5 h-5 text-[#d4af37] shrink-0" />
               <p>123, Kalashri Plaza, Main Road,<br/>Your City, Maharashtra - 411001</p>

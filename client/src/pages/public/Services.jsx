@@ -28,15 +28,15 @@ export default function Services() {
               <motion.div key={svc._id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}
                 className="rounded-2xl bg-[var(--color-surface-card)] border border-[var(--color-border)] overflow-hidden hover:border-[var(--color-rose-500)]/40 hover:-translate-y-1 transition-all group"
               >
-                {svc.image ? <img src={svc.image} alt={svc.name} className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
-                  : <div className="w-full h-48 bg-gradient-to-br from-[var(--color-rose-900)]/50 to-purple-900/30 flex items-center justify-center"><Sparkles className="w-10 h-10 text-[var(--color-rose-400)]/30" /></div>}
+                {svc.image ? <img src={svc.image} alt={svc.name} onError={(e) => { e.target.onerror = null; e.target.src = "https://images.unsplash.com/photo-1516975080661-460d3fcb6215?w=500&auto=format&fit=crop"; }} className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
+                  : <div className="w-full h-48 bg-gradient-to-br from-[var(--color-rose-900)]/50 to-[var(--color-rose-500)]/30 flex items-center justify-center"><Sparkles className="w-10 h-10 text-[var(--color-rose-400)]/30" /></div>}
                 <div className="p-5">
                   <h3 className="font-display font-semibold text-[var(--color-text-primary)] text-lg mb-1">{svc.name}</h3>
                   <p className="text-sm text-[var(--color-text-muted)] mb-3 line-clamp-2">{svc.description}</p>
                   <div className="flex items-center justify-end mb-4">
                     <span className="text-xs text-[var(--color-text-muted)] flex items-center gap-1"><Clock className="w-3 h-3" />{svc.duration} min</span>
                   </div>
-                  <Link to="/register" className="w-full py-2.5 -white text-sm font-medium rounded-xl transition-all text-center block">Book Now</Link>
+                  <Link to="/book" className="w-full py-2.5 btn-primary text-sm font-medium rounded-xl transition-all text-center block">Book Now</Link>
                 </div>
               </motion.div>
             ))}
