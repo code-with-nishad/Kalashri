@@ -21,8 +21,8 @@ export default function MobileLayout() {
       </main>
 
       {/* Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-[#111111]/95 backdrop-blur-xl border-t border-[#2A2A2A] shadow-[0_-10px_30px_rgba(0,0,0,0.5)] z-50">
-        <div className="max-w-md mx-auto flex items-center justify-between px-6 h-16">
+      <nav className="md:hidden fixed bottom-4 left-4 right-4 bg-[#1a0e11]/80 backdrop-blur-[24px] border border-[rgba(212,175,55,0.12)] rounded-[24px] shadow-[0_8px_32px_rgba(0,0,0,0.37)] z-50 overflow-hidden">
+        <div className="max-w-md mx-auto flex items-center justify-between px-6 py-2 h-[72px]">
           {navItems.map((item) => {
             const isActive = location.pathname === item.to || (item.to !== "/" && location.pathname.startsWith(item.to));
             const Icon = item.icon;
@@ -31,12 +31,12 @@ export default function MobileLayout() {
                 key={item.label}
                 to={item.to}
                 className={cn(
-                  "flex flex-col items-center justify-center gap-1 w-16 h-full transition-colors",
-                  isActive ? "text-[var(--color-gold)]" : "text-white/40 hover:text-white/80"
+                  "flex flex-col items-center justify-center gap-1.5 w-16 h-full transition-all duration-300",
+                  isActive ? "text-[#d4af37]" : "text-white hover:text-white/80"
                 )}
               >
-                <Icon className={cn("w-6 h-6", isActive && "text-[var(--color-gold)]")} strokeWidth={isActive ? 2.5 : 2} />
-                <span className="text-[10px] font-medium">{item.label}</span>
+                <Icon className={cn("w-5 h-5 transition-transform duration-300", isActive && "scale-110")} strokeWidth={2.2} />
+                <span className="text-[10px] font-medium tracking-wide">{item.label}</span>
               </Link>
             );
           })}

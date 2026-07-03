@@ -29,14 +29,14 @@ export default function Login() {
           alt="Login Background" 
           className="w-full h-full object-cover object-center opacity-60"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#1a1110]/90 via-[#1a1110]/80 to-[#1a1110]"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-primary-dark)]/90 via-[var(--color-primary-dark)]/80 to-[var(--color-primary-dark)]"></div>
       </div>
 
       <div className="relative z-10 flex flex-col items-center mb-10">
-        <div className="w-16 h-16 rounded-full border border-[#d4af37] flex items-center justify-center mb-4 bg-white/10 backdrop-blur-sm">
-          <span className="text-3xl font-display text-[#d4af37]">K</span>
+        <div className="w-16 h-16 rounded-full border border-[var(--color-accent)] flex items-center justify-center mb-4 bg-white/10 backdrop-blur-sm shadow-lg">
+          <span className="text-3xl font-display text-[var(--color-accent)]">K</span>
         </div>
-        <h1 className="text-3xl font-display font-semibold text-[#d4af37] tracking-wider">KALASHRI</h1>
+        <h1 className="text-3xl font-display font-semibold text-[var(--color-accent)] tracking-wider">KALASHRI</h1>
         <p className="text-[10px] uppercase tracking-widest text-white/60 mt-1">Fashion • Beauty</p>
       </div>
 
@@ -54,7 +54,7 @@ export default function Login() {
             type="text"
             required
             placeholder="Enter Mobile Number"
-            className="w-full pl-11 pr-4 py-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-[#d4af37] focus:border-transparent outline-none transition-all shadow-lg"
+            className="w-full pl-11 pr-4 py-3 bg-[var(--color-surface-3)]/60 backdrop-blur-md border border-[var(--color-border)] rounded-xl text-white placeholder-[var(--color-text-muted)] focus:ring-2 focus:ring-[var(--color-accent)] focus:border-transparent outline-none transition-all shadow-lg"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           />
@@ -68,14 +68,14 @@ export default function Login() {
             type="password"
             required
             placeholder="Enter Password"
-            className="w-full pl-11 pr-4 py-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-[#d4af37] focus:border-transparent outline-none transition-all shadow-lg"
+            className="w-full pl-11 pr-4 py-3 bg-[var(--color-surface-3)]/60 backdrop-blur-md border border-[var(--color-border)] rounded-xl text-white placeholder-[var(--color-text-muted)] focus:ring-2 focus:ring-[var(--color-accent)] focus:border-transparent outline-none transition-all shadow-lg"
             value={formData.password}
             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
           />
         </div>
 
         <div className="flex justify-end">
-          <Link to="/forgot-password" className="text-xs text-[#d4af37] hover:text-white transition-colors">
+          <Link to="/forgot-password" className="text-xs text-[var(--color-accent)] hover:text-[var(--color-accent-light)] transition-colors">
             Forgot Password?
           </Link>
         </div>
@@ -83,7 +83,7 @@ export default function Login() {
         <button
           type="submit"
           disabled={isPending}
-          className="w-full py-4 bg-[#d4af37] text-white rounded-full font-bold text-lg hover:bg-[#ebd576] transition-colors shadow-lg shadow-[#d4af37]/30"
+          className="w-full py-4 btn-luxury-primary text-lg mt-2"
         >
           {isPending ? "Signing in..." : "Login"}
         </button>
@@ -108,7 +108,7 @@ export default function Login() {
 
       <div className="mt-auto pb-8 text-center pt-8 relative z-10">
         <p className="text-sm text-white/60">
-          Don't have an account? <Link to="/register" className="text-[#d4af37] font-semibold">Sign Up</Link>
+          Don't have an account? <Link to="/register" className="text-[var(--color-accent)] hover:text-[var(--color-accent-light)] font-semibold">Sign Up</Link>
         </p>
       </div>
     </div>

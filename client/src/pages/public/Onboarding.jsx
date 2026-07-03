@@ -20,7 +20,7 @@ export default function Onboarding() {
   const [current] = useState(0);
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex flex-col min-h-screen bg-[var(--color-surface)]">
       <div className="flex-1 relative bg-[var(--color-primary-dark)]">
         <img
           src={slides[current].img}
@@ -43,34 +43,34 @@ export default function Onboarding() {
         </div>
       </div>
 
-      <div className="bg-white rounded-t-[2.5rem] px-8 pt-8 pb-10 flex-shrink-0 -mt-10 relative z-20 shadow-[0_-10px_20px_rgba(0,0,0,0.1)]">
+      <div className="bg-[var(--color-surface-2)] rounded-t-[2.5rem] px-8 pt-8 pb-10 flex-shrink-0 -mt-10 relative z-20 shadow-lg border-t border-[var(--color-border)]">
         <div className="space-y-5 mb-8">
           {slides[current].features.map((feat) => (
             <div key={feat.text} className="flex items-center gap-4">
-              <span className="w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center border border-rose-100">
+              <span className="w-10 h-10 rounded-full bg-[var(--color-surface-3)] flex items-center justify-center border border-[var(--color-border)]">
                 <feat.icon className="w-5 h-5 text-[var(--color-accent)]" />
               </span>
-              <span className="text-sm font-bold text-gray-800">{feat.text}</span>
+              <span className="text-sm font-bold text-white">{feat.text}</span>
             </div>
           ))}
         </div>
 
         <div className="flex justify-center gap-2 mb-8">
-          <span className="w-2 h-2 rounded-full bg-gray-300" />
-          <span className="w-2 h-2 rounded-full bg-gray-300" />
-          <span className="w-2 h-2 rounded-full bg-gray-300" />
+          <span className="w-2 h-2 rounded-full bg-white/20" />
+          <span className="w-2 h-2 rounded-full bg-white/20" />
+          <span className="w-2 h-2 rounded-full bg-white/20" />
           <span className="w-2 h-2 rounded-full bg-[var(--color-accent)]" />
         </div>
 
         <button
           onClick={() => navigate("/login")}
-          className="w-full py-3.5 bg-[var(--color-accent)] text-white rounded-full font-bold text-sm tracking-wide shadow-md hover:bg-[var(--color-accent-light)] transition-colors mb-3"
+          className="w-full py-3.5 btn-luxury-primary mb-3"
         >
           Get Started
         </button>
         <button
           onClick={() => navigate("/login")}
-          className="w-full py-2 text-gray-500 font-bold text-xs hover:text-gray-800 transition-colors"
+          className="w-full py-2 text-white/50 font-bold text-xs hover:text-white transition-colors"
         >
           Skip
         </button>

@@ -24,24 +24,25 @@ export default function FashionHome() {
           alt="Fashion Hero" 
           className="w-full h-64 object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#3d0c34]/90 to-transparent flex flex-col justify-center px-6">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#12080a]/90 to-transparent flex flex-col justify-center px-6">
           <h2 className="text-3xl font-display font-bold text-white mb-2 leading-tight">
             Customized<br/>Just For You
           </h2>
-          <p className="text-[var(--color-gold)] text-xs uppercase tracking-widest font-medium">
+          <p className="text-[var(--color-accent)] text-xs uppercase tracking-widest font-medium">
             Premium Stitching<br/>Perfect Fit
           </p>
         </div>
       </div>
 
       {/* Services */}
-      <div className="bg-white rounded-t-3xl -mt-6 relative z-10 px-6 py-8 shadow-[0_-8px_20px_rgba(0,0,0,0.1)] pb-24">
-        <h3 className="text-lg font-bold text-gray-900 font-display mb-4">Our Services</h3>
+      {/* Services */}
+      <div className="bg-[var(--color-surface)] rounded-t-3xl -mt-6 relative z-10 px-6 py-8 shadow-[0_-8px_20px_rgba(0,0,0,0.5)] border-t border-[var(--color-border)] pb-24">
+        <h3 className="text-lg font-bold text-white font-display mb-4">Our Services</h3>
         <div className="grid grid-cols-2 gap-4">
           {services.map((svc, i) => (
-            <Link key={i} to={svc.to} className="bg-white border border-rose-100 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm hover:border-rose-300 transition-colors">
+            <Link key={i} to={svc.to} className="card-luxury p-4 flex flex-col items-center justify-center text-center">
               <span className="text-3xl mb-3">{svc.icon}</span>
-              <span className="text-xs font-semibold text-gray-800">{svc.name}</span>
+              <span className="text-xs font-semibold text-white">{svc.name}</span>
             </Link>
           ))}
         </div>

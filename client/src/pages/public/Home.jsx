@@ -8,17 +8,17 @@ export default function Home() {
       
       {/* Floating Action Menu (Right Side - Desktop Only) */}
       <div className="hidden md:flex fixed right-0 top-1/2 -translate-y-1/2 z-50 flex-col gap-2 p-2">
-        <a href="tel:+919876543210" className="bg-[#241a18]/90 hover:bg-[#3d2b28] border border-[#d4af37]/30 text-[#d4af37] p-3 rounded-l-xl flex flex-col items-center justify-center gap-1 transition-all backdrop-blur-sm group">
+        <a href="tel:+919876543210" className="bg-[var(--color-surface-card)]/90 hover:bg-[var(--color-surface-3)] border border-[var(--color-border)] text-[var(--color-accent)] p-3 rounded-l-xl flex flex-col items-center justify-center gap-1 transition-all backdrop-blur-sm group shadow-lg">
           <Phone className="w-5 h-5 group-hover:scale-110 transition-transform" />
-          <span className="text-[10px] uppercase tracking-wider font-semibold">Call Us</span>
+          <span className="text-[10px] uppercase tracking-wider font-semibold text-[var(--color-text-secondary)]">Call Us</span>
         </a>
-        <a href="https://wa.me/919876543210" target="_blank" rel="noreferrer" className="bg-[#241a18]/90 hover:bg-[#3d2b28] border border-[#d4af37]/30 text-[#d4af37] p-3 rounded-l-xl flex flex-col items-center justify-center gap-1 transition-all backdrop-blur-sm group">
+        <a href="https://wa.me/919876543210" target="_blank" rel="noreferrer" className="bg-[var(--color-surface-card)]/90 hover:bg-[var(--color-surface-3)] border border-[var(--color-border)] text-[var(--color-accent)] p-3 rounded-l-xl flex flex-col items-center justify-center gap-1 transition-all backdrop-blur-sm group shadow-lg">
           <MessageCircle className="w-5 h-5 group-hover:scale-110 transition-transform" />
-          <span className="text-[10px] uppercase tracking-wider font-semibold">WhatsApp</span>
+          <span className="text-[10px] uppercase tracking-wider font-semibold text-[var(--color-text-secondary)]">WhatsApp</span>
         </a>
-        <a href="#" className="bg-[#241a18]/90 hover:bg-[#3d2b28] border border-[#d4af37]/30 text-[#d4af37] p-3 rounded-l-xl flex flex-col items-center justify-center gap-1 transition-all backdrop-blur-sm group">
+        <a href="#" className="bg-[var(--color-surface-card)]/90 hover:bg-[var(--color-surface-3)] border border-[var(--color-border)] text-[var(--color-accent)] p-3 rounded-l-xl flex flex-col items-center justify-center gap-1 transition-all backdrop-blur-sm group shadow-lg">
           <MapPin className="w-5 h-5 group-hover:scale-110 transition-transform" />
-          <span className="text-[10px] uppercase tracking-wider font-semibold">Directions</span>
+          <span className="text-[10px] uppercase tracking-wider font-semibold text-[var(--color-text-secondary)]">Directions</span>
         </a>
       </div>
 
@@ -60,7 +60,7 @@ export default function Home() {
 
           {/* Nav Actions */}
           <div className="flex flex-wrap items-center gap-3 absolute top-6 right-4 md:relative md:top-0 md:right-0">
-            <Link to="/book" className="hidden sm:inline-flex items-center gap-2 border border-[#d4af37] text-[#d4af37] px-4 py-2.5 rounded hover:bg-[#d4af37] hover:text-white transition-all font-semibold text-sm">
+            <Link to="/book" className="hidden sm:inline-flex items-center gap-2 btn-luxury-outline px-5 py-2.5 text-sm">
               Book Appointment
             </Link>
             <button className="md:hidden text-white hover:text-[#d4af37]">
@@ -88,10 +88,10 @@ export default function Home() {
             </p>
             
             <div className="flex flex-wrap items-center gap-4">
-              <Link to="/services" className="bg-[#d4af37] text-white px-8 py-3.5 rounded font-bold hover:bg-[#ebd576] transition-colors flex items-center gap-2 shadow-lg shadow-[#d4af37]/30">
+              <Link to="/services" className="btn-luxury-primary px-8 py-3.5 flex items-center gap-2">
                 Explore Services <span className="text-xl">→</span>
               </Link>
-              <Link to="/book" className="bg-transparent border border-white/30 text-white px-8 py-3.5 rounded font-bold hover:border-[#d4af37] hover:text-[#d4af37] transition-colors flex items-center gap-2">
+              <Link to="/book" className="btn-luxury-outline px-8 py-3.5 flex items-center gap-2 bg-transparent text-white border-white/30 hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]">
                 Book Appointment <CalendarIcon className="w-5 h-5" />
               </Link>
             </div>
@@ -126,7 +126,7 @@ export default function Home() {
       </div>
 
       {/* Services Section */}
-      <div className="bg-[var(--color-surface)] py-20 px-8 border-y border-gray-100">
+      <div className="bg-[var(--color-surface)] py-20 px-8 border-y border-[var(--color-border)]">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <div className="flex items-center justify-center gap-3 mb-4">
@@ -134,30 +134,30 @@ export default function Home() {
               <span className="text-[#d4af37] uppercase tracking-[0.2em] text-xs font-bold">Services We Offer</span>
               <div className="h-[1px] w-12 bg-[#d4af37]"></div>
             </div>
-            <h2 className="font-display text-4xl text-gray-900 font-bold">Complete Solutions for Your Style & Beauty</h2>
+            <h2 className="font-display text-4xl text-white font-bold">Complete Solutions for Your Style & Beauty</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Fashion Card */}
-            <div className="relative rounded-2xl overflow-hidden group bg-white shadow-xl shadow-gray-200/50 text-gray-900 border border-gray-100 min-h-[400px] flex">
+            <div className="card-luxury relative overflow-hidden group min-h-[400px] flex p-0">
               <div className="absolute right-0 top-0 bottom-0 w-1/2 z-0 hidden md:block">
-                <img src="https://images.unsplash.com/photo-1610030469983-98e550d615ef?q=80&w=800&auto=format&fit=crop" alt="Fashion" className="w-full h-full object-cover object-left opacity-90 transition-transform duration-700 group-hover:scale-105" />
-                <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent"></div>
+                <img src="https://images.unsplash.com/photo-1610030469983-98e550d615ef?q=80&w=800&auto=format&fit=crop" alt="Fashion" className="w-full h-full object-cover object-left opacity-80 transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-surface-card)] via-[var(--color-surface-card)]/80 to-transparent"></div>
               </div>
               
               <div className="relative z-10 p-10 flex flex-col justify-center w-full md:w-[65%]">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-14 h-14 bg-gray-50 border border-gray-200 rounded-full flex items-center justify-center shadow-sm">
+                  <div className="w-14 h-14 bg-[var(--color-surface-3)] border border-[var(--color-border)] rounded-full flex items-center justify-center shadow-sm">
                     <span className="text-2xl">👗</span>
                   </div>
-                  <h3 className="font-display text-3xl font-bold text-[#d4af37]">Fashion &<br/>Tailoring</h3>
+                  <h3 className="font-display text-3xl font-bold text-white">Fashion &<br/><span className="text-[#d4af37]">Tailoring</span></h3>
                 </div>
                 
-                <p className="text-gray-600 mb-8 text-sm leading-relaxed pr-4">
+                <p className="text-[var(--color-text-secondary)] mb-8 text-sm leading-relaxed pr-4">
                   Custom stitching, designer wear, aari work & traditional outfits crafted with perfection.
                 </p>
                 
-                <ul className="space-y-3 mb-10 text-sm font-medium text-gray-700">
+                <ul className="space-y-3 mb-10 text-sm font-medium text-[var(--color-text-secondary)]">
                   <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#d4af37]" /> Nauvari Saree Stitching</li>
                   <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#d4af37]" /> Blouse Stitching</li>
                   <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#d4af37]" /> Custom Dresses</li>
@@ -165,32 +165,32 @@ export default function Home() {
                   <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#d4af37]" /> Alterations & More</li>
                 </ul>
 
-                <Link to="/fashion" className="bg-[#d4af37] text-white px-6 py-3 rounded font-bold w-max hover:bg-[#ebd576] transition-colors shadow-md">
+                <Link to="/fashion" className="btn-luxury-outline px-6 py-3 w-max">
                   Explore Fashion →
                 </Link>
               </div>
             </div>
 
             {/* Beauty Card */}
-            <div className="relative rounded-2xl overflow-hidden group bg-white shadow-xl shadow-gray-200/50 text-gray-900 border border-gray-100 min-h-[400px] flex">
+            <div className="card-luxury relative overflow-hidden group min-h-[400px] flex p-0">
               <div className="absolute right-0 top-0 bottom-0 w-1/2 z-0 hidden md:block">
-                <img src="https://images.unsplash.com/photo-1516975080661-460d3fcb6215?q=80&w=800&auto=format&fit=crop" alt="Beauty" className="w-full h-full object-cover object-left opacity-90 transition-transform duration-700 group-hover:scale-105" />
-                <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent"></div>
+                <img src="https://images.unsplash.com/photo-1516975080661-460d3fcb6215?q=80&w=800&auto=format&fit=crop" alt="Beauty" className="w-full h-full object-cover object-left opacity-80 transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-surface-card)] via-[var(--color-surface-card)]/80 to-transparent"></div>
               </div>
               
               <div className="relative z-10 p-10 flex flex-col justify-center w-full md:w-[65%]">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-14 h-14 bg-gray-50 border border-gray-200 rounded-full flex items-center justify-center shadow-sm">
+                  <div className="w-14 h-14 bg-[var(--color-surface-3)] border border-[var(--color-border)] rounded-full flex items-center justify-center shadow-sm">
                     <span className="text-2xl">🪷</span>
                   </div>
-                  <h3 className="font-display text-3xl font-bold text-[#d4af37]">Beauty<br/>Parlour</h3>
+                  <h3 className="font-display text-3xl font-bold text-white">Beauty<br/><span className="text-[#d4af37]">Parlour</span></h3>
                 </div>
                 
-                <p className="text-gray-600 mb-8 text-sm leading-relaxed pr-4">
+                <p className="text-[var(--color-text-secondary)] mb-8 text-sm leading-relaxed pr-4">
                   Pamper yourself with our premium beauty & salon services.
                 </p>
                 
-                <ul className="space-y-3 mb-10 text-sm font-medium text-gray-700">
+                <ul className="space-y-3 mb-10 text-sm font-medium text-[var(--color-text-secondary)]">
                   <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#d4af37]" /> Bridal Makeup</li>
                   <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#d4af37]" /> Hair Styling</li>
                   <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#d4af37]" /> Skin & Hair Care</li>
@@ -198,7 +198,7 @@ export default function Home() {
                   <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#d4af37]" /> Packages & More</li>
                 </ul>
 
-                <Link to="/beauty" className="bg-[#d4af37] text-white px-6 py-3 rounded font-bold w-max hover:bg-[#ebd576] transition-colors shadow-md">
+                <Link to="/beauty" className="btn-luxury-outline px-6 py-3 w-max">
                   Explore Beauty →
                 </Link>
               </div>
@@ -208,41 +208,41 @@ export default function Home() {
       </div>
 
       {/* Stats Section */}
-      <div className="border-y border-gray-200 bg-white py-12 px-8">
-        <div className="max-w-7xl mx-auto flex flex-wrap justify-center md:justify-between items-center gap-8 divide-x-0 md:divide-x divide-gray-200">
+      <div className="border-y border-[var(--color-border)] bg-[var(--color-surface-2)] py-12 px-8">
+        <div className="max-w-7xl mx-auto flex flex-wrap justify-center md:justify-between items-center gap-8 divide-x-0 md:divide-x divide-[var(--color-border)]">
           <div className="flex items-center gap-4 px-8 w-full md:w-auto justify-center">
             <Users className="w-12 h-12 text-[#d4af37]" strokeWidth={1} />
             <div>
-              <p className="text-3xl font-display font-bold text-gray-900">5000+</p>
-              <p className="text-sm text-gray-500 font-medium">Happy Customers</p>
+              <p className="text-3xl font-display font-bold text-white">5000+</p>
+              <p className="text-sm text-[var(--color-text-muted)] font-medium">Happy Customers</p>
             </div>
           </div>
           <div className="flex items-center gap-4 px-8 w-full md:w-auto justify-center">
             <Star className="w-12 h-12 text-[#d4af37]" strokeWidth={1} />
             <div>
-              <p className="text-3xl font-display font-bold text-gray-900">50+</p>
-              <p className="text-sm text-gray-500 font-medium">Expert Professionals</p>
+              <p className="text-3xl font-display font-bold text-white">50+</p>
+              <p className="text-sm text-[var(--color-text-muted)] font-medium">Expert Professionals</p>
             </div>
           </div>
           <div className="flex items-center gap-4 px-8 w-full md:w-auto justify-center">
-            <span className="w-12 h-12 flex items-center justify-center border-2 border-[#d4af37] rounded-full text-[#d4af37] text-xl">🎖</span>
+            <span className="w-12 h-12 flex items-center justify-center border-2 border-[var(--color-border)] rounded-full text-[#d4af37] text-xl">🎖</span>
             <div>
-              <p className="text-3xl font-display font-bold text-gray-900">100%</p>
-              <p className="text-sm text-gray-500 font-medium">Quality Service</p>
+              <p className="text-3xl font-display font-bold text-white">100%</p>
+              <p className="text-sm text-[var(--color-text-muted)] font-medium">Quality Service</p>
             </div>
           </div>
           <div className="flex items-center gap-4 px-8 w-full md:w-auto justify-center">
-            <span className="w-12 h-12 flex items-center justify-center border-2 border-[#d4af37] rounded-full text-[#d4af37] text-xl">☺</span>
+            <span className="w-12 h-12 flex items-center justify-center border-2 border-[var(--color-border)] rounded-full text-[#d4af37] text-xl">☺</span>
             <div>
-              <p className="text-3xl font-display font-bold text-gray-900">4.9/5</p>
-              <p className="text-sm text-gray-500 font-medium">Customer Rating</p>
+              <p className="text-3xl font-display font-bold text-white">4.9/5</p>
+              <p className="text-sm text-[var(--color-text-muted)] font-medium">Customer Rating</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Featured Collections */}
-      <div className="bg-[#faf7f2] py-20 px-8">
+      <div className="bg-[var(--color-surface-3)] py-20 px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <div className="flex items-center justify-center gap-3 mb-4">
@@ -271,7 +271,7 @@ export default function Home() {
           </div>
 
           <div className="text-center">
-            <Link to="/gallery" className="inline-flex items-center gap-2 bg-[#3d0c34] text-white px-8 py-3 rounded font-bold hover:bg-black transition-colors">
+            <Link to="/gallery" className="inline-flex items-center gap-2 btn-luxury-outline px-8 py-3">
               <span className="text-lg">❖</span> View All Gallery <span className="text-lg">❖</span>
             </Link>
           </div>
@@ -297,17 +297,17 @@ export default function Home() {
               { text: "The stitching quality is amazing. They understand exactly what we want. Highly recommended!", name: "Snehal M." },
               { text: "Very professional service and staff. I always love their work and the way they treat customers.", name: "Anjali K." }
             ].map((review, i) => (
-              <div key={i} className="bg-white border border-gray-100 rounded-2xl p-8 relative shadow-lg shadow-gray-200/40">
-                <span className="text-5xl text-[#d4af37] opacity-20 font-display absolute top-4 left-6">"</span>
-                <p className="text-gray-600 text-sm leading-relaxed relative z-10 mb-8 min-h-[80px]">
+              <div key={i} className="card-luxury relative">
+                <span className="text-5xl text-[var(--color-accent)] opacity-20 font-display absolute top-4 left-6">"</span>
+                <p className="text-[var(--color-text-secondary)] text-sm leading-relaxed relative z-10 mb-8 min-h-[80px]">
                   {review.text}
                 </p>
-                <div className="flex items-center justify-between border-t border-gray-100 pt-4 mt-auto">
+                <div className="flex items-center justify-between border-t border-[var(--color-border)] pt-4 mt-auto">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
+                    <div className="w-10 h-10 rounded-full bg-[var(--color-surface-3)] overflow-hidden">
                       <img src={`https://i.pravatar.cc/100?img=${i+10}`} alt={review.name} />
                     </div>
-                    <span className="text-gray-900 font-medium text-sm">{review.name}</span>
+                    <span className="text-white font-medium text-sm">{review.name}</span>
                   </div>
                   <div className="flex gap-1">
                     {[1,2,3,4,5].map(star => <Star key={star} className="w-3.5 h-3.5 fill-[#d4af37] text-[#d4af37]" />)}
@@ -319,34 +319,34 @@ export default function Home() {
 
           <div className="flex justify-center gap-2 mt-10">
             <div className="w-3 h-3 rounded-full bg-[#d4af37]"></div>
-            <div className="w-3 h-3 rounded-full bg-gray-300"></div>
-            <div className="w-3 h-3 rounded-full bg-gray-300"></div>
+            <div className="w-3 h-3 rounded-full bg-white/20"></div>
+            <div className="w-3 h-3 rounded-full bg-white/20"></div>
           </div>
         </div>
       </div>
 
       {/* Footer Banner */}
-      <div className="bg-white text-gray-900 py-12 px-8 border-t border-gray-100">
+      <div className="bg-[var(--color-surface)] py-12 px-8 border-t border-[var(--color-border)]">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
           
-          <div className="flex items-center gap-6 flex-1 bg-rose-50 p-6 rounded-2xl border border-rose-100">
+          <div className="flex items-center gap-6 flex-1 card-luxury border border-[var(--color-border)]">
             <div className="text-5xl">🎁</div>
             <div>
               <h3 className="text-xl font-display font-bold text-[#d4af37] mb-1">Special Offers Just For You!</h3>
-              <p className="text-sm text-gray-600 mb-4 max-w-sm">Grab the best deals on fashion & beauty services. Limited time only!</p>
-              <Link to="/offers" className="bg-[#d4af37] text-white px-6 py-2 rounded font-bold text-sm hover:bg-[#ebd576] inline-block shadow-md">View Offers →</Link>
+              <p className="text-sm text-[var(--color-text-secondary)] mb-4 max-w-sm">Grab the best deals on fashion & beauty services. Limited time only!</p>
+              <Link to="/offers" className="btn-luxury-outline px-6 py-2 text-sm inline-block">View Offers →</Link>
             </div>
           </div>
 
           <div className="flex-1 text-center">
-            <h2 className="text-3xl font-display font-bold mb-4">Ready to Experience <span className="text-[#d4af37]">the Best?</span></h2>
-            <p className="text-gray-600 text-sm mb-6 max-w-sm mx-auto">Book your appointment now and let us bring out the most beautiful you!</p>
-            <Link to="/book" className="bg-[#d4af37] text-white px-8 py-3 rounded font-bold hover:bg-[#ebd576] transition-colors inline-block shadow-lg shadow-[#d4af37]/30">
+            <h2 className="text-3xl font-display font-bold text-white mb-4">Ready to Experience <span className="text-[#d4af37]">the Best?</span></h2>
+            <p className="text-[var(--color-text-secondary)] text-sm mb-6 max-w-sm mx-auto">Book your appointment now and let us bring out the most beautiful you!</p>
+            <Link to="/book" className="btn-luxury-primary px-8 py-3 inline-block">
               Book Appointment Now
             </Link>
           </div>
 
-          <div className="flex-1 space-y-4 text-sm text-gray-700 bg-gray-50 p-6 rounded-2xl border border-gray-100">
+          <div className="flex-1 space-y-4 text-sm text-[var(--color-text-secondary)] card-luxury border border-[var(--color-border)]">
             <div className="flex gap-3">
               <MapPin className="w-5 h-5 text-[#d4af37] shrink-0" />
               <p>123, Kalashri Plaza, Main Road,<br/>Your City, Maharashtra - 411001</p>

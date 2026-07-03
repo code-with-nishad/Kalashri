@@ -103,52 +103,51 @@ export default function BookAppointment() {
       </div>
 
       {/* Form Area */}
-      <div className="bg-white rounded-t-3xl -mt-6 p-6 flex-1 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] relative z-20">
+      <div className="bg-[var(--color-surface)] border-t border-[var(--color-border)] rounded-t-3xl -mt-6 p-6 flex-1 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] relative z-20">
         
-        {step === 1 && (
           <div className="space-y-4 animate-fade-in">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">What are you looking for today?</h2>
+            <h2 className="text-xl font-bold text-white mb-6">What are you looking for today?</h2>
             
             <div 
               onClick={() => { setCategory("Beauty"); setStep(2); setSelectedServiceId(""); }}
-              className={`p-6 rounded-2xl border-2 cursor-pointer transition-all ${category === "Beauty" ? "border-[var(--color-primary)] bg-[var(--color-primary)]/5" : "border-gray-100 hover:border-gray-200"}`}
+              className={`p-6 rounded-2xl border cursor-pointer transition-all ${category === "Beauty" ? "border-[var(--color-accent)] bg-[var(--color-accent)]/5" : "border-[var(--color-border)] hover:border-[var(--color-accent)]/30 card-luxury"}`}
             >
-              <div className="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center mb-4">
-                <Sparkles className="w-6 h-6 text-pink-500" />
+              <div className="w-12 h-12 rounded-full bg-[var(--color-surface-3)] border border-[var(--color-border)] flex items-center justify-center mb-4">
+                <Sparkles className="w-6 h-6 text-[var(--color-accent)]" />
               </div>
-              <h3 className="text-lg font-bold text-gray-900">Beauty Salon</h3>
-              <p className="text-sm text-gray-500 mt-1">Bridal makeup, hair styling, facials, and beauty treatments.</p>
+              <h3 className="text-lg font-bold text-white">Beauty Salon</h3>
+              <p className="text-sm text-white/60 mt-1">Bridal makeup, hair styling, facials, and beauty treatments.</p>
             </div>
 
             <div 
               onClick={() => { setCategory("Fashion"); setStep(2); setSelectedServiceId(""); }}
-              className={`p-6 rounded-2xl border-2 cursor-pointer transition-all ${category === "Fashion" ? "border-[var(--color-primary)] bg-[var(--color-primary)]/5" : "border-gray-100 hover:border-gray-200"}`}
+              className={`p-6 rounded-2xl border cursor-pointer transition-all ${category === "Fashion" ? "border-[var(--color-accent)] bg-[var(--color-accent)]/5" : "border-[var(--color-border)] hover:border-[var(--color-accent)]/30 card-luxury"}`}
             >
-              <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
-                <Scissors className="w-6 h-6 text-purple-500" />
+              <div className="w-12 h-12 rounded-full bg-[var(--color-surface-3)] border border-[var(--color-border)] flex items-center justify-center mb-4">
+                <Scissors className="w-6 h-6 text-[var(--color-accent)]" />
               </div>
-              <h3 className="text-lg font-bold text-gray-900">Fashion Studio</h3>
-              <p className="text-sm text-gray-500 mt-1">Stitching consultations, Nauvari sarees, and custom dress fittings.</p>
+              <h3 className="text-lg font-bold text-white">Fashion Studio</h3>
+              <p className="text-sm text-white/60 mt-1">Stitching consultations, Nauvari sarees, and custom dress fittings.</p>
             </div>
           </div>
         )}
 
         {step === 2 && (
           <div className="space-y-6 animate-fade-in">
-            <h2 className="text-xl font-bold text-gray-900 mb-2">Select a Service</h2>
-            <p className="text-sm text-gray-500 mb-6">Showing {category} services</p>
+            <h2 className="text-xl font-bold text-white mb-2">Select a Service</h2>
+            <p className="text-sm text-white/60 mb-6">Showing {category} services</p>
             
             {isLoading ? (
-              <div className="text-center py-8 text-gray-500">Loading services...</div>
+              <div className="text-center py-8 text-white/60">Loading services...</div>
             ) : filteredServices.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-gray-500 mb-4">No specific {category.toLowerCase()} services found in the catalog.</p>
+                <p className="text-white/60 mb-4">No specific {category.toLowerCase()} services found in the catalog.</p>
                 <div 
                   onClick={() => setSelectedServiceId("custom")}
-                  className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${selectedServiceId === "custom" ? "border-[var(--color-primary)] bg-[var(--color-primary)]/5" : "border-gray-100"}`}
+                  className={`p-4 rounded-xl border cursor-pointer transition-all ${selectedServiceId === "custom" ? "border-[var(--color-accent)] bg-[var(--color-accent)]/5" : "border-[var(--color-border)] card-luxury"}`}
                 >
-                  <h3 className="font-bold text-gray-900">General Consultation</h3>
-                  <p className="text-sm text-gray-500">Book an open appointment to discuss your needs.</p>
+                  <h3 className="font-bold text-white">General Consultation</h3>
+                  <p className="text-sm text-white/60">Book an open appointment to discuss your needs.</p>
                 </div>
               </div>
             ) : (
@@ -157,13 +156,13 @@ export default function BookAppointment() {
                   <div 
                     key={svc._id}
                     onClick={() => setSelectedServiceId(svc._id)}
-                    className={`p-4 rounded-xl border-2 cursor-pointer transition-all flex items-center justify-between ${selectedServiceId === svc._id ? "border-[var(--color-primary)] bg-[var(--color-primary)]/5" : "border-gray-100 hover:border-gray-200"}`}
+                    className={`p-4 rounded-xl border cursor-pointer transition-all flex items-center justify-between ${selectedServiceId === svc._id ? "border-[var(--color-accent)] bg-[var(--color-accent)]/5" : "border-[var(--color-border)] hover:border-[var(--color-accent)]/30 card-luxury"}`}
                   >
                     <div>
-                      <h3 className="font-bold text-gray-900">{svc.name}</h3>
-                      <p className="text-sm text-gray-500">{svc.duration} mins</p>
+                      <h3 className="font-bold text-white">{svc.name}</h3>
+                      <p className="text-sm text-white/60">{svc.duration} mins</p>
                     </div>
-                    <div className="text-[var(--color-primary)] font-bold">
+                    <div className="text-[var(--color-accent)] font-bold">
                       ₹{svc.price}
                     </div>
                   </div>
@@ -175,29 +174,29 @@ export default function BookAppointment() {
 
         {step === 3 && (
           <div className="space-y-6 animate-fade-in">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Choose Date & Time</h2>
+            <h2 className="text-xl font-bold text-white mb-6">Choose Date & Time</h2>
             
             <div>
-              <label className="block text-xs text-gray-500 font-medium mb-2 uppercase tracking-wider">Date</label>
+              <label className="block text-xs text-white/60 font-medium mb-2 uppercase tracking-wider">Date</label>
               <div className="relative">
                 <input 
                   type="date" 
                   value={date} 
                   onChange={(e) => setDate(e.target.value)}
                   min={format(new Date(), 'yyyy-MM-dd')}
-                  className="w-full border-2 border-gray-100 rounded-xl px-4 py-3 text-gray-900 font-semibold focus:outline-none focus:border-[var(--color-primary)] bg-transparent"
+                  className="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-white font-semibold focus:outline-none focus:border-[var(--color-accent)] focus:ring-1 focus:ring-[var(--color-accent)] bg-[var(--color-surface-3)]/50 backdrop-blur-sm"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs text-gray-500 font-medium mb-3 uppercase tracking-wider">Available Slots</label>
+              <label className="block text-xs text-white/60 font-medium mb-3 uppercase tracking-wider">Available Slots</label>
               <div className="grid grid-cols-3 gap-3">
                 {availableTimes.map(t => (
                   <button
                     key={t}
                     onClick={() => setTime(t)}
-                    className={`py-2 px-1 rounded-xl text-sm font-semibold border-2 transition-colors ${time === t ? "border-[var(--color-primary)] bg-[var(--color-primary)] text-white" : "border-gray-100 text-gray-600 hover:border-gray-200"}`}
+                    className={`py-2 px-1 rounded-xl text-sm font-semibold border transition-colors ${time === t ? "border-[var(--color-accent)] bg-[var(--color-accent)] text-[var(--color-primary-dark)]" : "border-[var(--color-border)] text-white/80 hover:border-[var(--color-accent)]/50 card-luxury"}`}
                   >
                     {t}
                   </button>
@@ -206,12 +205,12 @@ export default function BookAppointment() {
             </div>
 
             <div>
-              <label className="block text-xs text-gray-500 font-medium mb-2 uppercase tracking-wider">Any specific requests?</label>
+              <label className="block text-xs text-white/60 font-medium mb-2 uppercase tracking-wider">Any specific requests?</label>
               <textarea 
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="E.g. I need a trial, or I'm bringing reference photos..."
-                className="w-full border-2 border-gray-100 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-[var(--color-primary)] bg-transparent min-h-[100px] text-sm"
+                className="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[var(--color-accent)] focus:ring-1 focus:ring-[var(--color-accent)] bg-[var(--color-surface-3)]/50 backdrop-blur-sm min-h-[100px] text-sm"
               />
             </div>
           </div>
@@ -219,27 +218,27 @@ export default function BookAppointment() {
 
         {step === 4 && (
           <div className="space-y-6 animate-fade-in">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
-              <Check className="w-8 h-8 text-green-500" />
+            <div className="w-16 h-16 bg-[var(--color-accent)]/20 border border-[var(--color-accent)] rounded-full flex items-center justify-center mx-auto mb-2 shadow-lg shadow-[var(--color-accent)]/10">
+              <Check className="w-8 h-8 text-[var(--color-accent)]" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 text-center">Ready to Confirm</h2>
+            <h2 className="text-2xl font-bold text-white text-center">Ready to Confirm</h2>
             
-            <div className="bg-gray-50 rounded-2xl p-5 space-y-4">
-              <div className="flex justify-between items-center border-b border-gray-200 pb-4">
-                <span className="text-sm text-gray-500">Business</span>
-                <span className="font-bold text-gray-900">{category}</span>
+            <div className="card-luxury p-5 space-y-4">
+              <div className="flex justify-between items-center border-b border-[var(--color-border)] pb-4">
+                <span className="text-sm text-white/60">Business</span>
+                <span className="font-bold text-white">{category}</span>
               </div>
-              <div className="flex justify-between items-center border-b border-gray-200 pb-4">
-                <span className="text-sm text-gray-500">Service</span>
-                <span className="font-bold text-gray-900">{selectedService?.name || "General Consultation"}</span>
+              <div className="flex justify-between items-center border-b border-[var(--color-border)] pb-4">
+                <span className="text-sm text-white/60">Service</span>
+                <span className="font-bold text-white">{selectedService?.name || "General Consultation"}</span>
               </div>
-              <div className="flex justify-between items-center border-b border-gray-200 pb-4">
-                <span className="text-sm text-gray-500">Date</span>
-                <span className="font-bold text-gray-900">{format(new Date(date), 'MMM dd, yyyy')}</span>
+              <div className="flex justify-between items-center border-b border-[var(--color-border)] pb-4">
+                <span className="text-sm text-white/60">Date</span>
+                <span className="font-bold text-white">{format(new Date(date), 'MMM dd, yyyy')}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-500">Time</span>
-                <span className="font-bold text-[var(--color-primary)]">{time}</span>
+                <span className="text-sm text-white/60">Time</span>
+                <span className="font-bold text-[var(--color-accent)]">{time}</span>
               </div>
             </div>
           </div>
@@ -247,12 +246,12 @@ export default function BookAppointment() {
 
       </div>
 
-      <div className="fixed bottom-16 left-0 right-0 p-6 bg-white max-w-md mx-auto z-40 flex gap-3 border-t border-gray-100 shadow-[0_-10px_20px_rgba(0,0,0,0.05)]">
+      <div className="fixed bottom-16 left-0 right-0 p-6 bg-[var(--color-surface)] max-w-md mx-auto z-40 flex gap-3 border-t border-[var(--color-border)] shadow-[0_-10px_20px_rgba(0,0,0,0.5)]">
         {step > 1 && (
           <button 
             onClick={() => setStep(step - 1)}
             disabled={createAppointment.isPending}
-            className="w-1/3 py-4 bg-gray-100 text-gray-600 rounded-xl font-bold text-sm hover:bg-gray-200 transition-colors"
+            className="w-1/3 py-4 card-luxury text-white rounded-xl font-bold text-sm transition-colors border border-[var(--color-border)] hover:bg-[var(--color-surface-3)]"
           >
             Back
           </button>
@@ -260,7 +259,7 @@ export default function BookAppointment() {
         <button 
           onClick={handleNext}
           disabled={createAppointment.isPending}
-          className="flex-1 py-4 bg-[var(--color-accent)] text-white rounded-xl font-bold text-sm hover:bg-[var(--color-accent-light)] transition-colors shadow-lg shadow-[var(--color-accent)]/30 flex items-center justify-center gap-2"
+          className="flex-1 py-4 btn-luxury-primary text-sm flex items-center justify-center gap-2"
         >
           {createAppointment.isPending ? "Processing..." : step === 4 ? "Confirm Booking" : "Next Step"}
         </button>

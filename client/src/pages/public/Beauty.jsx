@@ -25,7 +25,7 @@ export default function Beauty() {
           alt="Beauty Hero" 
           className="w-full h-64 object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent flex flex-col justify-center px-6">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#12080a]/90 to-transparent flex flex-col justify-center px-6">
           <h2 className="text-2xl font-display font-bold text-white mb-2 leading-tight">
             Enhance Your<br/>Beauty With Us
           </h2>
@@ -37,14 +37,14 @@ export default function Beauty() {
 
       {/* Services */}
       <div className="px-6 py-8">
-        <h3 className="text-lg font-bold text-[var(--color-primary-dark)] font-display mb-4">Our Services</h3>
+        <h3 className="text-lg font-bold text-white font-display mb-4">Our Services</h3>
         <div className="grid grid-cols-3 gap-4">
           {services.map((svc, i) => (
             <Link key={i} to={svc.to} className="flex flex-col items-center text-center gap-2">
-              <div className="w-16 h-16 rounded-full bg-[#fae8f0] flex items-center justify-center text-2xl shadow-sm border border-pink-100">
+              <div className="w-16 h-16 rounded-full bg-[var(--color-surface-3)] flex items-center justify-center text-2xl shadow-sm border border-[var(--color-border)]">
                 {svc.icon}
               </div>
-              <span className="text-[10px] font-semibold text-gray-800 leading-tight">{svc.name}</span>
+              <span className="text-[10px] font-semibold text-white leading-tight">{svc.name}</span>
             </Link>
           ))}
         </div>
@@ -54,7 +54,7 @@ export default function Beauty() {
       <div className="fixed bottom-20 left-0 right-0 px-6 max-w-md mx-auto z-40">
         <button 
           onClick={() => navigate("/book")}
-          className="w-full py-4 bg-[var(--color-accent)] text-white rounded-full font-bold text-sm hover:bg-[var(--color-accent-light)] transition-colors shadow-lg shadow-[var(--color-accent)]/30 text-center"
+          className="w-full py-4 btn-luxury-primary shadow-lg shadow-[var(--color-accent)]/30 text-center"
         >
           Book Appointment
         </button>

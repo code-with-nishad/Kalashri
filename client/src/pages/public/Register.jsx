@@ -67,7 +67,7 @@ export default function Register() {
           alt="Register Background" 
           className="w-full h-full object-cover object-center opacity-60"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#1a1110]/95 via-[#1a1110]/80 to-[#1a1110]"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-primary-dark)]/95 via-[var(--color-primary-dark)]/80 to-[var(--color-primary-dark)]"></div>
       </div>
 
       <motion.div
@@ -83,10 +83,10 @@ export default function Register() {
             transition={{ delay: 0.4, duration: 1 }}
           >
             <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-white/10 backdrop-blur-md mb-6 border border-white/20">
-              <Sparkles className="w-10 h-10 text-[#d4af37]" />
+              <Sparkles className="w-10 h-10 text-[var(--color-accent)]" />
             </div>
             <h1 className="font-display text-5xl xl:text-7xl font-black mb-6 leading-tight drop-shadow-sm text-white">
-              Book fashion <br /><span className="text-[#d4af37]">and beauty visits.</span>
+              Book fashion <br /><span className="text-[var(--color-accent)]">and beauty visits.</span>
             </h1>
 
             <div className="mt-8 space-y-4">
@@ -98,7 +98,7 @@ export default function Register() {
                   transition={{ delay: 0.6 + (idx * 0.1) }}
                   className="flex items-center gap-4 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl px-5 py-3.5 shadow-sm w-max"
                 >
-                  <CheckCircle className="w-5 h-5 text-[#d4af37]" />
+                  <CheckCircle className="w-5 h-5 text-[var(--color-accent)]" />
                   <span className="text-white/90 font-bold tracking-wide">{text}</span>
                 </motion.div>
               ))}
@@ -107,7 +107,7 @@ export default function Register() {
         </div>
 
         <div className="w-full max-w-lg bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl md:rounded-[2.5rem] p-5 sm:p-8 shadow-2xl relative overflow-hidden group">
-          <div className="absolute inset-0 bg-gradient-to-bl from-[#d4af37]/0 to-[#d4af37]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-bl from-[var(--color-accent)]/0 to-[var(--color-accent)]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
           <div className="relative z-10">
             <div className="mb-6 sm:mb-8 text-center">
@@ -123,7 +123,7 @@ export default function Register() {
                     <div className="relative">
                       <Icon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
                       <input {...reg(name)} type={type} placeholder={placeholder}
-                        className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-white/5 border border-white/20 text-white placeholder:text-white/40 focus:outline-none focus:border-[#d4af37] focus:bg-white/10 focus:ring-2 focus:ring-[#d4af37]/50 transition-all text-sm shadow-sm"
+                        className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-white/5 border border-white/20 text-white placeholder:text-white/40 focus:outline-none focus:border-[var(--color-accent)] focus:bg-white/10 focus:ring-2 focus:ring-[var(--color-accent)]/50 transition-all text-sm shadow-sm"
                       />
                     </div>
                     {errors[name] && <p className="text-xs text-red-500 mt-1.5 ml-1">{errors[name].message}</p>}
@@ -137,7 +137,7 @@ export default function Register() {
                   <div className="relative">
                     <Icon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
                     <input {...reg(name)} type={type} placeholder={placeholder}
-                      className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-white/5 border border-white/20 text-white placeholder:text-white/40 focus:outline-none focus:border-[#d4af37] focus:bg-white/10 focus:ring-2 focus:ring-[#d4af37]/50 transition-all shadow-sm"
+                      className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-white/5 border border-white/20 text-white placeholder:text-white/40 focus:outline-none focus:border-[var(--color-accent)] focus:bg-white/10 focus:ring-2 focus:ring-[var(--color-accent)]/50 transition-all shadow-sm"
                     />
                   </div>
                   {errors[name] && <p className="text-xs text-red-500 mt-1.5 ml-1">{errors[name].message}</p>}
@@ -150,7 +150,7 @@ export default function Register() {
                   <div className="relative">
                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
                     <input {...reg("password")} type={showPass ? "text" : "password"} placeholder="Min 6 chars"
-                      className="w-full pl-11 pr-10 py-3.5 rounded-2xl bg-white/5 border border-white/20 text-white placeholder:text-white/40 focus:outline-none focus:border-[#d4af37] focus:bg-white/10 focus:ring-2 focus:ring-[#d4af37]/50 transition-all text-sm shadow-sm"
+                      className="w-full pl-11 pr-10 py-3.5 rounded-2xl bg-white/5 border border-white/20 text-white placeholder:text-white/40 focus:outline-none focus:border-[var(--color-accent)] focus:bg-white/10 focus:ring-2 focus:ring-[var(--color-accent)]/50 transition-all text-sm shadow-sm"
                     />
                     <button type="button" onClick={() => setShowPass((v) => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors p-1">
                       {showPass ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
@@ -164,7 +164,7 @@ export default function Register() {
                   <div className="relative">
                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
                     <input {...reg("confirmPassword")} type={showConfirmPass ? "text" : "password"} placeholder="Confirm"
-                      className="w-full pl-11 pr-10 py-3.5 rounded-2xl bg-white/5 border border-white/20 text-white placeholder:text-white/40 focus:outline-none focus:border-[#d4af37] focus:bg-white/10 focus:ring-2 focus:ring-[#d4af37]/50 transition-all text-sm shadow-sm"
+                      className="w-full pl-11 pr-10 py-3.5 rounded-2xl bg-white/5 border border-white/20 text-white placeholder:text-white/40 focus:outline-none focus:border-[var(--color-accent)] focus:bg-white/10 focus:ring-2 focus:ring-[var(--color-accent)]/50 transition-all text-sm shadow-sm"
                     />
                     <button type="button" onClick={() => setShowConfirmPass((v) => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors p-1">
                       {showConfirmPass ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
@@ -175,15 +175,15 @@ export default function Register() {
               </div>
 
               <button type="submit" disabled={isPending}
-                className="w-full py-4 bg-[#d4af37] hover:bg-[#ebd576] text-white font-bold rounded-2xl transition-all shadow-[0_10px_20px_rgba(212,175,55,0.2)] hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-4"
+                className="w-full py-4 btn-luxury-primary flex items-center justify-center gap-2 mt-4"
               >
                 {isPending ? <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : "Create My Free Account"}
               </button>
 
               <div className="flex justify-center mt-3 gap-3 text-[11px] text-white/60 font-medium">
-                <span className="flex items-center gap-1"><CheckCircle className="w-3.5 h-3.5 text-[#d4af37]" /> Free Registration</span>
-                <span className="flex items-center gap-1"><CheckCircle className="w-3.5 h-3.5 text-[#d4af37]" /> No Card Needed</span>
-                <span className="flex items-center gap-1"><ShieldCheck className="w-3.5 h-3.5 text-[#d4af37]" /> 100% Secure</span>
+                <span className="flex items-center gap-1"><CheckCircle className="w-3.5 h-3.5 text-[var(--color-accent)]" /> Free Registration</span>
+                <span className="flex items-center gap-1"><CheckCircle className="w-3.5 h-3.5 text-[var(--color-accent)]" /> No Card Needed</span>
+                <span className="flex items-center gap-1"><ShieldCheck className="w-3.5 h-3.5 text-[var(--color-accent)]" /> 100% Secure</span>
               </div>
 
               <div className="flex items-center gap-3 my-5">
@@ -208,7 +208,7 @@ export default function Register() {
 
             <p className="text-center text-sm text-white/60 mt-6">
               Already have an account?{" "}
-              <Link to="/login" className="text-[#d4af37] hover:text-white font-bold transition-colors">
+              <Link to="/login" className="text-[var(--color-accent)] hover:text-[var(--color-accent-light)] font-bold transition-colors">
                 Sign in
               </Link>
             </p>
