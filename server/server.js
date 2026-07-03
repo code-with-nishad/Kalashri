@@ -5,7 +5,6 @@ const cookieParser = require("cookie-parser");
 const errorMiddleware = require("./src/middleware/errorMiddleware");
 const connectDB = require("./src/config/db");
 const helmet = require("helmet");
-const mongoSanitize = require("express-mongo-sanitize");
 const rateLimit = require("express-rate-limit");
 
 const authRoutes = require("./src/routes/authRoutes");
@@ -29,7 +28,6 @@ connectDB();
 
 // Security Middleware
 app.use(helmet());
-app.use(mongoSanitize());
 
 const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
