@@ -30,7 +30,7 @@ export default function Profile() {
       
       {/* Profile Header */}
       <div className="p-6 flex items-center gap-4 bg-[var(--color-primary-dark)] text-white pb-10 rounded-b-3xl">
-        <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center overflow-hidden border-2 border-white/20">
+        <div className="w-16 h-16 rounded-full bg-[var(--color-surface-card)]/10 flex items-center justify-center overflow-hidden border-2 border-white/20">
           <span className="text-2xl font-bold">{user?.firstName?.[0] || 'P'}</span>
         </div>
         <div>
@@ -41,33 +41,33 @@ export default function Profile() {
       </div>
 
       <div className="px-6 py-6 -mt-6 relative z-10">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="card-luxury overflow-hidden p-0">
           {links.map((link, i) => {
             const Icon = link.icon;
             return (
-              <button key={i} className="w-full flex items-center justify-between p-4 border-b border-gray-50 hover:bg-gray-50 transition-colors">
+              <button key={i} className="w-full flex items-center justify-between p-4 border-b border-[var(--color-border)] hover:bg-[var(--color-surface-3)] transition-colors">
                 <div className="flex items-center gap-3">
-                  <Icon className="w-5 h-5 text-gray-400" />
-                  <span className="text-sm font-medium text-gray-700">{link.label}</span>
+                  <Icon className="w-5 h-5 text-[var(--color-accent)]" />
+                  <span className="text-sm font-medium text-white">{link.label}</span>
                 </div>
-                <ChevronRight className="w-4 h-4 text-gray-300" />
+                <ChevronRight className="w-4 h-4 text-[var(--color-text-muted)]" />
               </button>
             );
           })}
           
           <button 
             onClick={handleLogout}
-            className="w-full flex items-center justify-between p-4 hover:bg-red-50 transition-colors"
+            className="w-full flex items-center justify-between p-4 hover:bg-red-500/10 transition-colors"
           >
             <div className="flex items-center gap-3">
               <LogOut className="w-5 h-5 text-red-400" />
               <span className="text-sm font-medium text-red-500">Logout</span>
             </div>
-            <ChevronRight className="w-4 h-4 text-red-300" />
+            <ChevronRight className="w-4 h-4 text-[var(--color-text-muted)]" />
           </button>
         </div>
         
-        <p className="text-center text-[10px] text-gray-400 mt-6">App Version 1.0.0</p>
+        <p className="text-center text-[10px] text-[var(--color-text-muted)] mt-6">App Version 1.0.0</p>
       </div>
     </div>
   );

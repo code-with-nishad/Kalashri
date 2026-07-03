@@ -80,7 +80,7 @@ function SettingsSection() {
                 <button onClick={() => set(`businessHours.${day}.isOpen`, !h.isOpen)}
                   className={`relative w-10 h-5 rounded-full transition-colors ${h.isOpen ? "bg-emerald-500" : "bg-[var(--color-surface-3)]"}`}
                 >
-                  <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white transition-transform ${h.isOpen ? "translate-x-5" : "translate-x-0.5"}`} />
+                  <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-[var(--color-surface-card)] transition-transform ${h.isOpen ? "translate-x-5" : "translate-x-0.5"}`} />
                 </button>
                 {h.isOpen && <>
                   <input type="time" value={h.openTime} onChange={e => set(`businessHours.${day}.openTime`, e.target.value)} className="px-2 py-1 rounded-lg bg-[var(--color-surface-3)] border border-[var(--color-border)] text-[var(--color-text-primary)] text-xs focus:outline-none" />

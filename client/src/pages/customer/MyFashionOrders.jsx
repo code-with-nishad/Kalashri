@@ -23,7 +23,7 @@ export default function MyFashionOrders() {
       case "Ready": return "text-green-500 bg-green-50";
       case "Delivered": return "text-purple-500 bg-purple-50";
       case "Cancelled": return "text-red-500 bg-red-50";
-      default: return "text-gray-500 bg-gray-50";
+      default: return "text-[var(--color-text-secondary)] bg-[var(--color-surface-2)]";
     }
   };
 
@@ -42,19 +42,19 @@ export default function MyFashionOrders() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 font-display">My Fashion Orders</h1>
-          <p className="text-sm text-gray-500">Track your custom tailoring orders</p>
+          <h1 className="text-2xl font-bold text-white font-display">My Fashion Orders</h1>
+          <p className="text-sm text-[var(--color-text-secondary)]">Track your custom tailoring orders</p>
         </div>
       </div>
 
       <div className="space-y-4">
         {orders.length === 0 ? (
-          <div className="bg-white rounded-3xl p-8 text-center border border-gray-100 shadow-sm">
+          <div className="bg-[var(--color-surface-card)] rounded-3xl p-8 text-center border border-[var(--color-border)] shadow-sm">
             <div className="w-16 h-16 rounded-full bg-pink-50 flex items-center justify-center mx-auto mb-4">
               <Package className="w-8 h-8 text-pink-500" />
             </div>
-            <h3 className="text-lg font-bold text-gray-900 mb-2">No Active Orders</h3>
-            <p className="text-sm text-gray-500 mb-6 max-w-sm mx-auto">
+            <h3 className="text-lg font-bold text-white mb-2">No Active Orders</h3>
+            <p className="text-sm text-[var(--color-text-secondary)] mb-6 max-w-sm mx-auto">
               You don't have any custom tailoring or fashion orders in progress right now.
             </p>
             <Link to="/fashion" className="inline-flex px-6 py-3 bg-[var(--color-primary)] text-white font-bold rounded-full hover:bg-[var(--color-primary-dark)] transition-colors">
@@ -63,33 +63,33 @@ export default function MyFashionOrders() {
           </div>
         ) : (
           orders.map((order) => (
-            <div key={order._id} className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+            <div key={order._id} className="bg-[var(--color-surface-card)] rounded-3xl border border-[var(--color-border)] shadow-sm overflow-hidden hover:shadow-md transition-shadow">
               <div className="p-5 border-b border-gray-50 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className={`p-2 rounded-xl ${getStatusColor(order.status)}`}>
                     {getStatusIcon(order.status)}
                   </div>
                   <div>
-                    <h3 className="text-base font-bold text-gray-900">{order.dressType}</h3>
-                    <p className="text-xs text-gray-500">Ordered on {format(new Date(order.orderDate), "MMM dd, yyyy")}</p>
+                    <h3 className="text-base font-bold text-white">{order.dressType}</h3>
+                    <p className="text-xs text-[var(--color-text-secondary)]">Ordered on {format(new Date(order.orderDate), "MMM dd, yyyy")}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-bold text-gray-900">{formatCurrency(order.advancePaid + order.remainingAmount)}</p>
+                  <p className="text-sm font-bold text-white">{formatCurrency(order.advancePaid + order.remainingAmount)}</p>
                   <p className="text-xs text-red-500">{order.remainingAmount > 0 ? `Due: ${formatCurrency(order.remainingAmount)}` : 'Paid in full'}</p>
                 </div>
               </div>
               
-              <div className="p-5 bg-gray-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="p-5 bg-[var(--color-surface-2)]/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-gray-400" />
-                  <span className="text-sm text-gray-600">Expected Delivery: <span className="font-bold text-gray-900">{format(new Date(order.deliveryDate), "MMM dd, yyyy")}</span></span>
+                  <Calendar className="w-4 h-4 text-[var(--color-text-muted)]" />
+                  <span className="text-sm text-[var(--color-text-secondary)]">Expected Delivery: <span className="font-bold text-white">{format(new Date(order.deliveryDate), "MMM dd, yyyy")}</span></span>
                 </div>
                 
                 <div className="w-full sm:w-1/2">
                   {order.timeline?.length > 0 && (
-                    <div className="text-xs text-gray-500 flex items-center gap-2">
-                      <span className="font-medium text-gray-900">Latest update:</span>
+                    <div className="text-xs text-[var(--color-text-secondary)] flex items-center gap-2">
+                      <span className="font-medium text-white">Latest update:</span>
                       <span className="truncate">{order.timeline[order.timeline.length - 1].status}</span>
                     </div>
                   )}

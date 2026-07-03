@@ -32,8 +32,8 @@ const NotificationCard = ({ notification, onClick, onMarkAsRead }) => {
             onClick={handleClick}
             className={clsx(
                 "relative flex items-start gap-4 p-4 rounded-xl cursor-pointer transition-all duration-300",
-                "hover:bg-white/10 backdrop-blur-md border border-white/5",
-                isRead ? "opacity-75" : "bg-white/5 shadow-[0_4px_30px_rgba(0,0,0,0.1)]"
+                "hover:bg-[var(--color-surface-card)]/10 backdrop-blur-md border border-white/5",
+                isRead ? "opacity-75" : "bg-[var(--color-surface-card)]/5 shadow-[0_4px_30px_rgba(0,0,0,0.1)]"
             )}
         >
             {/* Unread Indicator */}
@@ -42,7 +42,7 @@ const NotificationCard = ({ notification, onClick, onMarkAsRead }) => {
             )}
 
             {/* Icon / Image */}
-            <div className="flex-shrink-0 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center border border-white/10 overflow-hidden">
+            <div className="flex-shrink-0 w-12 h-12 rounded-full bg-[var(--color-surface-card)]/10 flex items-center justify-center border border-white/10 overflow-hidden">
                 {image ? (
                     <img src={image} alt={title} className="w-full h-full object-cover" />
                 ) : (
@@ -54,14 +54,14 @@ const NotificationCard = ({ notification, onClick, onMarkAsRead }) => {
             <div className="flex-1 min-w-0 pt-1">
                 <p className={clsx(
                     "text-sm font-semibold truncate",
-                    isRead ? "text-gray-400" : "text-gray-100"
+                    isRead ? "text-[var(--color-text-muted)]" : "text-gray-100"
                 )}>
                     {title}
                 </p>
-                <p className="text-sm text-gray-400 mt-1 line-clamp-2 leading-relaxed">
+                <p className="text-sm text-[var(--color-text-muted)] mt-1 line-clamp-2 leading-relaxed">
                     {body}
                 </p>
-                <div className="flex items-center gap-1 mt-2 text-xs text-gray-500">
+                <div className="flex items-center gap-1 mt-2 text-xs text-[var(--color-text-secondary)]">
                     <Clock className="w-3 h-3" />
                     <span>{formatDistanceToNow(new Date(createdAt), { addSuffix: true })}</span>
                 </div>

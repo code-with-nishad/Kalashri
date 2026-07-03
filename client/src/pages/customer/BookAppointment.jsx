@@ -87,14 +87,14 @@ export default function BookAppointment() {
         <div className="flex justify-between relative z-10">
           {steps.map((s, i) => (
             <div key={i} className="flex flex-col items-center gap-2">
-              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] ${i + 1 < step ? "bg-[var(--color-accent)] text-white" : i + 1 === step ? "bg-white text-[var(--color-primary-dark)]" : "bg-white/20 text-white"}`}>
+              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] ${i + 1 < step ? "bg-[var(--color-accent)] text-white" : i + 1 === step ? "bg-[var(--color-surface-card)] text-[var(--color-primary-dark)]" : "bg-[var(--color-surface-card)]/20 text-white"}`}>
                 {i + 1 < step ? <Check className="w-3 h-3" /> : i + 1}
               </div>
               <span className={`text-[10px] ${i + 1 <= step ? "text-white font-medium" : "text-white/50"}`}>{s}</span>
             </div>
           ))}
           {/* Connecting Line */}
-          <div className="absolute top-3 left-[10%] right-[10%] h-0.5 bg-white/20 -z-10" />
+          <div className="absolute top-3 left-[10%] right-[10%] h-0.5 bg-[var(--color-surface-card)]/20 -z-10" />
           <div 
             className="absolute top-3 left-[10%] h-0.5 bg-[var(--color-accent)] -z-10 transition-all duration-300"
             style={{ width: `${((step - 1) / (steps.length - 1)) * 80}%` }}

@@ -31,7 +31,7 @@ export default function FashionOrders() {
       case "Ready": return "bg-green-100 text-green-700";
       case "Delivered": return "bg-purple-100 text-purple-700";
       case "Cancelled": return "bg-red-100 text-red-700";
-      default: return "bg-gray-100 text-gray-700";
+      default: return "bg-[var(--color-surface-3)] text-[var(--color-text-primary)]";
     }
   };
 
@@ -47,8 +47,8 @@ export default function FashionOrders() {
             <Package className="w-5 h-5 text-amber-500" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Fashion Orders</h1>
-            <p className="text-sm text-gray-500">Manage stitching and boutique orders</p>
+            <h1 className="text-2xl font-bold text-white">Fashion Orders</h1>
+            <p className="text-sm text-[var(--color-text-secondary)]">Manage stitching and boutique orders</p>
           </div>
         </div>
         <button className="flex items-center justify-center gap-2 bg-[var(--color-primary)] text-white px-4 py-2 rounded-xl font-medium hover:bg-[var(--color-primary-dark)] transition-colors">
@@ -57,19 +57,19 @@ export default function FashionOrders() {
         </button>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="p-4 border-b border-gray-100 flex items-center gap-4">
+      <div className="bg-[var(--color-surface-card)] rounded-2xl shadow-sm border border-[var(--color-border)] overflow-hidden">
+        <div className="p-4 border-b border-[var(--color-border)] flex items-center gap-4">
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--color-text-muted)]" />
             <input
               type="text"
               placeholder="Search by customer or dress type..."
-              className="w-full pl-9 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)]"
+              className="w-full pl-9 pr-4 py-2 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)]"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <button className="flex items-center gap-2 px-3 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+          <button className="flex items-center gap-2 px-3 py-2 border border-[var(--color-border)] rounded-lg text-sm font-medium text-[var(--color-text-primary)] hover:bg-[var(--color-surface-2)] transition-colors">
             <Filter className="w-4 h-4" />
             <span className="hidden sm:inline">Filter</span>
           </button>
@@ -78,34 +78,34 @@ export default function FashionOrders() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-100">
-                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Customer</th>
-                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Dress Type</th>
-                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Delivery Date</th>
-                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Amount Due</th>
-                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider text-right">Actions</th>
+              <tr className="bg-[var(--color-surface-2)] border-b border-[var(--color-border)]">
+                <th className="px-6 py-4 text-xs font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider">Customer</th>
+                <th className="px-6 py-4 text-xs font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider">Dress Type</th>
+                <th className="px-6 py-4 text-xs font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider">Delivery Date</th>
+                <th className="px-6 py-4 text-xs font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider">Status</th>
+                <th className="px-6 py-4 text-xs font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider">Amount Due</th>
+                <th className="px-6 py-4 text-xs font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {filteredOrders.length === 0 ? (
                 <tr>
-                  <td colSpan="6" className="px-6 py-8 text-center text-sm text-gray-500">
+                  <td colSpan="6" className="px-6 py-8 text-center text-sm text-[var(--color-text-secondary)]">
                     No fashion orders found.
                   </td>
                 </tr>
               ) : (
                 filteredOrders.map((order) => (
-                  <tr key={order._id} className="hover:bg-gray-50/50 transition-colors">
+                  <tr key={order._id} className="hover:bg-[var(--color-surface-2)]/50 transition-colors">
                     <td className="px-6 py-4">
-                      <div className="font-medium text-gray-900">{order.customer?.firstName} {order.customer?.lastName}</div>
-                      <div className="text-xs text-gray-500">{order.customer?.phone || order.customer?.email}</div>
+                      <div className="font-medium text-white">{order.customer?.firstName} {order.customer?.lastName}</div>
+                      <div className="text-xs text-[var(--color-text-secondary)]">{order.customer?.phone || order.customer?.email}</div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-sm font-medium text-gray-900">{order.dressType}</div>
+                      <div className="text-sm font-medium text-white">{order.dressType}</div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-sm text-gray-600">{format(new Date(order.deliveryDate), 'MMM dd, yyyy')}</div>
+                      <div className="text-sm text-[var(--color-text-secondary)]">{format(new Date(order.deliveryDate), 'MMM dd, yyyy')}</div>
                     </td>
                     <td className="px-6 py-4">
                       <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
@@ -119,7 +119,7 @@ export default function FashionOrders() {
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <Link to={`/admin/fashion-orders/${order._id}`} className="p-1.5 text-gray-400 hover:text-[var(--color-primary)] hover:bg-rose-50 rounded transition-colors">
+                        <Link to={`/admin/fashion-orders/${order._id}`} className="p-1.5 text-[var(--color-text-muted)] hover:text-[var(--color-primary)] hover:bg-rose-50 rounded transition-colors">
                           <Eye className="w-4 h-4" />
                         </Link>
                       </div>

@@ -27,7 +27,7 @@ const NotificationBell = () => {
     return (
         <Popover.Root open={open} onOpenChange={setOpen}>
             <Popover.Trigger asChild>
-                <button className="relative p-2 rounded-full hover:bg-white/10 transition-colors focus:outline-none">
+                <button className="relative p-2 rounded-full hover:bg-[var(--color-surface-card)]/10 transition-colors focus:outline-none">
                     <Bell className="w-6 h-6 text-gray-200" />
                     <AnimatePresence>
                         {unreadCount > 0 && (
@@ -70,12 +70,12 @@ const NotificationBell = () => {
                                 )}
                                 <button 
                                     onClick={() => { setOpen(false); navigate("/notifications"); }}
-                                    className="p-1 text-gray-400 hover:text-white rounded-full hover:bg-white/10 transition-colors"
+                                    className="p-1 text-[var(--color-text-muted)] hover:text-white rounded-full hover:bg-[var(--color-surface-card)]/10 transition-colors"
                                 >
                                     <Settings className="w-4 h-4" />
                                 </button>
                                 <Popover.Close asChild>
-                                    <button className="p-1 text-gray-400 hover:text-white rounded-full hover:bg-white/10 transition-colors">
+                                    <button className="p-1 text-[var(--color-text-muted)] hover:text-white rounded-full hover:bg-[var(--color-surface-card)]/10 transition-colors">
                                         <X className="w-4 h-4" />
                                     </button>
                                 </Popover.Close>
@@ -103,7 +103,7 @@ const NotificationBell = () => {
                         {/* Body */}
                         <div className="max-h-[400px] overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
                             {notifications.length === 0 ? (
-                                <div className="p-8 text-center text-gray-400">
+                                <div className="p-8 text-center text-[var(--color-text-muted)]">
                                     <Bell className="w-12 h-12 mx-auto mb-3 opacity-20" />
                                     <p>You have no notifications</p>
                                 </div>
@@ -126,7 +126,7 @@ const NotificationBell = () => {
                             <div className="p-2 border-t border-white/10 bg-black/40">
                                 <button 
                                     onClick={() => { setOpen(false); navigate("/notifications"); }}
-                                    className="w-full py-2 text-sm text-center text-blue-400 hover:text-blue-300 hover:bg-white/5 rounded-lg transition-colors font-medium"
+                                    className="w-full py-2 text-sm text-center text-blue-400 hover:text-blue-300 hover:bg-[var(--color-surface-card)]/5 rounded-lg transition-colors font-medium"
                                 >
                                     View All Notifications
                                 </button>

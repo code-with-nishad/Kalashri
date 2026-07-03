@@ -26,22 +26,21 @@ export default function MyAppointments() {
 
   const getStatusColor = (status) => {
     switch(status) {
-      case "Pending": return "text-yellow-600 bg-yellow-50";
-      case "Confirmed": return "text-blue-600 bg-blue-50";
-      case "Completed": return "text-green-600 bg-green-50";
-      case "Cancelled": return "text-red-600 bg-red-50";
-      default: return "text-gray-600 bg-gray-50";
+      case "Pending": return "text-yellow-500 bg-yellow-500/10 border border-yellow-500/20";
+      case "Confirmed": return "text-blue-400 bg-blue-500/10 border border-blue-500/20";
+      case "Completed": return "text-emerald-400 bg-emerald-500/10 border border-emerald-500/20";
+      case "Cancelled": return "text-red-400 bg-red-500/10 border border-red-500/20";
+      default: return "text-[var(--color-text-secondary)] bg-[var(--color-surface-3)] border border-[var(--color-border)]";
     }
   };
 
   const getCategoryIcon = (category) => {
-    if (category === "Fashion") return <Scissors className="w-8 h-8 text-purple-500" />;
-    return <Sparkles className="w-8 h-8 text-pink-500" />;
+    if (category === "Fashion") return <Scissors className="w-8 h-8 text-[var(--color-accent)]" />;
+    return <Sparkles className="w-8 h-8 text-[var(--color-accent)]" />;
   };
 
   const getCategoryBg = (category) => {
-    if (category === "Fashion") return "bg-purple-50";
-    return "bg-pink-50";
+    return "bg-[var(--color-surface-3)] border border-[var(--color-border)]";
   };
 
   return (
@@ -49,12 +48,12 @@ export default function MyAppointments() {
       <MobileHeader title="My Bookings" showBack />
       
       {/* Tabs */}
-      <div className="px-6 py-4 flex justify-between border-b border-gray-100 bg-[var(--color-primary-dark)] text-white">
+      <div className="px-6 py-4 flex justify-between border-b border-[var(--color-border)] bg-[var(--color-primary-dark)] text-white">
         {["Upcoming", "Completed", "Cancelled"].map(tab => (
           <button 
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`text-xs font-bold pb-1 transition-all ${activeTab === tab ? "border-b-2 border-white text-white" : "text-white/50 border-b-2 border-transparent"}`}
+            className={`text-xs font-bold pb-1 transition-all ${activeTab === tab ? "border-b-2 border-[var(--color-accent)] text-[var(--color-accent)]" : "text-white/50 border-b-2 border-transparent hover:text-white/80"}`}
           >
             {tab}
           </button>
@@ -63,39 +62,39 @@ export default function MyAppointments() {
 
       <div className="p-6 space-y-4">
         {isLoading ? (
-          <div className="text-center py-8 text-gray-500">Loading your bookings...</div>
+          <div className="text-center py-8 text-[var(--color-text-secondary)]">Loading your bookings...</div>
         ) : filteredAppointments.length === 0 ? (
-          <div className="bg-white rounded-3xl p-8 text-center border border-gray-100 shadow-sm">
-            <div className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center mx-auto mb-4">
-              <Clock className="w-8 h-8 text-gray-400" />
+          <div className="card-luxury p-8 text-center">
+            <div className="w-16 h-16 rounded-full bg-[var(--color-surface-3)] border border-[var(--color-border)] flex items-center justify-center mx-auto mb-4">
+              <Clock className="w-8 h-8 text-[var(--color-text-secondary)]" />
             </div>
-            <h3 className="text-lg font-bold text-gray-900 mb-2">No {activeTab} Bookings</h3>
-            <p className="text-sm text-gray-500 mb-6">You don't have any appointments in this category.</p>
-            <Link to="/book" className="inline-flex px-6 py-3 bg-[var(--color-primary)] text-white font-bold rounded-full hover:bg-[var(--color-primary-dark)] transition-colors">
+            <h3 className="text-lg font-bold text-white mb-2">No {activeTab} Bookings</h3>
+            <p className="text-sm text-[var(--color-text-secondary)] mb-6">You don't have any appointments in this category.</p>
+            <Link to="/book" className="inline-flex px-6 py-3 btn-luxury-primary text-sm font-bold rounded-full">
               Book Appointment
             </Link>
           </div>
         ) : (
           filteredAppointments.map((appt) => (
-            <div key={appt._id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex gap-4 items-center">
+            <div key={appt._id} className="card-luxury p-4 flex gap-4 items-center">
               <div className={`w-16 h-16 rounded-xl flex items-center justify-center shrink-0 ${getCategoryBg(appt.appointmentCategory)}`}>
                 {getCategoryIcon(appt.appointmentCategory)}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex justify-between items-start mb-1 gap-2">
-                  <h3 className="font-bold text-gray-900 text-sm truncate">
+                  <h3 className="font-bold text-white text-sm truncate">
                     {appt.services?.[0]?.serviceName || `${appt.appointmentCategory} Appointment`}
                   </h3>
                   <span className={`text-[10px] font-bold px-2 py-0.5 rounded shrink-0 ${getStatusColor(appt.status)}`}>
                     {appt.status}
                   </span>
                 </div>
-                <p className="text-xs text-gray-500 mb-1">
+                <p className="text-xs text-[var(--color-text-secondary)] mb-1">
                   {format(new Date(appt.appointmentDate), "dd MMM yyyy")} • {appt.appointmentTime}
                 </p>
                 <div className="flex justify-between items-center mt-2">
-                  <p className="text-[10px] font-medium text-gray-400">ID: #{appt._id.slice(-6).toUpperCase()}</p>
-                  <p className="text-sm font-bold text-gray-900">{formatCurrency(appt.totalAmount)}</p>
+                  <p className="text-[10px] font-medium text-[var(--color-text-muted)]">ID: #{appt._id.slice(-6).toUpperCase()}</p>
+                  <p className="text-sm font-bold text-white">{formatCurrency(appt.totalAmount)}</p>
                 </div>
               </div>
             </div>

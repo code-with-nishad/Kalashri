@@ -59,13 +59,13 @@ export default function MyMeasurements() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 font-display">My Measurements</h1>
-          <p className="text-sm text-gray-500">Your custom tailoring profile</p>
+          <h1 className="text-2xl font-bold text-white font-display">My Measurements</h1>
+          <p className="text-sm text-[var(--color-text-secondary)]">Your custom tailoring profile</p>
         </div>
         {!isEditing ? (
           <button 
             onClick={handleEditClick}
-            className="p-2 bg-white border border-gray-200 rounded-full text-gray-600 hover:bg-purple-50 hover:text-purple-600 hover:border-purple-200 transition-colors"
+            className="p-2 bg-[var(--color-surface-card)] border border-[var(--color-border)] rounded-full text-[var(--color-text-secondary)] hover:bg-purple-50 hover:text-purple-600 hover:border-purple-200 transition-colors"
           >
             <Edit2 className="w-5 h-5" />
           </button>
@@ -81,34 +81,34 @@ export default function MyMeasurements() {
         )}
       </div>
 
-      <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100">
+      <div className="bg-[var(--color-surface-card)] rounded-3xl p-6 md:p-8 shadow-sm border border-[var(--color-border)]">
         <div className="flex items-center gap-4 mb-8 pb-6 border-b border-gray-50">
           <div className="w-12 h-12 rounded-2xl bg-purple-50 flex items-center justify-center">
             <Ruler className="w-6 h-6 text-purple-500" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-gray-900">Standard Profile</h2>
-            <p className="text-sm text-gray-500">Used for dresses and custom stitching</p>
+            <h2 className="text-lg font-bold text-white">Standard Profile</h2>
+            <p className="text-sm text-[var(--color-text-secondary)]">Used for dresses and custom stitching</p>
           </div>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {fields.map(field => (
             <div key={field.key} className="space-y-1">
-              <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">{field.label}</label>
+              <label className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider">{field.label}</label>
               {isEditing ? (
                 <div className="relative">
                   <input
                     type="number"
                     value={editForm[field.key] || ""}
                     onChange={(e) => setEditForm({...editForm, [field.key]: e.target.value})}
-                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)] text-gray-900 font-medium transition-all"
+                    className="w-full bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)] text-white font-medium transition-all"
                     placeholder="0.0"
                   />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-medium">in</span>
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)] text-sm font-medium">in</span>
                 </div>
               ) : (
-                <div className="w-full bg-gray-50 border border-transparent rounded-xl px-4 py-3 text-gray-900 font-bold text-lg">
+                <div className="w-full bg-[var(--color-surface-2)] border border-transparent rounded-xl px-4 py-3 text-white font-bold text-lg">
                   {measurement && measurement[field.key] ? `${measurement[field.key]}"` : "-"}
                 </div>
               )}
@@ -117,17 +117,17 @@ export default function MyMeasurements() {
         </div>
 
         <div className="mt-8 space-y-1">
-          <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Custom Notes</label>
+          <label className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Custom Notes</label>
           {isEditing ? (
             <textarea
               value={editForm.customNotes || ""}
               onChange={(e) => setEditForm({...editForm, customNotes: e.target.value})}
-              className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)] text-gray-900 text-sm transition-all min-h-[100px]"
+              className="w-full bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)] text-white text-sm transition-all min-h-[100px]"
               placeholder="Any specific fitting preferences or instructions..."
             />
           ) : (
-            <div className="w-full bg-gray-50 rounded-xl px-4 py-4 text-gray-700 text-sm min-h-[100px]">
-              {measurement?.customNotes || <span className="text-gray-400 italic">No custom notes added.</span>}
+            <div className="w-full bg-[var(--color-surface-2)] rounded-xl px-4 py-4 text-[var(--color-text-primary)] text-sm min-h-[100px]">
+              {measurement?.customNotes || <span className="text-[var(--color-text-muted)] italic">No custom notes added.</span>}
             </div>
           )}
         </div>
