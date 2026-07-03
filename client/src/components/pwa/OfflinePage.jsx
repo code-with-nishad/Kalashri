@@ -41,7 +41,7 @@ export default function OfflinePage() {
         </h1>
         
         <p className="text-[var(--color-text-secondary)] font-medium text-base mb-8">
-          It looks like you're offline. Check your internet connection or try again. Kalashri fashion and beauty studio is ready to welcome you back once you're online! 👑
+          It looks like you're offline. Check your internet connection or try again. Kalashri Beauty studio is ready to welcome you back once you're online! 👑
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">

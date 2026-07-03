@@ -1,7 +1,7 @@
-export const SALON_NAME = "Kalashri fashion and beauty studio";
+export const SALON_NAME = "Kalashri Beauty studio";
 export const SALON_TAGLINE = "Your Beauty, Our Passion";
 export const SALON_WHATSAPP = import.meta.env.VITE_WHATSAPP_NUMBER || "918830383499";
-export const SALON_INSTAGRAM = import.meta.env.VITE_INSTAGRAM_URL || "https://www.instagram.com/bharti_damale?igsh=YzljYTk1ODg3Zg==";
+export const SALON_INSTAGRAM = import.meta.env.VITE_INSTAGRAM_URL || "https://www.instagram.com/anupama";
 export const SALON_FACEBOOK = import.meta.env.VITE_FACEBOOK_URL || "#";
 
 export const API_BASE_URL = import.meta.env.VITE_API_URL || "/api";

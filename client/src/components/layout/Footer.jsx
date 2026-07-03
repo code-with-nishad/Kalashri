@@ -77,7 +77,7 @@ export default function Footer() {
               </li>
               <li className="flex gap-2 text-sm text-[var(--color-text-muted)]">
                 <Mail className="w-4 h-4 text-[var(--color-rose-400)] flex-shrink-0 mt-0.5" />
-                <span>gayatribeautystudio@gmail.com</span>
+                <span>kalashribeautystudio@gmail.com</span>
               </li>
             </ul>
           </div>

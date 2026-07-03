@@ -22,7 +22,7 @@ export default function Contact() {
         <div className="max-w-2xl mx-auto space-y-5">
             {[
               { icon: Phone, label: "Phone", value: contact.phone || "8830383499", href: `tel:${contact.phone || "8830383499"}` },
-              { icon: Mail, label: "Email", value: contact.email || "gayatribeautystudio@gmail.com", href: `mailto:${contact.email || "gayatribeautystudio@gmail.com"}` },
+              { icon: Mail, label: "Email", value: contact.email || "kalashribeautystudio@gmail.com", href: `mailto:${contact.email || "kalashribeautystudio@gmail.com"}` },
               { icon: MessageCircle, label: "WhatsApp", value: contact.whatsapp || "8830383499", href: `https://wa.me/91${SALON_WHATSAPP}` },
               { icon: MapPin, label: "Address", value: contact.address },
             ].map(({ icon: Icon, label, value, href }) => value ? (

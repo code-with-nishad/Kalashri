@@ -14,6 +14,6 @@ export const useAuthStore = create(
       })),
       logout: () => set({ user: null, token: null, isAuthenticated: false }),
     }),
-    { name: "gayatri-auth" }
+    { name: "kalashri-auth" }
   )
 );
